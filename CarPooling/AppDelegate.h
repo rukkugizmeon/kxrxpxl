@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <GoogleMaps/GoogleMaps.h>
+#import "DefineMainValues.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
