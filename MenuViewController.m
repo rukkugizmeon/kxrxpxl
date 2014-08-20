@@ -22,6 +22,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+        [WTStatusBar clearStatus];
     prefs= [NSUserDefaults standardUserDefaults];
     userId=[prefs stringForKey:@"id"];
     

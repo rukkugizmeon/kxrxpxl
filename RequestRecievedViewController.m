@@ -98,7 +98,7 @@ UIAlertView * Alert;
 
 -(void)ShowAlertViewwithDismiss:(NSString*)Message{
     
-    UIAlertView * Alert = [[UIAlertView alloc ]initWithTitle:kApplicationName message:Message delegate:nil cancelButtonTitle:@"Dismiss" otherButtonTitles: nil];
+    UIAlertView * Alert = [[UIAlertView alloc ]initWithTitle:kApplicationName message:Message delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles: nil];
     [Alert show];
 }
 
@@ -114,7 +114,7 @@ UIAlertView * Alert;
          {
              [WTStatusBar setLoading:NO loadAnimated:NO];
              [WTStatusBar clearStatus];
-    NSArray *requestObj=[data objectForKey:@"requests"];
+           NSArray *requestObj=[data objectForKey:@"requests"];
              NSInteger *count=[requestObj count];
              if(count>0)
              {

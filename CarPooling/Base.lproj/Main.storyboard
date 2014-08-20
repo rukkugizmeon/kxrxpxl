@@ -469,11 +469,12 @@
                     <connections>
                         <outlet property="myMap" destination="aCO-9j-4eT" id="frq-ua-l7X"/>
                         <segue destination="RvM-8e-Fda" kind="modal" identifier="toDetailedView" modalTransitionStyle="coverVertical" id="ckd-Tv-8lk"/>
+                        <segue destination="8rI-pc-4na" kind="modal" identifier="toEditDetailView" id="cV3-Sa-XUu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Aj-YO-bb8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-264" y="416"/>
+            <point key="canvasLocation" x="-256" y="486"/>
         </scene>
         <!--Request Sent View Controller-->
         <scene sceneID="ldc-9a-NBu">
@@ -618,6 +619,111 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Gj-po-nt5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-240" y="1205"/>
+        </scene>
+        <!--Edit Route View Controller-->
+        <scene sceneID="H8g-mp-w2q">
+            <objects>
+                <viewController id="8rI-pc-4na" customClass="EditRouteViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="U88-2e-zkU">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" id="fNC-IB-z8P">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="71"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Edit Route Details" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="lOK-c4-ZCW">
+                                        <rect key="frame" x="60" y="28" width="215" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="24"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="X77-m0-Nm4">
+                                        <rect key="frame" x="8" y="17" width="48" height="49"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" backgroundImage="backNew.png">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="u2t-zP-OpC" kind="modal" modalTransitionStyle="crossDissolve" id="udM-w4-EFC"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.25083276719999997" green="0.72700832199999998" blue="0.091832534349999995" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="TBJ-ut-OV0">
+                                <rect key="frame" x="47" y="120" width="230" height="276"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="0.25083276719999997" green="0.72700832199999998" blue="0.091832534349999995" alpha="1" colorSpace="calibratedRGB"/>
+                                <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
+                                <color key="sectionIndexColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="8rI-pc-4na" id="j6I-6V-mlr"/>
+                                    <outlet property="delegate" destination="8rI-pc-4na" id="Aaf-6X-xaG"/>
+                                </connections>
+                            </tableView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No:of Seats" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Lzz-sw-oZO">
+                                <rect key="frame" x="20" y="426" width="91" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select active days " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ZYt-dO-ZdK">
+                                <rect key="frame" x="91" y="91" width="145" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="FyX-ce-EOA">
+                                <rect key="frame" x="137" y="423" width="97" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time Interval" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RKw-hB-pGJ">
+                                <rect key="frame" x="20" y="472" width="99" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="Vgq-ab-li7">
+                                <rect key="frame" x="139" y="472" width="152" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="9-10"/>
+                                    <segment title="10-11"/>
+                                    <segment title="11-12"/>
+                                </segments>
+                            </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="WvX-Pl-eQk">
+                                <rect key="frame" x="53" y="518" width="214" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.25083276719999997" green="0.72700832199999998" blue="0.091832534349999995" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Edit">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="editDetails:" destination="8rI-pc-4na" eventType="touchUpInside" id="KJV-pB-Yg7"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="ea7-Tx-iCQ"/>
+                    <connections>
+                        <outlet property="daysTableView" destination="TBJ-ut-OV0" id="X0R-iG-xSu"/>
+                        <outlet property="editButton" destination="WvX-Pl-eQk" id="h5D-4x-A2o"/>
+                        <outlet property="intervalSegment" destination="Vgq-ab-li7" id="1Xn-l1-LNs"/>
+                        <outlet property="noOfSeatField" destination="FyX-ce-EOA" id="D2P-GB-paz"/>
+                        <segue destination="u2t-zP-OpC" kind="modal" identifier="backFromEdit" id="Fhb-xj-f9B"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fgg-vf-CQU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="302" y="1118"/>
         </scene>
         <!--Co Riders View Controller-->
         <scene sceneID="x1h-3o-CCp">
@@ -1442,11 +1548,11 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="dpE-tI-Hi2"/>
-        <segue reference="hkr-CD-J8a"/>
-        <segue reference="zgg-kq-fhg"/>
+        <segue reference="udM-w4-EFC"/>
+        <segue reference="nx4-VW-e5l"/>
         <segue reference="gsa-Lr-Tbj"/>
         <segue reference="hGb-xB-hY0"/>
-        <segue reference="Xtc-rs-HVW"/>
+        <segue reference="zgg-kq-fhg"/>
+        <segue reference="dpE-tI-Hi2"/>
     </inferredMetricsTieBreakers>
 </document>

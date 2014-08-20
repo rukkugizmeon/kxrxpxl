@@ -80,6 +80,15 @@
 #define kServerLink_UpadteRoute @"http://ridewithme.in/index.php?r=Api/UpdateRoute"
 
 
+//Delete My Routes
+
+#define kServerLink_DeleteRoute @"http://ridewithme.in/index.php?r=api/deleteRoute"
+
+
+//Edit Route
+
+#define kServerLink_EditRoute @"http://ridewithme.in/index.php?r=api/updateRouteDetails"
+
 //Get Earnings
 
 #define kServerLink_GetEarnings @"http://ridewithme.in/index.php?r=Api/getEarnings"

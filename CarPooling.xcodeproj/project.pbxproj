@@ -38,6 +38,7 @@
 		043DE957199D037C003ACE0C /* starsbackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 043DE955199D037C003ACE0C /* starsbackground.png */; };
 		043DE95D199D051F003ACE0C /* EDStarRating.m in Sources */ = {isa = PBXBuildFile; fileRef = 043DE95B199D051F003ACE0C /* EDStarRating.m */; };
 		043DE95E199D051F003ACE0C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 043DE95C199D051F003ACE0C /* README.md */; };
+		043F6CDE19A48EEB00ED8235 /* EditRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 043F6CDD19A48EEB00ED8235 /* EditRouteViewController.m */; };
 		04510D73197F88530057D7B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04510D72197F88530057D7B4 /* Foundation.framework */; };
 		04510D75197F88530057D7B4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04510D74197F88530057D7B4 /* CoreGraphics.framework */; };
 		04510D77197F88530057D7B4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04510D76197F88530057D7B4 /* UIKit.framework */; };
@@ -163,6 +164,8 @@
 		043DE95A199D051F003ACE0C /* EDStarRating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDStarRating.h; sourceTree = "<group>"; };
 		043DE95B199D051F003ACE0C /* EDStarRating.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDStarRating.m; sourceTree = "<group>"; };
 		043DE95C199D051F003ACE0C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		043F6CDC19A48EEB00ED8235 /* EditRouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditRouteViewController.h; sourceTree = "<group>"; };
+		043F6CDD19A48EEB00ED8235 /* EditRouteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditRouteViewController.m; sourceTree = "<group>"; };
 		04510D6F197F88530057D7B4 /* CarPooling.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CarPooling.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04510D72197F88530057D7B4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		04510D74197F88530057D7B4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -461,6 +464,8 @@
 				043DE927199A5185003ACE0C /* RequestSentViewController.m */,
 				043DE92C199B757C003ACE0C /* CoRidersViewController.h */,
 				043DE92D199B757C003ACE0C /* CoRidersViewController.m */,
+				043F6CDC19A48EEB00ED8235 /* EditRouteViewController.h */,
+				043F6CDD19A48EEB00ED8235 /* EditRouteViewController.m */,
 			);
 			name = ViewControllers;
 			path = ..;
@@ -724,6 +729,7 @@
 				043DE92B199B3D7E003ACE0C /* PassengerListModel.m in Sources */,
 				04E4CD5A199488FC00575290 /* MyDataView.m in Sources */,
 				043DE917199A16EF003ACE0C /* RequestRecievedViewController.m in Sources */,
+				043F6CDE19A48EEB00ED8235 /* EditRouteViewController.m in Sources */,
 				04E4CCF31992414D00575290 /* MyRoutesViewController.m in Sources */,
 				04E4CD031993A49200575290 /* MZLoadingCircle.m in Sources */,
 				04E4CD621994DCD600575290 /* UpdateProfileViewController.m in Sources */,

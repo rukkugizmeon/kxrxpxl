@@ -19,7 +19,7 @@
 
 @implementation MyRoutesViewController
 @synthesize  myMap,noOfSeatField,mActiveFields,mActiveSwitch,mDestField;
-@synthesize  mOriginField,mTimeIntervalField;
+@synthesize  mOriginField,mTimeIntervalField,seats,activeDays,timeInterval;
 
 -(void)viewDidAppear:(BOOL)animated
 {
@@ -35,6 +35,7 @@
     DaysArray=@[@"Sunday", @"Monday",
                 @"Tuesday", @"Wednesday", @"Thursday",@"Friday",@"Saturday"];
    // [daysTableView setSeparatorInset:UIEdgeInsetsZero];
+    ConnectToServer=[[ServerConnection alloc] init];
     journeyListArray=[[NSMutableArray alloc]init];
     // [self ShowCallAlertWithMessage:@"Clicked"];
     [self LoadMaps];
@@ -61,50 +62,23 @@
     
 }
 
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger) section {
-//    return [DaysArray count];
-//}
-//
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    
-//    UITableViewCell *cell = nil;
-//    static NSString *AutoCompleteRowIdentifier = @"AutoCompleteRowIdentifier";
-//    cell = [tableView dequeueReusableCellWithIdentifier:AutoCompleteRowIdentifier];
-//    if (cell == nil) {
-//        cell = [[UITableViewCell alloc]
-//                initWithStyle:UITableViewCellStyleDefault reuseIdentifier:AutoCompleteRowIdentifier];
-//    }
-//    cell.textLabel.textAlignment=UITextAlignmentCenter;
-//    cell.textLabel.text = [DaysArray objectAtIndex:indexPath.row];
-//    cell.backgroundColor=[UIColor clearColor];
-//    return cell;
-//}
-//
-//#pragma mark UITableViewDelegate methods
-//
-//
-//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//     NSString *data=[DaysArray objectAtIndex:indexPath.row];
-//    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-//    if([tableView cellForRowAtIndexPath:indexPath].accessoryType == UITableViewCellAccessoryCheckmark){
-//        [tableView cellForRowAtIndexPath:indexPath].accessoryType = UITableViewCellAccessoryNone;
-//        NSLog(@"Cleared%@",data);
-//        [mSelectedArray removeObject:data];
-//    }else{
-//        [tableView cellForRowAtIndexPath:indexPath].accessoryType = UITableViewCellAccessoryCheckmark;
-//         NSLog(@"Selected %@",data);
-//        [mSelectedArray addObject:data];
-//    }
-//}
+
 -(void)ShowAlertView:(NSString*)Message{
+    [WTStatusBar clearStatus];
+    UIAlertView * Alerts = [[UIAlertView alloc ]initWithTitle:kApplicationName message:Message delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles: nil];
+    [Alerts show];
+}
+
+-(void)ShowResultAlertView:(NSString*)Message{
     
-    UIAlertView * Alert = [[UIAlertView alloc ]initWithTitle:kApplicationName message:Message delegate:nil cancelButtonTitle:@"Dismiss" otherButtonTitles: nil];
-    [Alert show];
+    UIAlertView * Alerts = [[UIAlertView alloc ]initWithTitle:kApplicationName message:Message delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles: nil];
+    [Alerts show];
 }
 
 
 
 -(void)fetchMyRoutesFromServer{
+    [myMap clear];
     [WTStatusBar setLoading:YES loadAnimated:YES];
    // NSString *user_id=@"564";
     NSString * PostString = [NSString stringWithFormat:@"user_id=%@",userId];
@@ -144,9 +118,15 @@
     NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseData
                                                          options:0 error:&jsonParsingError];
      NSLog(@"Response %@",data);
-    if([data count]==0){
+     NSString *result=[NSString stringWithFormat:@"%@",[data objectForKey:@"status"]];
+    if([result isEqualToString:@"0"])
+    {
+        
     [self ShowAlertView:@"No Routes added!!"];
-    }else{
+    }
+    else
+    {
+        NSLog(@"Response=1");
     for(int i=0;i<[data count]-1;i++)
     {
           mRouteModel=[[myRouteModel alloc] init];
@@ -157,7 +137,9 @@
         mRouteModel.journey_start_latitude=[journeyArray objectForKey:@"journey_start_latitude"];
         mRouteModel.journey_start_longitude=[journeyArray objectForKey:@"journey_start_longitude"];
         mRouteModel.journey_end_point=[journeyArray objectForKey:@"journey_end_point"];
-        mRouteModel.active_days=[journeyArray objectForKey:@"active_days"];
+        NSString *active=[journeyArray objectForKey:@"active_day"];
+       
+        mRouteModel.active_days=[self replaces:active];
         mRouteModel.active=[journeyArray objectForKey:@"active"];
         mRouteModel.time_intervals=[journeyArray objectForKey:@"time_intervals"];
         mRouteModel.seats_count=[journeyArray objectForKey:@"seats_count"];
@@ -167,6 +149,28 @@
     [WTStatusBar clearStatus];
     [self PlaceMarkersOnMap];
    
+}
+-(NSString*)replaces:(NSString*)string
+{
+    string=[string stringByReplacingOccurrencesOfString:@"0"
+                                             withString:@"Sun"];
+    string=[string stringByReplacingOccurrencesOfString:@"1"
+                                             withString:@"Mon"];
+    string=[string stringByReplacingOccurrencesOfString:@"2"
+                                             withString:@"Tue"];
+    string=[string stringByReplacingOccurrencesOfString:@"3"
+                                             withString:@"Wed"];
+    string=[string stringByReplacingOccurrencesOfString:@"4"
+                                             withString:@"Thu"];
+    string=[string stringByReplacingOccurrencesOfString:@"5"
+                                             withString:@"Fri"];
+    string=[string stringByReplacingOccurrencesOfString:@"6"
+                                             withString:@"Sat"];
+    string=[string stringByReplacingOccurrencesOfString:@"{"
+                                             withString:@""];
+    string=[string stringByReplacingOccurrencesOfString:@"}"
+                                             withString:@""];
+    return string;
 }
 
 -(void)PlaceMarkersOnMap{
@@ -194,6 +198,9 @@
     if([markerTitle isEqualToString:id])
     {
         [self ShowRouteAlertWithMessage:model.journey_start_point To:model.journey_end_point TimeI:model.time_intervals NofSeats:model.seats_count ActiveDays:model.active_days active:model.active];
+        seats=model.seats_count;
+        timeInterval=model.time_intervals;
+        activeDays=model.active_days;
     }
     }
 	return YES;
@@ -201,7 +208,7 @@
 
 -(void)ShowRouteAlertWithMessage:(NSString*)from To:(NSString*)to TimeI:(NSString*)time NofSeats:(NSString*)noSeats ActiveDays:(NSString*)activeDays active:(NSString*)action {
     
-    UIAlertView * Alert = [[UIAlertView alloc]initWithTitle:@"Route Details" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Show route",@"Edit details", nil];
+    Alert = [[UIAlertView alloc]initWithTitle:@"Route Details" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Show route",@"Delete route",@"Edit details", nil];
     
     MyDataView *AccessoryView =[ [[NSBundle mainBundle]loadNibNamed:@"MyDataView" owner:self options:nil] objectAtIndex:0];
     
@@ -231,18 +238,32 @@
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    
+    NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
+    // Initate call over cellular network
+    if ([title isEqualToString:@"Dismiss"])
+    {
+     [self fetchMyRoutesFromServer];
+            NSLog(@"Dismissed");
+    }
     // Initate call over cellular network
     if (buttonIndex==1) {
          [self performSegueWithIdentifier:@"toDetailedView" sender:nil];
         
     }
     else if (buttonIndex==2){
-        NSLog(@"2");
+         [self performSelector:@selector(dismiss:) withObject:Alert afterDelay:1.0];
+        [self DeleteRoute];
     }
-    else{
-    NSLog(@"3");
+    else if (buttonIndex==3){
+    NSLog(@"Edit");
+          [self performSegueWithIdentifier:@"toEditDetailView" sender:nil];
+        
     }
+}
+
+-(void)dismiss:(UIAlertView*)alert
+{
+    [alert dismissWithClickedButtonIndex:0 animated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -250,13 +271,47 @@
     [super didReceiveMemoryWarning];
     
 }
-
+-(void)DeleteRoute
+{
+    NSLog(@"Deleted");
+    NSString *postString=[NSString stringWithFormat:@"userId=%@&journeyId=%@",userId,markerTitle];
+    NSData *deleteRouteResponse=[ConnectToServer ServerCall:kServerLink_DeleteRoute post:postString];
+    NSError *jsonParsingError;
+    NSDictionary *data = [NSJSONSerialization JSONObjectWithData:deleteRouteResponse
+                                                         options:0 error:&jsonParsingError];
+    if(!jsonParsingError)
+    {
+        NSString *result=[NSString stringWithFormat:@"%@",[data objectForKey:@"status"]];
+        
+        NSLog(@"Data %@",result);
+        if([result isEqualToString:@"1"])
+        {
+            [self ShowResultAlertView:@"Route Successfully Deleted!!"];
+            
+        }
+        else if([result isEqualToString:@"0"]){
+           
+            [self ShowAlertView:@"Deletion Failed!!"];
+        }
+    }
+    else{
+      
+        [self ShowAlertView:@"Unable to process the request"];
+    }
+}
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     
     if ([segue.identifier isEqualToString:@"toDetailedView"]) {
         DetailRouteViewController *detVC = segue.destinationViewController;
         detVC.journeyId=markerTitle;
+    }
+   else if ([segue.identifier isEqualToString:@"toEditDetailView"]) {
+        EditRouteViewController *edtVC = segue.destinationViewController;
+        edtVC.journeyId=markerTitle;
+       edtVC.seats=seats;
+       edtVC.timeInterval=timeInterval;
+       edtVC.activeDays=activeDays;
     }
 }
 @end

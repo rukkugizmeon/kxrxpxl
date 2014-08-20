@@ -11,8 +11,10 @@
 #import "DefineMainValues.h"
 #import "myRouteModel.h"
 #import "DetailRouteViewController.h"
+#import "ServerConnection.h"
 #import "MyDataView.h"
 #import "WTStatusBar.h"
+#import "EditRouteViewController.h"
 
 @interface MyRoutesViewController : UIViewController<UIAlertViewDelegate,UITextFieldDelegate>
 {
@@ -20,7 +22,12 @@
     NSMutableArray * mSelectedArray;
      NSArray * DaysArray;
     myRouteModel *mRouteModel;
+    UIAlertView * Alert ;
+    ServerConnection *ConnectToServer;
 }
+@property (strong, nonatomic)  NSString *seats;
+@property (strong, nonatomic)  NSString *activeDays;
+@property (strong, nonatomic)  NSString *timeInterval;
 @property (weak, nonatomic) IBOutlet GMSMapView *myMap;
 @property (strong, nonatomic) IBOutlet MyDataView *customView;
 @property (weak, nonatomic) IBOutlet UILabel *noOfSeatField;

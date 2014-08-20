@@ -332,7 +332,7 @@ NSString *durText;
     [WTStatusBar setLoading:YES loadAnimated:YES];
    
     NSLog(@" type %@", types);
-     NSString *activeDays=@"2";
+     NSString *activeDays=@"{0,1,2,3,4,5,6}";
      NSString *timeinterval=@"10-11";
      NSString *noSeats=@"3";
     origin=[NSString stringWithFormat:@"%@",origin];

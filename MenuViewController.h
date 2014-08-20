@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DefineMainValues.h"
+#import "WTStatusBar.h"
 
 @interface MenuViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIButton *earningPaymentButton;
