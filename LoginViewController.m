@@ -20,9 +20,8 @@ NSUserDefaults *prefs ;
 NSString *isLoggedIn;
 NSString *rideOptions;
 
-
--(void)viewDidAppear:(BOOL)animated
-{
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     prefs= [NSUserDefaults standardUserDefaults];
     isLoggedIn=[prefs stringForKey:@"isLogged"];
     NSLog(@"result%@",isLoggedIn);
@@ -32,11 +31,19 @@ NSString *rideOptions;
         mPasswordTextField.hidden=YES;
         mLoginButton.hidden=YES;
         mRegisterButton.hidden=YES;
-       // myView.hidden=YES;
-    //[self performSegueWithIdentifier:@"toMenuView" sender:nil];
+        // myView.hidden=YES;
+        //[self performSegueWithIdentifier:@"toMenuView" sender:nil];
         [self AuthenticateUserLoginWithServer];
     }
+
+}
+-(void)viewDidAppear:(BOOL)animated
+{
+    
     [super viewDidAppear:animated];
+    if([isLoggedIn isEqualToString:@"true"] && isLoggedIn!=nil)
+    {   [self AuthenticateUserLoginWithServer];
+    }
 }
 
 - (void)viewDidLoad

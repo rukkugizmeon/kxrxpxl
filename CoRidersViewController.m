@@ -20,6 +20,7 @@ NSString *types;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    Rating=@"0";
     ConnectToServer=[[ServerConnection alloc]init];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     uId=[prefs stringForKey:@"id"];
@@ -89,10 +90,14 @@ NSString *types;
     
     [WTStatusBar setLoading:NO loadAnimated:NO];
     [WTStatusBar clearStatus];
+     NSString *req=[data objectForKey:@"requests"];
+//    if(![req isEqualToString:@"No requests"])
+//    {
     NSArray *requestObj=[data objectForKey:@"requests"];
-    NSInteger *count=[requestObj count];
-    if(count>0)
-    {
+        if([requestObj count]>0)
+        {
+
+    
         for(int i=0;i<[requestObj count];i++)
         {
            mRiderModel=[[CoRiderObject alloc] init];
@@ -170,6 +175,7 @@ NSString *types;
     CoriderListObject *model=[ridePassengerListArray objectAtIndex:indexPath.row];
     NSString * PostString = [NSString stringWithFormat:@"userId=%@&profileId=%@",uId,model.user_id];
     NSData *passengerProfile=[ConnectToServer ServerCall:kServerLink_GetCoridersProfileById post:PostString];
+    
     [self ShowPassengerProfileAlert:passengerProfile];
 
 }
@@ -302,6 +308,7 @@ NSString *types;
             addressField.text=[passDict objectForKey:@"address"];
             cityField.text=[passDict objectForKey:@"city"];
             carModelField.text=[passDict objectForKey:@"car_model"];
+            favId=[passDict objectForKey:@"user_id"];
             seatsField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"number_of_seats"]];
             sosContactField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"sos_contact_num"]];
             SOSEmailField.text=[passDict objectForKey:@"sos_email_id"];
@@ -315,6 +322,82 @@ NSString *types;
 
 - (IBAction)addToFavs:(id)sender {
     NSLog(@"Favourites");
+    NSString *favsPost=[NSString stringWithFormat:@"userId=%@&fave_user_id=%@",uId,favId];
+    NSData *favs=[ConnectToServer ServerCall:kServerLink_AddToFavourites post:favsPost];
+    [self favResponse:favs];
+}
+
+-(void)favResponse:(NSData*)responseData
+{
+    NSError *jsonParsingError;
+    NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseData
+                                                         options:0 error:&jsonParsingError];
+    NSLog(@"Requested%@",data);
+    if(!jsonParsingError)
+    {
+        NSString *result=[NSString stringWithFormat:@"%@",[data objectForKey:@"status"]];
+        
+        NSLog(@"Data %@",result);
+        if([result isEqualToString:@"1"])
+        {
+          
+            [self ShowAlertView:@"Requset processed!!"];
+            
+        }
+        else if([result isEqualToString:@"0"]){
+         
+            [self ShowAlertView:@"Request Failed!!"];
+        }
+    }
+    else{
+        
+        [self ShowAlertView:@"Unable to process the request"];
+    }
+
+    
+    }
+
+- (IBAction)rating1:(id)sender {
+     Rating=@"1";
+     [self.GiverStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+}
+- (IBAction)rating2:(id)sender {
+     Rating=@"2";
+    [self.GiverStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+    [self.GiverStar2 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+}
+- (IBAction)rating3:(id)sender {
+     Rating=@"3";
+    [self.GiverStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+    [self.GiverStar2 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+    [self.GiverStar3 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+}
+- (IBAction)rating4:(id)sender {
+     Rating=@"4";
+    [self.GiverStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+    [self.GiverStar2 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+    [self.GiverStar3 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+    [self.GiverStar4 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+}
+- (IBAction)rating5:(id)sender {
+     Rating=@"5";
+    [self.GiverStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+    [self.GiverStar2 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+    [self.GiverStar3 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+    [self.GiverStar4 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+    [self.GiverStar5 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+}
+- (IBAction)submitAll:(id)sender {
+    if([Rating isEqualToString:@"0"])
+    {
+        [self ShowAlertView:@"Select alteast one"];
+    }
+    else{
+        NSString *RatePost=[NSString stringWithFormat:@"userId=%@&userIdRate=%@&rate=%@",uId,favId,Rating];
+        NSData *rates=[ConnectToServer ServerCall:kServerLink_SaveRatings post:RatePost];
+        [self favResponse:rates];
+
+    }
 }
 
 - (void)didReceiveMemoryWarning

@@ -13,6 +13,7 @@
     NSString *markerTitle;
     NSString *role;
     NSString *userId;
+    NSString *active_Rawform;
     NSUserDefaults *prefs;
 }
 @end
@@ -21,14 +22,14 @@
 @synthesize  myMap,noOfSeatField,mActiveFields,mActiveSwitch,mDestField;
 @synthesize  mOriginField,mTimeIntervalField,seats,activeDays,timeInterval;
 
--(void)viewDidAppear:(BOOL)animated
-{
-   
-       [super viewDidAppear:animated];
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+        [WTStatusBar clearStatus];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+ 
     mSelectedArray=[[NSMutableArray alloc]init];
     prefs= [NSUserDefaults standardUserDefaults];
     userId=[prefs stringForKey:@"id"];
@@ -138,7 +139,7 @@
         mRouteModel.journey_start_longitude=[journeyArray objectForKey:@"journey_start_longitude"];
         mRouteModel.journey_end_point=[journeyArray objectForKey:@"journey_end_point"];
         NSString *active=[journeyArray objectForKey:@"active_day"];
-       
+        mRouteModel.active_raw=active;
         mRouteModel.active_days=[self replaces:active];
         mRouteModel.active=[journeyArray objectForKey:@"active"];
         mRouteModel.time_intervals=[journeyArray objectForKey:@"time_intervals"];
@@ -201,6 +202,7 @@
         seats=model.seats_count;
         timeInterval=model.time_intervals;
         activeDays=model.active_days;
+        active_Rawform=model.active_raw;
     }
     }
 	return YES;
@@ -312,6 +314,7 @@
        edtVC.seats=seats;
        edtVC.timeInterval=timeInterval;
        edtVC.activeDays=activeDays;
+       edtVC.activeDaysRaw=active_Rawform;
     }
 }
 @end

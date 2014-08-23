@@ -23,7 +23,7 @@
 
 @implementation MapViewController
 @synthesize gAddressField,gAgeField,gCarModelField,gCityField,gMinDistField,gMinTimeField,gNameField,gSeatsField;
-@synthesize mymap,LocationCoordinates,mNameField,mAgeField,mAddressField,mDriverImageField,minDistField,minTimeField;
+@synthesize mymap,LocationCoordinates,mNameField,mAgeField,mAddressField,mDriverImageField,minDistField,minTimeField,intervalSegment;
 PolyLineDecoder *decoder;
 ServerConnection *ConnectToServer;
 NSString *start_Latitude;
@@ -39,6 +39,7 @@ NSString *uId;
 NSString *types;
 NSString *distText;
 NSString *durText;
+NSMutableArray *days;
 
 -(void)viewDidAppear:(BOOL)animated
 {
@@ -49,12 +50,23 @@ NSString *durText;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+ //  days = [NSMutableArray arrayWithObjects: @"Sunday", @"Monday", @"Tuesday", @"Wednesday",@"Thursday", @"Friday", @"Saturday", nil];
+    
+    self.seatsField.delegate=self;
+    self.daysTable.layer.cornerRadius=5;
+    mSelectedArray=[[NSMutableArray alloc]init];
     ConnectToServer=[[ServerConnection alloc]init];
+    self.timeInterval=@"9-10";
     isUpdatingEnd=NO;
     isUpdatingStart=NO;
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     uId=[prefs stringForKey:@"id"];
     types=[prefs stringForKey:@"role"];
+    if([types isEqualToString:@"T"])
+    {
+        self.seatsField.hidden=YES;
+        self.seatsLabel.hidden=YES;
+    }
     NSLog(@"id %@ type %@",uId,types);
     searchListArray=[[NSMutableArray alloc]init];
 
@@ -110,6 +122,8 @@ NSString *durText;
         [self performSelectorOnMainThread:@selector(fetchedData:)
                                withObject:data waitUntilDone:YES];
         }  else{
+             [WTStatusBar setLoading:NO loadAnimated:NO];
+            [WTStatusBar clearStatus];
                [self ShowAlertView:@"Unable to proces your request"];
             }
         
@@ -332,15 +346,18 @@ NSString *durText;
     [WTStatusBar setLoading:YES loadAnimated:YES];
    
     NSLog(@" type %@", types);
-     NSString *activeDays=@"{0,1,2,3,4,5,6}";
-     NSString *timeinterval=@"10-11";
-     NSString *noSeats=@"3";
+    NSString *activedaysFinal= [[NSString stringWithFormat:@"%@",mSelectedArray] stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+    
+    activedaysFinal= [activedaysFinal stringByReplacingOccurrencesOfString:@"(" withString:@"{"];
+    activedaysFinal= [activedaysFinal stringByReplacingOccurrencesOfString:@")" withString:@"}"];
+     NSString *noSeats=self.seatsField.text;
+    noSeats=[NSString stringWithFormat:@"%@",noSeats];
     origin=[NSString stringWithFormat:@"%@",origin];
     destination=[NSString stringWithFormat:@"%@",destination];
     origin=[origin stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
   //  OverViewPolyline=[OverViewPolyline stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     destination=[destination stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString * PostString = [NSString stringWithFormat:@"userId=%@&startLatLong[1]=%@&startLatLong[0]=%@&endLatLong[1]=%@&endLatLong[0]=%@&routeType=%@&from=%@&to=%@&activeDays=%@&timeInterval=%@&seatsCount=%@&overview_path=%@",uId,start_Latitude,start_Longitude,stop_Latitude,stop_Longitude,types,origin,destination,activeDays,timeinterval,noSeats,OverViewPolyline];
+    NSString * PostString = [NSString stringWithFormat:@"userId=%@&startLatLong[1]=%@&startLatLong[0]=%@&endLatLong[1]=%@&endLatLong[0]=%@&routeType=%@&from=%@&to=%@&activeDays=%@&timeInterval=%@&seatsCount=%@&overview_path=%@",uId,start_Latitude,start_Longitude,stop_Latitude,stop_Longitude,types,origin,destination,activedaysFinal,self.timeInterval,noSeats,OverViewPolyline];
     NSLog(@"postString %@",PostString);
     NSData *postData = [PostString  dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
@@ -369,27 +386,31 @@ NSString *durText;
 
 -(void)ShowSubmitRouteAlertWithMessage:(NSString*)Message{
     
-    UIAlertView * Alert = [[UIAlertView alloc]initWithTitle:kApplicationName message:Message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Submit", nil];
+    UIAlertView * Alerts = [[UIAlertView alloc]initWithTitle:kApplicationName message:Message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Submit", nil];
     
     
     
-    [Alert show];
+    [Alerts show];
 }
 
-//  Alert View Delagates
+// ***************** Alert View Delagates
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
       NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
     // Initate call over cellular network
     if ([title isEqualToString:@"Submit"]) {
+         [self MoveUp];
         [self addRouteToServer];
     }
     else if ([title isEqualToString:@"Show route"])
     {
         [self drawPolylineAndMarker];
     }
-    else{
-        NSLog(@"Cancelled");
+    else if ([title isEqualToString:@"Cancel"]){
+        [days removeAllObjects];
+        [self.daysTable reloadData];
+        [self MoveUp];
+     //
     }
 }
 
@@ -397,7 +418,9 @@ NSString *durText;
 
 - (void)addRouteResponse:(NSData *)responseData
 {
-    
+    [days removeAllObjects];
+    [self.daysTable reloadData];
+    self.addView.hidden=YES;
     NSError *jsonParsingError;
     NSDictionary *AddResponseData= [NSJSONSerialization JSONObjectWithData:responseData
                                                                 options:0 error:&jsonParsingError];
@@ -427,12 +450,8 @@ NSString *durText;
 
 -(void) drawPolylineAndMarker
 {
-   // NSString *postString=[NSString stringWithFormat:@"userId=%@&journeyId=%@",uId,journey_ids];
      [self performSegueWithIdentifier:@"toUserDetailedRoute" sender:nil];
-  //   NSLog(@"Global one%@", GlobalpostString);
-   
-    //NSData *driverPolyLine=[ConnectToServer ServerCall:kServerLink_UserPolyline post:GlobalpostString];
-    //          [self UserRoute:driverPolyLine];
+  
 }
 
 //Parsing Taker from search 
@@ -447,8 +466,10 @@ NSString *durText;
     NSString *age=[DataPos objectForKey:@"age"];
     age=[NSString stringWithFormat:@"%@",age];
     NSString *address=[DataPos objectForKey:@"address"];
+    NSString *rating=[DataPos objectForKey:@"rate"];
+    rating=[NSString stringWithFormat:@"%@",rating];
       NSLog(@"DriverData%@",name);
-    [self ShowUserRouteDataAlert:name age:age address:address time:time dist:dist];
+    [self ShowUserRouteDataAlert:name age:age address:address time:time dist:dist rate:rating];
 }
                     
 - (void)fetchedGiverData:(NSData *)responseData time:(NSString*)time dist:(NSString*)dist
@@ -468,8 +489,10 @@ NSString *durText;
                     car_model=[NSString stringWithFormat:@"%@",car_model];
                     NSString *seats=[DataPos objectForKey:@"number_of_seats"];
                     seats=[NSString stringWithFormat:@"%@",seats];
+                    NSString *rating=[DataPos objectForKey:@"rate"];
+                    rating=[NSString stringWithFormat:@"%@",rating];
                     NSLog(@"DriverData%@",name);
-                    [self ShowGiverRouteDataAlert:name age:age address:address NofSeats:seats city:city model:car_model time:time dist:dist];
+                    [self ShowGiverRouteDataAlert:name age:age address:address NofSeats:seats city:city model:car_model time:time dist:dist rate:rating];
                 }
 
 
@@ -537,7 +560,21 @@ NSString *durText;
    
     
 }
-
+-(void)MoveUp
+{
+      self.addRouteButton.userInteractionEnabled=YES;
+    const int movementDistance = 385; // tweak as needed
+    const float movementDuration = 0.3f; // tweak as needed
+    bool up=YES;
+    int movement = (up ? -movementDistance : movementDistance);
+    
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.addView.frame = CGRectOffset(self.addView.frame, 0, movement);
+    [UIView commitAnimations];
+      //self.addView.hidden=YES;
+}
 - (void)mapView:(GMSMapView *)mapView didBeginDraggingMarker:(GMSMarker *)marker
 {
   if([marker.title isEqualToString:@"Origin"])
@@ -550,9 +587,25 @@ NSString *durText;
   }
 }
 
+//*************ADD route button*********
+
 - (IBAction)addRouteAction:(id)sender {
+    self.addRouteButton.userInteractionEnabled=NO;
+      days = [NSMutableArray arrayWithObjects: @"Sunday", @"Monday", @"Tuesday", @"Wednesday",@"Thursday", @"Friday", @"Saturday", nil];
+    [self.daysTable reloadData];
+    const int movementDistance = 385; // tweak as needed
+    const float movementDuration = 0.3f; // tweak as needed
+    bool up=YES;
+    int movement = (up ? movementDistance : -movementDistance);
     
-    [self ShowSubmitRouteAlertWithMessage:@"Are you sure you want to submit the route?"];
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.addView.frame = CGRectOffset(self.addView.frame, 0, movement);
+    [UIView commitAnimations];
+    self.addView.hidden=NO;
+    [mymap addSubview:self.addView];
+    [mymap bringSubviewToFront:self.addView];
 }
 
 - (void)mapView:(GMSMapView *)mapView didDragMarker:(GMSMarker *)marker
@@ -589,10 +642,10 @@ NSString *durText;
    
 }
 
--(void)ShowUserRouteDataAlert:(NSString*)name age:(NSString*)age address:(NSString*)address  time:(NSString*)time dist:(NSString*)dist// NofSeats:(NSString*)noSeats ActiveDays:(NSString*)activeDays active:(NSString*)action
+-(void)ShowUserRouteDataAlert:(NSString*)name age:(NSString*)age address:(NSString*)address  time:(NSString*)time dist:(NSString*)dist rate:(NSString*)rating //ActiveDays:(NSString*)activeDays active:(NSString*)action
 {
     
-   Alert = [[UIAlertView alloc]initWithTitle:kApplicationName message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Show route", nil];
+   Alert = [[UIAlertView alloc]initWithTitle:kApplicationName message:@"" delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:@"Show route", nil];
     
     UserDataView *AccessoryView =[ [[NSBundle mainBundle]loadNibNamed:@"UserDataView" owner:self options:nil] objectAtIndex:0];
     
@@ -603,8 +656,9 @@ NSString *durText;
     mNameField.text=name;
     mAgeField.text=age;
     mAddressField.text=address;
-        minTimeField.text=dist;
-        minDistField.text=time;
+        minTimeField.text=time;
+        minDistField.text=dist;
+     [self ratingTaker:rating];
         NSLog(@"Type=%@ =Dist%@,Time%@ ",types,distText,durText);
   
     // Set Values
@@ -612,10 +666,10 @@ NSString *durText;
     [Alert show];
 }
 
--(void)ShowGiverRouteDataAlert:(NSString*)name age:(NSString*)age address:(NSString*)address NofSeats:(NSString*)noSeats city:(NSString*)city model:(NSString*)model  time:(NSString*)time dist:(NSString*)dist
+-(void)ShowGiverRouteDataAlert:(NSString*)name age:(NSString*)age address:(NSString*)address NofSeats:(NSString*)noSeats city:(NSString*)city model:(NSString*)model  time:(NSString*)time dist:(NSString*)dist rate:(NSString*)rate
 {
     
-    Alert = [[UIAlertView alloc]initWithTitle:kApplicationName message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Show route", nil];
+    Alert = [[UIAlertView alloc]initWithTitle:kApplicationName message:@"" delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:@"Show route", nil];
     
     GiverDataView *AccessoryView =[ [[NSBundle mainBundle]loadNibNamed:@"View" owner:self options:nil] objectAtIndex:0];
     
@@ -631,10 +685,79 @@ NSString *durText;
     gSeatsField.text=noSeats;
     gCityField.text=city;
     gCarModelField.text=model;
-    // Set Values
+    [self ratingGiver:rate];
     
     [Alert show];
 }
+-(void)ratingGiver:(NSString*)rates
+{
+   int rate=[rates intValue];
+    switch (rate) {
+        case 1:
+           [self.GiverStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            break;
+        case 2:
+            [self.GiverStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.GiverStar2 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            break;
+        case 3:
+            [self.GiverStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.GiverStar2 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.GiverStar3 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            break;
+        case 4:
+            [self.GiverStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.GiverStar2 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.GiverStar3 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.GiverStar4 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            break;
+        case 5:
+            [self.GiverStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.GiverStar2 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.GiverStar3 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.GiverStar4 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+             [self.GiverStar5 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            break;
+        default:
+            break;
+    }
+}
+//Rating taker
+
+-(void)ratingTaker:(NSString*)rates
+{
+    int rate=[rates intValue];
+    switch (rate) {
+        case 1:
+            [self.TakerStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            break;
+        case 2:
+            [self.TakerStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.GiverStar2 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            break;
+        case 3:
+            [self.TakerStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.GiverStar2 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.GiverStar3 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            break;
+        case 4:
+            [self.TakerStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.TakerStar2 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.TakerStar3 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.TakerStar4 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            break;
+        case 5:
+            [self.TakerStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.TakerStar2 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.TakerStar3 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.TakerStar4 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            [self.TakerStar5 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
+            break;
+        default:
+            break;
+    }
+}
+
 
 //
 - (void)UserRoute:(NSData *)responseData {
@@ -781,6 +904,126 @@ NSString *durText;
      [self ShowAlertView:@"Request cannot be sent now! Please try later!"];
     }
 }
+- (IBAction)cancelAdding:(id)sender {
+    [self MoveUp];
+}
 
+
+
+- (IBAction)timeSubmission:(id)sender {
+    if (intervalSegment.selectedSegmentIndex == 0)
+    {
+        self.timeInterval=@"9-10";
+    }
+    else  if (intervalSegment.selectedSegmentIndex == 1)
+    {
+        self.timeInterval=@"10-11";
+    }
+    else{
+        self.timeInterval=@"11-12";
+    }
+
+    
+}
+
+- (IBAction)addRouteSUbmission:(id)sender {
+    NSLog(@"Array val %@",mSelectedArray);
+    if(mSelectedArray.count>0){
+        if(self.seatsField.hasText){
+      
+            [self ShowSubmitRouteAlertWithMessage:@"Are you sure you want to submit the route?"];
+        }else
+        {
+        [self ShowAlertView:@"Please enter no:of seats"];
+        }
+    
+    }
+    else{
+        [self ShowAlertView:@"Please select days"];
+    }
+}
+
+//Table delegates
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger) section {
+    return [days count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UITableViewCell *cell = nil;
+    
+    static NSString *AutoCompleteRowIdentifier = @"AutoCompleteRowIdentifier";
+    cell = [tableView dequeueReusableCellWithIdentifier:AutoCompleteRowIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc]
+                initWithStyle:UITableViewCellStyleDefault reuseIdentifier:AutoCompleteRowIdentifier];
+    }
+    cell.textLabel.textAlignment=UITextAlignmentCenter;
+    cell.backgroundColor=[UIColor clearColor];
+    cell.textLabel.text = [days objectAtIndex:indexPath.row];
+  
+    
+    return cell;
+}
+
+#pragma mark UITableViewDelegate methods
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+   // UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+   // [tableView reloadData];
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    UITableViewCell *thisCell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    if (thisCell.accessoryType == UITableViewCellAccessoryNone) {
+        thisCell.accessoryType = UITableViewCellAccessoryCheckmark;
+       
+         [mSelectedArray addObject:[NSString stringWithFormat:@"%ld",(long)indexPath.row]];
+    }
+    else
+    {
+        thisCell.accessoryType = UITableViewCellAccessoryNone;
+        [mSelectedArray removeObject:[NSString stringWithFormat:@"%ld",(long)indexPath.row]];
+    }
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+        return YES;
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self.seatsField resignFirstResponder];
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+   
+        [self animateTextField: textField up: YES];
+    
+}
+
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    
+        [self animateTextField: textField up: NO];
+    
+}
+
+- (void) animateTextField: (UITextField*) textField up: (BOOL) up
+{
+    const int movementDistance = 55; // tweak as needed
+    const float movementDuration = 0.3f; // tweak as needed
+    
+    int movement = (up ? -movementDistance : movementDistance);
+    
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView commitAnimations];
+}
 
 @end

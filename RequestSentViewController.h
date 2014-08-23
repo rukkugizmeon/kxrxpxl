@@ -18,6 +18,7 @@
 {
     NSMutableArray *path;
      UIAlertView  *Alerts;
+     NSString *favId;
     NSMutableArray * reqListArray;
     RecievedReqModel *mRequestModel;
       ServerConnection *ConnectToServer;

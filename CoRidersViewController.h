@@ -24,6 +24,8 @@
     UIAlertView *Alert;
     UIAlertView  *Alerts;
     CoRiderObject *mRiderModel;
+    NSString *favId;
+     NSString *Rating;
     CoriderListObject *mRiderListModel;
 }
 @property (weak, nonatomic) IBOutlet GMSMapView *myMap;
@@ -43,5 +45,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *SOSEmailField;
 
 @property (weak, nonatomic) IBOutlet UILabel *phoneField;
+
+//Ratings
+
+@property (weak, nonatomic) IBOutlet UIButton *GiverStar1;
+@property (weak, nonatomic) IBOutlet UIButton *GiverStar2;
+@property (weak, nonatomic) IBOutlet UIButton *GiverStar3;
+@property (weak, nonatomic) IBOutlet UIButton *GiverStar4;
+@property (weak, nonatomic) IBOutlet UIButton *GiverStar5;
+
 
 @end

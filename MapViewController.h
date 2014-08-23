@@ -20,9 +20,10 @@
 #import "SearchRouteViewController.h"
 
 
-@interface MapViewController : UIViewController<UIAlertViewDelegate>
+@interface MapViewController : UIViewController<UIAlertViewDelegate,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 {
     NSMutableArray *path;
+    NSMutableArray * mSelectedArray;
     NSMutableArray * searchListArray;
     SearchRouteModel *mSearchModel;
 }
@@ -30,10 +31,23 @@
 @property (strong, nonatomic, readwrite) GMDraggableMarkerManager *draggableMarkerManager;
 @property (assign,nonatomic) CLLocationCoordinate2D  LocationCoordinates;
 @property (strong, nonatomic)  NSString *starts;
+@property (strong, nonatomic)  NSString *timeInterval;
 @property (strong, nonatomic)  NSString *stops;
 @property (strong, nonatomic)  NSString *start_marker_lat;
 @property (strong, nonatomic)  NSString *start_marker_lng;
+@property (weak, nonatomic) IBOutlet UIButton *addRouteButton;
 
+//Add route Options
+@property (weak, nonatomic) IBOutlet UIView *addView;
+@property (weak, nonatomic) IBOutlet UITableView *daysTable;
+@property (weak, nonatomic) IBOutlet UITextField *seatsField;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *intervalSegment;
+@property (weak, nonatomic) IBOutlet UILabel *seatsLabel;
+
+
+
+
+//Taker Datas
 @property (weak, nonatomic) IBOutlet UILabel *minTimeField;
 @property (weak, nonatomic) IBOutlet UILabel *minDistField;
 @property (weak, nonatomic) IBOutlet UIImageView *mDriverImageField;
@@ -42,6 +56,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *mAddressField;
 @property (weak, nonatomic) IBOutlet UIButton *mBlockButton;
 @property (weak, nonatomic) IBOutlet UIButton *mRequestButton;
+@property (weak, nonatomic) IBOutlet UIButton *TakerStar1;
+@property (weak, nonatomic) IBOutlet UIButton *TakerStar2;
+@property (weak, nonatomic) IBOutlet UIButton *TakerStar3;
+@property (weak, nonatomic) IBOutlet UIButton *TakerStar4;
+@property (weak, nonatomic) IBOutlet UIButton *TakerStar5;
 
 //Giver Datas
 @property (weak, nonatomic) IBOutlet UILabel *gMinTimeField;
@@ -54,5 +73,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *gSeatsField;
 @property (weak, nonatomic) IBOutlet UIButton *gBlockButton;
 @property (weak, nonatomic) IBOutlet UIButton *gRequestButton;
+@property (weak, nonatomic) IBOutlet UIButton *GiverStar1;
+@property (weak, nonatomic) IBOutlet UIButton *GiverStar2;
+@property (weak, nonatomic) IBOutlet UIButton *GiverStar3;
+@property (weak, nonatomic) IBOutlet UIButton *GiverStar4;
+@property (weak, nonatomic) IBOutlet UIButton *GiverStar5;
 
 @end

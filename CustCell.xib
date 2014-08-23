@@ -9,7 +9,7 @@
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="passengerCell" id="rbu-yD-LLL" customClass="PassengerListTableViewCell">
             <rect key="frame" x="0.0" y="0.0" width="320" height="58"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rbu-yD-LLL" id="8es-iL-rRS">
+            <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rbu-yD-LLL" id="8es-iL-rRS">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="57"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>

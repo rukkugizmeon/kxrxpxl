@@ -221,6 +221,7 @@ NSString *types;
             ageField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"age"]];
             addressField.text=[passDict objectForKey:@"address"];
             cityField.text=[passDict objectForKey:@"city"];
+            favId=[passDict objectForKey:@"user_id"];
             if([types isEqualToString:@"T"])
             {
              seatsField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"number_of_seats"]];
@@ -258,6 +259,42 @@ NSString *types;
 {
     [alert dismissWithClickedButtonIndex:0 animated:YES];
 }
+- (IBAction)addToFavs:(id)sender {
+    NSString *favsPost=[NSString stringWithFormat:@"userId=%@&fave_user_id=%@",uId,favId];
+    NSData *favs=[ConnectToServer ServerCall:kServerLink_AddToFavourites post:favsPost];
+    [self favResponse:favs];
+}
+
+-(void)favResponse:(NSData*)responseData
+{
+    NSError *jsonParsingError;
+    NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseData
+                                                         options:0 error:&jsonParsingError];
+    NSLog(@"Requested%@",data);
+    if(!jsonParsingError)
+    {
+        NSString *result=[NSString stringWithFormat:@"%@",[data objectForKey:@"status"]];
+        
+        NSLog(@"Data %@",result);
+        if([result isEqualToString:@"1"])
+        {
+            
+            [self ShowAlertView:@"Requset processed!!"];
+            
+        }
+        else if([result isEqualToString:@"0"]){
+            
+            [self ShowAlertView:@"Request Failed!!"];
+        }
+    }
+    else{
+        
+        [self ShowAlertView:@"Unable to process the request"];
+    }
+    
+    
+}
+
 
 /*
 #pragma mark - Navigation

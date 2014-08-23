@@ -196,17 +196,18 @@ UIAlertView * Alert;
     if(!jsonParsingError)
     {
     NSArray *passenger=[data objectForKey:@"passengerList"];
-        
+        NSLog(@"Pass Count%lu",(unsigned long)[passenger count]);
         for(int pos=0;pos<[passenger count];pos++)
         {
+              NSLog(@"Index%i",pos);
             mPassengerModel=[[PassengerListModel alloc]init];
             NSDictionary *passDict=[passenger objectAtIndex:pos];
             mPassengerModel.journey_id=[passDict objectForKey:@"journey_id"];
             mPassengerModel.request_id=[passDict objectForKey:@"request_id"];
             mPassengerModel.name=[passDict objectForKey:@"name"];
-            NSLog(@"RequestedName%@",[passDict objectForKey:@"name"]);
+          //  NSLog(@"RequestedName%@",[passDict objectForKey:@"name"]);
             mPassengerModel.index=[NSString stringWithFormat:@"%i",pos+1];
-             NSLog(@"RequestedIndex%@",[NSString stringWithFormat:@"%i",pos+1]);
+            // NSLog(@"RequestedIndex%@",[NSString stringWithFormat:@"%i",pos+1]);
             [passListArray addObject:mPassengerModel];
         }
         
@@ -243,7 +244,7 @@ UIAlertView * Alert;
 -(NSInteger) tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section
 {
 
-    return [reqListArray count];
+    return [passListArray count];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -307,10 +308,10 @@ UIAlertView * Alert;
 
 -(void)ShowPassengerAlertWithMessage//:(NSString*)from To:(NSString*)to TimeI:(NSString*)time NofSeats:(NSString*)noSeats ActiveDays:(NSString*)activeDays active:(NSString*)action
 {
-    
+    NSLog(@"here");
     Alert = [[UIAlertView alloc ]initWithTitle:@"Passenger List" message:@"" delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles: nil];
     
-    PassengerListView *AccessoryView =[ [[NSBundle mainBundle]loadNibNamed:@"PassengerListView" owner:self options:nil] objectAtIndex:0];
+    PassengerListView *AccessoryView =[[[NSBundle mainBundle]loadNibNamed:@"PassengerListView" owner:self options:nil] objectAtIndex:0];
     
     [AccessoryView setBackgroundColor:[UIColor clearColor]];
     

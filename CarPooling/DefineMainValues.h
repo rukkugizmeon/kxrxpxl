@@ -135,6 +135,18 @@
  //requestId,userId
 
 
+// Set Favourite
+
+#define kServerLink_AddToFavourites @"http://ridewithme.in/index.php?r=api/setFavourite"
+//* userId,fave_user_id
+
+
+//Give Ratings
+
+#define kServerLink_SaveRatings @"http://ridewithme.in/index.php?r=api/saveRatings"
+//* params:userId,userIdRate
+
+
 //Reject user request
 
 #define kServerLink_RejectRequest @"http://ridewithme.in/index.php?r=api/cancelJourneyRequest"

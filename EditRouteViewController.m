@@ -9,72 +9,104 @@
 #import "EditRouteViewController.h"
 
 @interface EditRouteViewController ()
+{
+    NSString *userId;
+    NSUserDefaults *prefs;
+}
 
 @end
 
 @implementation EditRouteViewController
 
-@synthesize noOfSeatField,daysTableView,intervalSegment,editButton;
+@synthesize noOfSeatField,intervalSegment,editButton;
+@synthesize monSwitch,sunSwitch,tueSwitch,wedSwitch,thursSwitch,friSwitch,satSwitch;
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [WTStatusBar clearStatus];
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-     mSelectedArray=[[NSMutableArray alloc]init];
-    [daysTableView setSeparatorInset:UIEdgeInsetsZero];
-    daysTableView.layer.cornerRadius=10;
-    DaysArray=@[@"Sunday", @"Monday",
-                @"Tuesday", @"Wednesday", @"Thursday",@"Friday",@"Saturday"];
+    ConnectToServer=[[ServerConnection alloc]init];
+    prefs= [NSUserDefaults standardUserDefaults];
+    userId=[prefs stringForKey:@"id"];
+    mSelectedArray=[[NSMutableArray alloc]init];
     [self setUpUI];
 }
 
+
 - (IBAction)editDetails:(id)sender {
+     [WTStatusBar setLoading:YES loadAnimated:YES];
+    self.seats= noOfSeatField.text;
+    self.seats=[NSString stringWithFormat:@"%@",self.seats];
+    self.activeDays=[self ActiveDaysText];
+    NSString *postData=[NSString stringWithFormat:@"userId=%@&journeyId=%@&activeDays=%@&timeInterval=%@&seatsCount=%@",userId,self.journeyId,self.activeDays,self.timeInterval,self.seats];
+    NSData *editDataResp=[ConnectToServer ServerCall:kServerLink_EditRoute post:postData];
     NSLog(@"Array%@",[NSString stringWithFormat:@"%@",mSelectedArray]);
-    
+    [self parseData:editDataResp];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger) section {
-    return [DaysArray count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  NSString *data=[DaysArray objectAtIndex:indexPath.row];
-    UITableViewCell *cell = nil;
-    static NSString *AutoCompleteRowIdentifier = @"AutoCompleteRowIdentifier";
-    cell = [tableView dequeueReusableCellWithIdentifier:AutoCompleteRowIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc]
-                initWithStyle:UITableViewCellStyleDefault reuseIdentifier:AutoCompleteRowIdentifier];
-    }
-    cell.textLabel.textAlignment=UITextAlignmentCenter;
-    cell.textLabel.text = data;
-    cell.backgroundColor=[UIColor clearColor];
-    if([self.activeDays rangeOfString:@"Mon"].location == NSNotFound)
+-(void)parseData:(NSData*)responseData
+{
+    NSError *jsonParsingError;
+    NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseData
+                                                         options:0 error:&jsonParsingError];
+    if(!jsonParsingError)
     {
-        NSLog(@"Not Founed!!!!!!!!!!!!!!!!");
-    }else{
-      //  [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-        [mSelectedArray addObject:data];
+        NSString *result=[NSString stringWithFormat:@"%@",[data objectForKey:@"status"]];
+        
+        NSLog(@"Data %@",result);
+        if([result isEqualToString:@"1"])
+        {
+            [WTStatusBar setLoading:NO loadAnimated:NO];
+            [WTStatusBar clearStatus];
+            [self ShowAlertView:@"Details successfully update!!"];
+        }
+        else if([result isEqualToString:@"0"]){
+            [WTStatusBar setLoading:NO loadAnimated:NO];
+            [WTStatusBar clearStatus];
+            [self ShowAlertView:@"Updation Failed!!"];
+          
+            
+        }
     }
-    return cell;
+    else{
+        [WTStatusBar setLoading:NO loadAnimated:NO];
+        [WTStatusBar clearStatus];
+        [self ShowAlertView:@"Unable to process the request"];
+    }
+
 }
 
-#pragma mark UITableViewDelegate methods
+-(void)ShowAlertView:(NSString*)Message{
+    UIAlertView * Alerts = [[UIAlertView alloc ]initWithTitle:kApplicationName message:Message delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles: nil];
+    [Alerts show];
+}
 
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-     NSString *data=[DaysArray objectAtIndex:indexPath.row];
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    if([tableView cellForRowAtIndexPath:indexPath].accessoryType == UITableViewCellAccessoryCheckmark){
-        [tableView cellForRowAtIndexPath:indexPath].accessoryType = UITableViewCellAccessoryNone;
-        NSLog(@"Cleared%@",data);
-        [mSelectedArray removeObject:data];
-    }else{
-      
-        [tableView cellForRowAtIndexPath:indexPath].accessoryType = UITableViewCellAccessoryCheckmark;
-         NSLog(@"Selected %@",data);
-        [mSelectedArray addObject:data];
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+ 
+  
+          [self performSegueWithIdentifier:@"backFromEdit" sender:nil];
+        
+}
+    
+- (IBAction)timeSelection:(id)sender
+{
+    if (intervalSegment.selectedSegmentIndex == 0)
+    {
+        self.timeInterval=@"9-10";
+    }
+    else  if (intervalSegment.selectedSegmentIndex == 1)
+    {
+        self.timeInterval=@"10-11";
+    }
+    else{
+        self.timeInterval=@"11-12";
     }
 }
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -98,7 +130,73 @@
     else{
         [intervalSegment setSelectedSegmentIndex:2];
     }
-   
+    
+   // Active days
+    
+    if([self.activeDays rangeOfString:@"Sun"].location != NSNotFound)
+    {
+     [sunSwitch setOn:YES animated:YES];
+     NSLog(@"Found!!!!!!!!!!!!!!!!");
+    }
+    else
+    {
+      [sunSwitch setOn:NO animated:YES];
+    }
+    if([self.activeDays rangeOfString:@"Mon"].location != NSNotFound)
+    {
+    [monSwitch setOn:YES animated:YES];
+         NSLog(@"Found!!!!!!!!!!!!!!!!");
+    }
+    else
+    {
+        [monSwitch setOn:NO animated:YES];
+    }
+    if([self.activeDays rangeOfString:@"Tue"].location != NSNotFound)
+    {
+        [tueSwitch setOn:YES animated:YES];
+         NSLog(@"Found!!!!!!!!!!!!!!!!");
+    }
+    else
+    {
+        [tueSwitch setOn:NO animated:YES];
+    }
+    if([self.activeDays rangeOfString:@"Wed"].location != NSNotFound)
+    {
+        [wedSwitch setOn:YES animated:YES];
+         NSLog(@"Found!!!!!!!!!!!!!!!!");
+    }
+    else
+    {
+        [wedSwitch setOn:NO animated:YES];
+    }
+    if([self.activeDays rangeOfString:@"Thu"].location != NSNotFound)
+    {
+        [thursSwitch setOn:YES animated:YES];
+         NSLog(@"Found!!!!!!!!!!!!!!!!");
+    }
+    else
+    {
+        [thursSwitch setOn:NO animated:YES];
+    }
+    if([self.activeDays rangeOfString:@"Fri"].location != NSNotFound)
+    {
+        [friSwitch setOn:YES animated:YES];
+         NSLog(@"Found!!!!!!!!!!!!!!!!");
+    }
+    else
+    {
+        [friSwitch setOn:NO animated:YES];
+    }
+    if([self.activeDays rangeOfString:@"Sat"].location != NSNotFound)
+    {
+        [satSwitch setOn:YES animated:YES];
+         NSLog(@"Found!!!!!!!!!!!!!!!!");
+    }
+    else
+    {
+        [satSwitch setOn:NO animated:YES];
+    }
+    
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -139,6 +237,50 @@
     self.view.frame = CGRectOffset(self.view.frame, 0, movement);
     [UIView commitAnimations];
 }
+
+-(NSString*)ActiveDaysText
+{
+    [mSelectedArray removeAllObjects];
+    if([sunSwitch isOn])
+    {
+      [mSelectedArray addObject:@"0"];
+    }
+    if([monSwitch isOn])
+    {
+        [mSelectedArray addObject:@"1"];
+    }
+    if([tueSwitch isOn])
+    {
+       [mSelectedArray addObject:@"2"];
+    }
+    if([wedSwitch isOn])
+    {
+        [mSelectedArray addObject:@"3"];
+    }
+    if([thursSwitch isOn])
+    {
+        [mSelectedArray addObject:@"4"];
+    }
+    if([friSwitch isOn])
+    {
+        [mSelectedArray addObject:@"5"];
+    }
+    if([satSwitch isOn])
+    {
+        [mSelectedArray addObject:@"6"];
+    }
+  NSString  *activedaysFinal= [[NSString stringWithFormat:@"%@",mSelectedArray] stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+    
+    activedaysFinal= [activedaysFinal stringByReplacingOccurrencesOfString:@"(" withString:@"{"];
+    activedaysFinal= [activedaysFinal stringByReplacingOccurrencesOfString:@")" withString:@"}"];
+        NSLog(@"Array%@",[NSString stringWithFormat:@"%@",activedaysFinal]);
+
+    return activedaysFinal;
+}
+
+
+
+
 /*
 #pragma mark - Navigation
 

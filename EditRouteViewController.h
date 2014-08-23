@@ -7,18 +7,32 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DefineMainValues.h"
+#import "ServerConnection.h"
+#import "WTStatusBar.h"
 
-@interface EditRouteViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
+@interface EditRouteViewController : UIViewController<UITextFieldDelegate,UIAlertViewDelegate>
 {
-  NSArray * DaysArray;
-     NSMutableArray * mSelectedArray;
+  
+  NSMutableArray * mSelectedArray;
+    ServerConnection *ConnectToServer;
 }
-@property (weak, nonatomic) IBOutlet UITableView *daysTableView;
 @property (weak, nonatomic) IBOutlet UITextField *noOfSeatField;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *intervalSegment;
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
+@property (weak, nonatomic) IBOutlet UISwitch *sunSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *monSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *tueSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *wedSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *thursSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *friSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *satSwitch;
+
+//Variables
+
 @property (strong, nonatomic)  NSString *seats;
 @property (strong, nonatomic)  NSString *activeDays;
+@property (strong, nonatomic)  NSString *activeDaysRaw;
 @property (strong, nonatomic)  NSString *timeInterval;
 @property (strong, nonatomic)  NSString *journeyId;
 @end

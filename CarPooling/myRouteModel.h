@@ -19,4 +19,5 @@
 @property (strong, nonatomic) NSString *journey_end_point;
 @property (strong, nonatomic) NSString *active;
 @property (strong, nonatomic) NSString *active_days;
+@property (strong, nonatomic) NSString *active_raw;
 @end

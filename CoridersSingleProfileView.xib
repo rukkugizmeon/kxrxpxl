@@ -6,6 +6,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CoRidersViewController">
             <connections>
+                <outlet property="GiverStar1" destination="gUz-r5-QfX" id="rmH-pJ-D7C"/>
+                <outlet property="GiverStar2" destination="vwb-E4-hri" id="jl7-Hd-4tK"/>
+                <outlet property="GiverStar3" destination="cRt-31-V0F" id="y3g-8h-BqB"/>
+                <outlet property="GiverStar4" destination="4qW-Vz-oZg" id="hdQ-Bh-aAO"/>
+                <outlet property="GiverStar5" destination="RKA-i0-Vz8" id="i1y-zi-Jmm"/>
                 <outlet property="SOSEmailField" destination="txT-oH-rMa" id="ePa-VY-PVr"/>
                 <outlet property="addressField" destination="vLw-2M-oAW" id="ZYF-Vo-AzI"/>
                 <outlet property="ageField" destination="TWI-3R-66E" id="hmR-xw-3ya"/>
@@ -148,7 +153,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="HCF-1i-GA8">
-                            <rect key="frame" x="97" y="526" width="126" height="30"/>
+                            <rect key="frame" x="47" y="526" width="126" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="Add to Favourites"/>
                             <connections>
@@ -162,6 +167,66 @@
                             <color key="textColor" red="0.25083276719999997" green="0.72700832199999998" blue="0.091832534349999995" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gUz-r5-QfX">
+                            <rect key="frame" x="147" y="498" width="19" height="19"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" backgroundImage="star.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="rating1:" destination="-1" eventType="touchUpInside" id="jkQ-Oy-r5E"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="vwb-E4-hri">
+                            <rect key="frame" x="173" y="497" width="19" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" backgroundImage="star.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="rating2:" destination="-1" eventType="touchUpInside" id="Gri-ni-rH4"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="cRt-31-V0F">
+                            <rect key="frame" x="200" y="497" width="19" height="19"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" backgroundImage="star.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="rating3:" destination="-1" eventType="touchUpInside" id="myo-kY-PqG"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="4qW-Vz-oZg">
+                            <rect key="frame" x="227" y="497" width="19" height="19"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" backgroundImage="star.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="rating4:" destination="-1" eventType="touchUpInside" id="Eo6-Xp-HGe"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="RKA-i0-Vz8">
+                            <rect key="frame" x="250" y="497" width="19" height="19"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" backgroundImage="star.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="rating5:" destination="-1" eventType="touchUpInside" id="qGk-iY-1aM"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Ie9-jT-5UM">
+                            <rect key="frame" x="190" y="526" width="98" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Submit Rating">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="submitAll:" destination="-1" eventType="touchUpInside" id="m7j-1L-Gb1"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </scrollView>
@@ -173,5 +238,6 @@
     </objects>
     <resources>
         <image name="driver.jpg" width="128" height="105"/>
+        <image name="star.png" width="16" height="16"/>
     </resources>
 </document>
