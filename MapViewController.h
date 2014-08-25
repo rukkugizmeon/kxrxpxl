@@ -26,6 +26,7 @@
     NSMutableArray * mSelectedArray;
     NSMutableArray * searchListArray;
     SearchRouteModel *mSearchModel;
+    NSString *blockingId;
 }
 @property (weak, nonatomic) IBOutlet GMSMapView *mymap;
 @property (strong, nonatomic, readwrite) GMDraggableMarkerManager *draggableMarkerManager;

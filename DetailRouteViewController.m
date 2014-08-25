@@ -403,7 +403,7 @@
             [self performSelectorOnMainThread:@selector(updateRouteResponse:)
                                    withObject:data waitUntilDone:YES];
         }else{
-            [self ShowAlertView:@"Unable to proces your request"];
+            [self ShowAlertView:UnableToProcess];
             
         }
     });
@@ -432,7 +432,7 @@
             [WTStatusBar clearStatus];
             [self ShowAlertView:@"Route updation Failed!!"];
         }}else{
-             [self ShowAlertView:@"Unable to proces your request"];
+             [self ShowAlertView:UnableToProcess];
             [WTStatusBar setLoading:NO loadAnimated:NO];
             [WTStatusBar clearStatus];
         }

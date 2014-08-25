@@ -26,6 +26,8 @@
     ServerConnection *ConnectToServer;
 }
 @property (strong, nonatomic)  NSString *seats;
+@property (weak, nonatomic) IBOutlet UILabel *seatsLabel;
+
 @property (strong, nonatomic)  NSString *activeDays;
 @property (strong, nonatomic)  NSString *timeInterval;
 @property (weak, nonatomic) IBOutlet GMSMapView *myMap;

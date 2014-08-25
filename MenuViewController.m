@@ -85,7 +85,7 @@
                                    withObject:data waitUntilDone:YES];
         }
         else{
-            [self ShowAlertView:@"Unable to process request"];
+            [self ShowAlertView:UnableToProcess];
         }
         
     });
@@ -96,7 +96,8 @@
     {
         [self FetchEarningsFromServer];
     }else{
-            [self ShowAlertView:@"Its Payments"];
+        
+           [self ShowAlertView:@"Payment is pending"];
     }
 }
 
@@ -106,7 +107,8 @@
         [self performSegueWithIdentifier:@"toCoriders" sender:nil];
     }
     else{
-        [self ShowAlertView:@"Its ride points"];
+        [self performSegueWithIdentifier:@"toRidePoints" sender:nil];
+       // [self ShowAlertView:@"Its ride points"];
     }
 }
 

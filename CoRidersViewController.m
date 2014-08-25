@@ -73,7 +73,7 @@ NSString *types;
         }
         else{
             
-            [self ShowAlertView:@"Unable to process request!!"];
+            [self ShowAlertView:UnableToProcess];
         }
         
     });
@@ -91,14 +91,12 @@ NSString *types;
     [WTStatusBar setLoading:NO loadAnimated:NO];
     [WTStatusBar clearStatus];
      NSString *req=[data objectForKey:@"requests"];
-//    if(![req isEqualToString:@"No requests"])
-//    {
+    if(![req isEqualToString:@"No requests"])
+       {
     NSArray *requestObj=[data objectForKey:@"requests"];
-        if([requestObj count]>0)
+        if([requestObj count]>0 )
         {
-
-    
-        for(int i=0;i<[requestObj count];i++)
+            for(int i=0;i<[requestObj count];i++)
         {
            mRiderModel=[[CoRiderObject alloc] init];
             NSDictionary *route=[requestObj objectAtIndex:i];
@@ -119,6 +117,10 @@ NSString *types;
         [self PlaceMarkersOnMap];
     }
     else{
+        [WTStatusBar setLoading:NO loadAnimated:NO];
+        [WTStatusBar clearStatus];
+        [self ShowAlertView:@"No Co-riders!!"];
+    }}else{
         [WTStatusBar setLoading:NO loadAnimated:NO];
         [WTStatusBar clearStatus];
         [self ShowAlertView:@"No Co-riders!!"];
@@ -287,7 +289,7 @@ NSString *types;
     
     
     [scrollView setScrollEnabled:YES];
-    [scrollView setContentSize:CGSizeMake(300, 560)];
+    [scrollView setContentSize:CGSizeMake(320, 560)];
     [AccessoryView setBackgroundColor:[UIColor clearColor]];
     
     [Alerts setValue:AccessoryView forKey:@"accessoryView"];
@@ -351,7 +353,7 @@ NSString *types;
     }
     else{
         
-        [self ShowAlertView:@"Unable to process the request"];
+        [self ShowAlertView:UnableToProcess];
     }
 
     

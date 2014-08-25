@@ -13,6 +13,7 @@
                 <outlet property="mOriginField" destination="cjc-PO-iwT" id="Tx3-jj-EIh"/>
                 <outlet property="mTimeIntervalField" destination="zlJ-vY-sjc" id="rdW-OU-uXS"/>
                 <outlet property="noOfSeatField" destination="dlw-xX-0o7" id="oeR-Yr-hG2"/>
+                <outlet property="seatsLabel" destination="IgO-g8-Osj" id="PkD-ug-v36"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -27,19 +28,19 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="No:of Seats" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IgO-g8-Osj">
-                    <rect key="frame" x="26" y="164" width="84" height="21"/>
+                    <rect key="frame" x="28" y="204" width="84" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Active days" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OeC-n2-zvJ">
-                    <rect key="frame" x="24" y="201" width="82" height="21"/>
+                    <rect key="frame" x="28" y="168" width="82" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="df" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dlw-xX-0o7">
-                    <rect key="frame" x="148" y="160" width="123" height="29"/>
+                    <rect key="frame" x="140" y="204" width="123" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.25083276719999997" green="0.72700832199999998" blue="0.091832534349999995" alpha="1" colorSpace="calibratedRGB"/>
@@ -79,7 +80,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Sun,Mon,Tue,Wed,Thu,Fri,Sat" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="128" translatesAutoresizingMaskIntoConstraints="NO" id="LTr-G5-Hya">
-                    <rect key="frame" x="144" y="190" width="128" height="41"/>
+                    <rect key="frame" x="126" y="163" width="128" height="41"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" red="0.25083276719999997" green="0.72700832199999998" blue="0.091832534349999995" alpha="1" colorSpace="calibratedRGB"/>

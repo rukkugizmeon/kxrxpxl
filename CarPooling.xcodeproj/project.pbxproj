@@ -71,6 +71,9 @@
 		049ADB49198FB052006DCAB0 /* PolyLineDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 049ADB48198FB052006DCAB0 /* PolyLineDecoder.m */; };
 		049ADB501990A9A1006DCAB0 /* ic_action_search.png in Resources */ = {isa = PBXBuildFile; fileRef = 049ADB4F1990A9A1006DCAB0 /* ic_action_search.png */; };
 		049ADB531990C260006DCAB0 /* RouteSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049ADB521990C260006DCAB0 /* RouteSelectionViewController.m */; };
+		049D9D0419AB5028001228B3 /* RidePointModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 049D9D0319AB5028001228B3 /* RidePointModel.m */; };
+		04B1AAA119AB3C4100B6F6BA /* RidePointCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B1AAA019AB3C4100B6F6BA /* RidePointCell.m */; };
+		04B1AAA419AB3DB200B6F6BA /* RidePointsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B1AAA319AB3DB200B6F6BA /* RidePointsViewController.m */; };
 		04E4CCF31992414D00575290 /* MyRoutesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E4CCF21992414D00575290 /* MyRoutesViewController.m */; };
 		04E4CCF7199353A300575290 /* myRouteModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E4CCF6199353A300575290 /* myRouteModel.m */; };
 		04E4CCFA199367E700575290 /* DetailRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E4CCF9199367E700575290 /* DetailRouteViewController.m */; };
@@ -209,6 +212,12 @@
 		049ADB4F1990A9A1006DCAB0 /* ic_action_search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_action_search.png; sourceTree = "<group>"; };
 		049ADB511990C260006DCAB0 /* RouteSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RouteSelectionViewController.h; sourceTree = "<group>"; };
 		049ADB521990C260006DCAB0 /* RouteSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RouteSelectionViewController.m; sourceTree = "<group>"; };
+		049D9D0219AB5028001228B3 /* RidePointModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RidePointModel.h; sourceTree = "<group>"; };
+		049D9D0319AB5028001228B3 /* RidePointModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RidePointModel.m; sourceTree = "<group>"; };
+		04B1AA9F19AB3C4100B6F6BA /* RidePointCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RidePointCell.h; sourceTree = "<group>"; };
+		04B1AAA019AB3C4100B6F6BA /* RidePointCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RidePointCell.m; sourceTree = "<group>"; };
+		04B1AAA219AB3DB200B6F6BA /* RidePointsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RidePointsViewController.h; sourceTree = "<group>"; };
+		04B1AAA319AB3DB200B6F6BA /* RidePointsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RidePointsViewController.m; sourceTree = "<group>"; };
 		04E4CCF11992414D00575290 /* MyRoutesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyRoutesViewController.h; sourceTree = "<group>"; };
 		04E4CCF21992414D00575290 /* MyRoutesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyRoutesViewController.m; sourceTree = "<group>"; };
 		04E4CCF5199353A300575290 /* myRouteModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myRouteModel.h; sourceTree = "<group>"; };
@@ -466,6 +475,10 @@
 				043DE92D199B757C003ACE0C /* CoRidersViewController.m */,
 				043F6CDC19A48EEB00ED8235 /* EditRouteViewController.h */,
 				043F6CDD19A48EEB00ED8235 /* EditRouteViewController.m */,
+				04B1AA9F19AB3C4100B6F6BA /* RidePointCell.h */,
+				04B1AAA019AB3C4100B6F6BA /* RidePointCell.m */,
+				04B1AAA219AB3DB200B6F6BA /* RidePointsViewController.h */,
+				04B1AAA319AB3DB200B6F6BA /* RidePointsViewController.m */,
 			);
 			name = ViewControllers;
 			path = ..;
@@ -500,6 +513,8 @@
 				043DE930199B7E76003ACE0C /* CoRiderObject.m */,
 				043DE937199B8D65003ACE0C /* CoriderListObject.h */,
 				043DE938199B8D65003ACE0C /* CoriderListObject.m */,
+				049D9D0219AB5028001228B3 /* RidePointModel.h */,
+				049D9D0319AB5028001228B3 /* RidePointModel.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -725,6 +740,7 @@
 				049ADB531990C260006DCAB0 /* RouteSelectionViewController.m in Sources */,
 				04218BAF1983B93E00E442E7 /* ServerConnection.m in Sources */,
 				04E4CD4C1993C18D00575290 /* TaobanIdeAppDelegate.m in Sources */,
+				049D9D0419AB5028001228B3 /* RidePointModel.m in Sources */,
 				0477761519826DFA00F36338 /* MenuViewController.m in Sources */,
 				043DE92B199B3D7E003ACE0C /* PassengerListModel.m in Sources */,
 				04E4CD5A199488FC00575290 /* MyDataView.m in Sources */,
@@ -735,6 +751,7 @@
 				04E4CD621994DCD600575290 /* UpdateProfileViewController.m in Sources */,
 				04E4CD4D1993C18D00575290 /* TaobanIdeViewController.m in Sources */,
 				04510DC119813CE20057D7B4 /* RegistrationViewController.m in Sources */,
+				04B1AAA419AB3DB200B6F6BA /* RidePointsViewController.m in Sources */,
 				04E4CCF7199353A300575290 /* myRouteModel.m in Sources */,
 				0477760C19825D0600F36338 /* MapViewController.m in Sources */,
 				043DE925199A3A38003ACE0C /* PassengerListTableViewCell.m in Sources */,
@@ -759,6 +776,7 @@
 				04E4CD501993C18D00575290 /* WTStatusWindow.m in Sources */,
 				04510D7F197F88530057D7B4 /* main.m in Sources */,
 				04E4CCFA199367E700575290 /* DetailRouteViewController.m in Sources */,
+				04B1AAA119AB3C4100B6F6BA /* RidePointCell.m in Sources */,
 				04E4CD6519950E5300575290 /* SearchRouteViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

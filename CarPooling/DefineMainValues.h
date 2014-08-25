@@ -38,6 +38,8 @@
 
 #define kImageUploadQuality 0.3f
 
+#define UnableToProcess @"Unable to process the request"
+
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
 
 // Login
@@ -109,6 +111,12 @@
 #define kServerLink_journeyRequest @"http://ridewithme.in/index.php?r=api/createJourneyRequest"
 
 
+//Block User
+
+#define kServerLink_BlockUser @"http://ridewithme.in/index.php?r=api/BlockUsers"
+
+
+
 //Journey Request Recieved
 
 #define kServerLink_journeyRequestRecieved @"http://ridewithme.in/index.php?r=api/getJourneyRequests"
@@ -145,6 +153,12 @@
 
 #define kServerLink_SaveRatings @"http://ridewithme.in/index.php?r=api/saveRatings"
 //* params:userId,userIdRate
+
+
+//Get RidePoints
+
+#define kServerLink_GetRidepoints @"http://ridewithme.in/index.php?r=api/RidePointDetails"
+
 
 
 //Reject user request

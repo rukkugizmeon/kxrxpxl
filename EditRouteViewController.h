@@ -18,6 +18,8 @@
     ServerConnection *ConnectToServer;
 }
 @property (weak, nonatomic) IBOutlet UITextField *noOfSeatField;
+@property (weak, nonatomic) IBOutlet UILabel *seatsLabel;
+
 @property (weak, nonatomic) IBOutlet UISegmentedControl *intervalSegment;
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
 @property (weak, nonatomic) IBOutlet UISwitch *sunSwitch;

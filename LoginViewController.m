@@ -33,7 +33,7 @@ NSString *rideOptions;
         mRegisterButton.hidden=YES;
         // myView.hidden=YES;
         //[self performSegueWithIdentifier:@"toMenuView" sender:nil];
-        [self AuthenticateUserLoginWithServer];
+     //   [self AuthenticateUserLoginWithServer];
     }
 
 }
@@ -182,6 +182,7 @@ NSString *rideOptions;
     
     if([result isEqualToString:@"success"])
     {
+        
         [self hideLoadingMode];
         myView.hidden=NO;
          ids=[data objectForKey:@"userID"];

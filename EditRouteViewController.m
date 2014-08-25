@@ -12,6 +12,7 @@
 {
     NSString *userId;
     NSUserDefaults *prefs;
+       NSString *type;
 }
 
 @end
@@ -23,6 +24,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+ 
     [WTStatusBar clearStatus];
 }
 
@@ -32,6 +34,8 @@
     ConnectToServer=[[ServerConnection alloc]init];
     prefs= [NSUserDefaults standardUserDefaults];
     userId=[prefs stringForKey:@"id"];
+    type=[prefs stringForKey:@"role"];
+    NSLog(@"Data %@+%@",userId,type);
     mSelectedArray=[[NSMutableArray alloc]init];
     [self setUpUI];
 }
@@ -39,7 +43,7 @@
 
 - (IBAction)editDetails:(id)sender {
      [WTStatusBar setLoading:YES loadAnimated:YES];
-    self.seats= noOfSeatField.text;
+    self.seats=[type isEqualToString:@"T"]?@"0":noOfSeatField.text;
     self.seats=[NSString stringWithFormat:@"%@",self.seats];
     self.activeDays=[self ActiveDaysText];
     NSString *postData=[NSString stringWithFormat:@"userId=%@&journeyId=%@&activeDays=%@&timeInterval=%@&seatsCount=%@",userId,self.journeyId,self.activeDays,self.timeInterval,self.seats];
@@ -75,7 +79,7 @@
     else{
         [WTStatusBar setLoading:NO loadAnimated:NO];
         [WTStatusBar clearStatus];
-        [self ShowAlertView:@"Unable to process the request"];
+        [self ShowAlertView:UnableToProcess];
     }
 
 }
@@ -116,8 +120,14 @@
 
 -(void)setUpUI
 {
+    if([type isEqualToString:@"T"])
+    {
+        noOfSeatField.hidden=YES;
+        self.seatsLabel.hidden=YES;
+    }else{
+        
     noOfSeatField.text=[NSString stringWithFormat:@"%@",self.seats];
-    noOfSeatField.delegate=self;
+    noOfSeatField.delegate=self;}
     NSString *timeInter=[NSString stringWithFormat:@"%@",self.timeInterval];
     if([timeInter isEqualToString:@"9-10"])
     {

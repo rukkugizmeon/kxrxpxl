@@ -101,7 +101,7 @@ NSString *types;
         }
         else{
             
-            [self ShowAlertView:@"Unable to process request!!"];
+            [self ShowAlertView:UnableToProcess];
         }
         
     });
@@ -201,7 +201,7 @@ NSString *types;
     
     
     [scrollView setScrollEnabled:YES];
-   
+    [scrollView setContentSize:CGSizeMake(320, 550)];
     [AccessoryView setBackgroundColor:[UIColor clearColor]];
     
     [Alerts setValue:AccessoryView forKey:@"accessoryView"];
@@ -226,7 +226,7 @@ NSString *types;
             {
              seatsField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"number_of_seats"]];
             carModelField.text=[passDict objectForKey:@"car_model"];
-                 [scrollView setContentSize:CGSizeMake(300, 550)];
+           
             }
             else if([types isEqualToString:@"G"]){
                 self.model.hidden=YES;
@@ -289,7 +289,7 @@ NSString *types;
     }
     else{
         
-        [self ShowAlertView:@"Unable to process the request"];
+        [self ShowAlertView:UnableToProcess];
     }
     
     

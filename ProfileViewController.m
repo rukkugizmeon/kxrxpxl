@@ -108,7 +108,7 @@ profileRidePointBalanceLabel .text=[NSString stringWithFormat:@"%@",[profileDeta
     }
     else{
         [self hideLoadingMode];
-        [self ShowAlertView:@"Unable to process request"];
+        [self ShowAlertView:UnableToProcess];
     }
 }
 

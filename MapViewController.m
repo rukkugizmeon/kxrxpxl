@@ -124,7 +124,7 @@ NSMutableArray *days;
         }  else{
              [WTStatusBar setLoading:NO loadAnimated:NO];
             [WTStatusBar clearStatus];
-               [self ShowAlertView:@"Unable to proces your request"];
+               [self ShowAlertView:UnableToProcess];
             }
         
     });
@@ -350,13 +350,16 @@ NSMutableArray *days;
     
     activedaysFinal= [activedaysFinal stringByReplacingOccurrencesOfString:@"(" withString:@"{"];
     activedaysFinal= [activedaysFinal stringByReplacingOccurrencesOfString:@")" withString:@"}"];
-     NSString *noSeats=self.seatsField.text;
+     NSString *noSeats=[types isEqualToString:@"T"]? @"0":self.seatsField.text;
     noSeats=[NSString stringWithFormat:@"%@",noSeats];
+    origin=[origin stringByReplacingOccurrencesOfString:@" " withString:@""];
+    destination=[destination stringByReplacingOccurrencesOfString:@" " withString:@""];
     origin=[NSString stringWithFormat:@"%@",origin];
     destination=[NSString stringWithFormat:@"%@",destination];
     origin=[origin stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
   //  OverViewPolyline=[OverViewPolyline stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     destination=[destination stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
     NSString * PostString = [NSString stringWithFormat:@"userId=%@&startLatLong[1]=%@&startLatLong[0]=%@&endLatLong[1]=%@&endLatLong[0]=%@&routeType=%@&from=%@&to=%@&activeDays=%@&timeInterval=%@&seatsCount=%@&overview_path=%@",uId,start_Latitude,start_Longitude,stop_Latitude,stop_Longitude,types,origin,destination,activedaysFinal,self.timeInterval,noSeats,OverViewPolyline];
     NSLog(@"postString %@",PostString);
     NSData *postData = [PostString  dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
@@ -376,7 +379,7 @@ NSMutableArray *days;
             [self performSelectorOnMainThread:@selector(addRouteResponse:)
                                    withObject:data waitUntilDone:YES];
         }else{
-            [self ShowAlertView:@"Unable to proces your request"];
+            [self ShowAlertView:UnableToProcess];
             
         }
     });
@@ -443,7 +446,7 @@ NSMutableArray *days;
     }}else{
         [WTStatusBar setLoading:NO loadAnimated:NO];
         [WTStatusBar clearStatus];
-         [self ShowAlertView:@"Unable to proces your request"];
+         [self ShowAlertView:UnableToProcess];
     }
 }
 
@@ -506,6 +509,7 @@ NSMutableArray *days;
             GTuser_ids=[NSString stringWithFormat:@"%@",model.user_id];
             if([marker.title isEqualToString:journey_ids])
             {
+                blockingId=model.user_id;
                 //Distance api call
                 self.start_marker_lat=model.journey_latitude;
                 self.start_marker_lng=model.journey_longitude;
@@ -826,7 +830,10 @@ NSMutableArray *days;
 
    }
 - (IBAction)mBlockButton:(id)sender {
-         NSLog(@"Block");  
+         NSLog(@"Block");
+    NSString *postString=[NSString stringWithFormat:@"blockUserId=%@&blockedByUserId=%@",blockingId,uId];
+    NSData *response=[ConnectToServer ServerCall:kServerLink_BlockUser post:postString];
+    [self blockedResponse:response];
 }
 - (IBAction)gRequestButton:(id)sender {
     
@@ -839,6 +846,9 @@ NSMutableArray *days;
 
 }
 - (IBAction)gBlockButton:(id)sender {
+    NSString *postString=[NSString stringWithFormat:@"blockUserId=%@&blockedByUserId=%@",blockingId,uId];
+    NSData *response=[ConnectToServer ServerCall:kServerLink_BlockUser post:postString];
+    [self blockedResponse:response];
 }
 
 -(void)dismiss:(UIAlertView*)alert
@@ -904,6 +914,31 @@ NSMutableArray *days;
      [self ShowAlertView:@"Request cannot be sent now! Please try later!"];
     }
 }
+
+-(void)blockedResponse:(NSData *)responseData {
+    NSLog(@"Processing response");
+    NSLog(@"Data %@",responseData);
+    NSError *jsonParsingError;
+    if(!jsonParsingError)
+    {
+    NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseData
+                                                         options:0 error:&jsonParsingError];
+    
+    NSString *result=[NSString stringWithFormat:@"%@",[data objectForKey:@"status"]];
+    if([result isEqualToString:@"1"])
+    {
+        [self ShowAlertView:@"User blocked"];
+    }
+    else
+    {
+        [self ShowAlertView:UnableToProcess];
+    }
+    }
+    else
+    {
+        [self ShowAlertView:UnableToProcess];
+    }
+}
 - (IBAction)cancelAdding:(id)sender {
     [self MoveUp];
 }
@@ -929,7 +964,7 @@ NSMutableArray *days;
 - (IBAction)addRouteSUbmission:(id)sender {
     NSLog(@"Array val %@",mSelectedArray);
     if(mSelectedArray.count>0){
-        if(self.seatsField.hasText){
+        if(self.seatsField.hasText || [types isEqualToString:@"T"] ){
       
             [self ShowSubmitRouteAlertWithMessage:@"Are you sure you want to submit the route?"];
         }else

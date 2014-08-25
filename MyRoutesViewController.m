@@ -14,6 +14,7 @@
     NSString *role;
     NSString *userId;
     NSString *active_Rawform;
+    NSString *type;
     NSUserDefaults *prefs;
 }
 @end
@@ -33,6 +34,8 @@
     mSelectedArray=[[NSMutableArray alloc]init];
     prefs= [NSUserDefaults standardUserDefaults];
     userId=[prefs stringForKey:@"id"];
+    type=[prefs stringForKey:@"role"];
+    
     DaysArray=@[@"Sunday", @"Monday",
                 @"Tuesday", @"Wednesday", @"Thursday",@"Friday",@"Saturday"];
    // [daysTableView setSeparatorInset:UIEdgeInsetsZero];
@@ -223,8 +226,13 @@
     mDestField.text=to;
     time=[NSString stringWithFormat:@"%@",time];
     mTimeIntervalField.text=time;
+    if([type isEqualToString:@"T"])
+    {
+        self.seatsLabel.hidden=YES;
+        noOfSeatField.hidden=YES;
+    }else{
     noSeats=[NSString stringWithFormat:@"%@",noSeats];
-    noOfSeatField.text=noSeats;
+        noOfSeatField.text=noSeats;}
     activeDays=[NSString stringWithFormat:@"%@",activeDays];
     mActiveFields.text=activeDays;
     NSString *active=[NSString stringWithFormat:@"%@",action];
@@ -298,7 +306,7 @@
     }
     else{
       
-        [self ShowAlertView:@"Unable to process the request"];
+        [self ShowAlertView:UnableToProcess];
     }
 }
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

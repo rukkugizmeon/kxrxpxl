@@ -274,7 +274,7 @@ NSUserDefaults *prefs;
     }
     else{
         [self hideLoadingMode];
-        [self ShowAlertView:@"Unable to process the request"];
+        [self ShowAlertView:UnableToProcess];
     }
 }
 -(void) setupUI

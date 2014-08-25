@@ -84,7 +84,7 @@ UIAlertView * Alert;
         }
         else{
           
-            [self ShowAlertView:@"Unable to process request!!"];
+            [self ShowAlertView:UnableToProcess];
         }
         
     });
@@ -287,7 +287,7 @@ UIAlertView * Alert;
         }
     }
     else{
-        [self ShowAlertView:@"Unable to process the request"];
+        [self ShowAlertView:UnableToProcess];
     }
 }
 
