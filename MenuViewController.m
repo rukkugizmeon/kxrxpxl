@@ -25,8 +25,12 @@
         [WTStatusBar clearStatus];
     prefs= [NSUserDefaults standardUserDefaults];
     userId=[prefs stringForKey:@"id"];
-    
     role=[prefs stringForKey:@"role"];
+   
+    if([role isEqualToString:@"B"])
+    {
+     [self ShowSelectionAlertView:@"What would you prefer ?"];
+    }
     NSLog(@"%@",role);
     if([role isEqualToString:@"G"])
     {
@@ -37,13 +41,38 @@
         [earningPaymentButton setTitle:@"Payments " forState:UIControlStateNormal];
         [coRideRidePoints setTitle:@"Ride Points" forState:UIControlStateNormal];
     }
+    
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
- 
+    
     // Do any additional setup after loading the view.
 }
+
+-(void)ShowSelectionAlertView:(NSString*)Message{
+    
+    UIAlertView * Alert = [[UIAlertView alloc ]initWithTitle:kApplicationName message:Message delegate:self cancelButtonTitle:@"Take A Ride" otherButtonTitles:@"Give A Ride",nil];
+    [Alert show];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
+    if ([title isEqualToString:@"Take A Ride"]) {
+        [prefs setObject:@"T" forKey:@"role"];
+         role=[prefs stringForKey:@"role"];
+        [earningPaymentButton setTitle:@"Payments " forState:UIControlStateNormal];
+        [coRideRidePoints setTitle:@"Ride Points" forState:UIControlStateNormal];
+    }
+    else if ([title isEqualToString:@"Give A Ride"])
+    {
+        [prefs setObject:@"G" forKey:@"role"];
+         role=[prefs stringForKey:@"role"];
+        [earningPaymentButton setTitle:@"Earnings" forState:UIControlStateNormal];
+        [coRideRidePoints setTitle:@"Co-riders" forState:UIControlStateNormal];
+    }}
+
+
 
 - (IBAction)LogOut:(id)sender {
     [prefs removeObjectForKey:@"id"];
@@ -94,10 +123,13 @@
 - (IBAction)fetchEarnings:(id)sender {
     if([role isEqualToString:@"G"])
     {
-        [self FetchEarningsFromServer];
+         [self performSegueWithIdentifier:@"toEarnings" sender:nil];
+        
     }else{
         
-           [self ShowAlertView:@"Payment is pending"];
+          // [self ShowAlertView:@"Payment is pending"];
+         [self performSegueWithIdentifier:@"toPayments" sender:nil];
+        
     }
 }
 

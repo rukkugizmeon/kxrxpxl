@@ -15,6 +15,7 @@
 #import "PassengerListTableViewCell.h"
 #import "PassengerListView.h"
 #import "PassengerListModel.h"
+#import "RequestedProfileView.h"
 
 @interface RequestRecievedViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
 {
@@ -23,9 +24,28 @@
      NSMutableArray * passListArray;
     RecievedReqModel *mRequestModel;
     PassengerListModel *mPassengerModel;
+    UIAlertView *Alerts;
 }
 @property (weak, nonatomic) IBOutlet GMSMapView *myMap;
-@property (weak, nonatomic) IBOutlet UIStepper *zoom;
 @property (weak, nonatomic) IBOutlet UITableView *passengerTable;
+@property (weak, nonatomic) IBOutlet UIButton *zoomOut;
+@property (weak, nonatomic) IBOutlet UIButton *zoomIn;
+
+//Profile view
+
+@property (weak, nonatomic) IBOutlet UIScrollView *scollView;
+@property (weak, nonatomic) IBOutlet UILabel *nameField;
+@property (weak, nonatomic) IBOutlet UILabel *ageField;
+@property (weak, nonatomic) IBOutlet UILabel *addressField;
+@property (weak, nonatomic) IBOutlet UILabel *cityField;
+@property (weak, nonatomic) IBOutlet UILabel *carModelField;
+@property (weak, nonatomic) IBOutlet UILabel *seatsField;
+@property (weak, nonatomic) IBOutlet UILabel *sosContactField;
+@property (weak, nonatomic) IBOutlet UILabel *SOSEmailField;
+@property (weak, nonatomic) IBOutlet UILabel *phoneField;
+@property (weak, nonatomic) IBOutlet UIView *views;
+@property (weak, nonatomic) IBOutlet UILabel *model;
+@property (weak, nonatomic) IBOutlet UILabel *seats;
+
 
 @end

@@ -38,6 +38,24 @@
   }
 }
 
+-(NSMutableURLRequest*)RequestServer:(NSString*)url post:(NSString*)postStrings
+{
+    NSLog(@"Url %@",url);
+    NSLog(@"post %@",postStrings);
+    NSData *postData = [postStrings  dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
+    
+    
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody:postData];
+    
+    
+    return  request;
+    
+}
+
 -(float) DistanceDatas:(NSString*)responseData
 {
   #define kSearchURLs [NSURL URLWithString:responseData]

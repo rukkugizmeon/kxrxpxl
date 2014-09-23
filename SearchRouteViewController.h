@@ -19,4 +19,7 @@
 @property (strong, nonatomic)  NSString *start_marker_lng;
 @property (weak, nonatomic) IBOutlet GMSMapView *myMap;
 @property (strong, nonatomic, readwrite) GMDraggableMarkerManager *draggableMarkerManager;
+@property (weak, nonatomic) IBOutlet UIButton *zoomOut;
+@property (weak, nonatomic) IBOutlet UIButton *zoomIn;
+
 @end

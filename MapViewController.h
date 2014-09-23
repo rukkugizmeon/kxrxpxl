@@ -20,7 +20,7 @@
 #import "SearchRouteViewController.h"
 
 
-@interface MapViewController : UIViewController<UIAlertViewDelegate,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
+@interface MapViewController : UIViewController<UIAlertViewDelegate,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UIPickerViewDelegate, UIPickerViewDataSource>
 {
     NSMutableArray *path;
     NSMutableArray * mSelectedArray;
@@ -29,10 +29,18 @@
     NSString *blockingId;
 }
 @property (weak, nonatomic) IBOutlet GMSMapView *mymap;
+@property (weak, nonatomic) IBOutlet UIButton *zoomOut;
+@property (weak, nonatomic) IBOutlet UIButton *zoomIn;
+@property (weak, nonatomic) IBOutlet UIButton *searchButton;
+@property (weak, nonatomic) IBOutlet UIButton *submitButton;
+@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+
+
 @property (strong, nonatomic, readwrite) GMDraggableMarkerManager *draggableMarkerManager;
 @property (assign,nonatomic) CLLocationCoordinate2D  LocationCoordinates;
 @property (strong, nonatomic)  NSString *starts;
 @property (strong, nonatomic)  NSString *timeInterval;
+@property (strong, nonatomic)  NSString *options;
 @property (strong, nonatomic)  NSString *stops;
 @property (strong, nonatomic)  NSString *start_marker_lat;
 @property (strong, nonatomic)  NSString *start_marker_lng;
@@ -42,9 +50,9 @@
 @property (weak, nonatomic) IBOutlet UIView *addView;
 @property (weak, nonatomic) IBOutlet UITableView *daysTable;
 @property (weak, nonatomic) IBOutlet UITextField *seatsField;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *intervalSegment;
 @property (weak, nonatomic) IBOutlet UILabel *seatsLabel;
 
+@property (weak, nonatomic) IBOutlet UIPickerView *mIntervalPicker;
 
 
 

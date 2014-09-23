@@ -13,7 +13,7 @@
 #import "MenuViewController.h"
 
 
-@interface LoginViewController : UIViewController<UITextFieldDelegate>
+@interface LoginViewController : UIViewController<UITextFieldDelegate,UIAlertViewDelegate>
 {
     MZLoadingCircle *loadingCircle;
 }

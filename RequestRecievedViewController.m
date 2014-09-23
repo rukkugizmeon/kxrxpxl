@@ -11,11 +11,13 @@
 @interface RequestRecievedViewController ()<GMSMapViewDelegate>
 {
     ServerConnection *ConnectToServer;
+    float zoom;
 }
 @end
 
 @implementation RequestRecievedViewController
-@synthesize myMap,zoom;
+@synthesize scollView,nameField,ageField,cityField,addressField,carModelField,sosContactField,SOSEmailField,phoneField,seatsField,views;
+@synthesize myMap,zoomOut,zoomIn;
 NSString *uId;
 NSString *types;
 UIAlertView * Alert;
@@ -24,6 +26,9 @@ UIAlertView * Alert;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    zoom=kGoogleMapsZoomLevelDefault;
+    [myMap addSubview:zoomOut];
+    [myMap addSubview:zoomIn];
     ConnectToServer=[[ServerConnection alloc]init];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     uId=[prefs stringForKey:@"id"];
@@ -34,10 +39,6 @@ UIAlertView * Alert;
     [self LoadMaps];
     //[myMap addSubview:zoom];
 }
-- (IBAction)zoonInOut:(id)sender {
-     NSUInteger value = zoom.value;
-   NSLog(@"%f", (float)value);
-}
 
 -(void)LoadMaps
 {
@@ -45,7 +46,7 @@ UIAlertView * Alert;
     myMap.myLocationEnabled = YES;
     [self.view addSubview:myMap];
     [myMap setMapType:kGMSTypeNormal];
-    GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:26.90083 longitude:76.35371 zoom:8];
+    GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:12.9667 longitude:77.5667 zoom:kGoogleMapsZoomLevelDefault];
     myMap.camera=cameraPosition;
    [self fetchMyRoutesFromServer];
     
@@ -161,7 +162,7 @@ UIAlertView * Alert;
         marker.position = CLLocationCoordinate2DMake([model.journey_latitude doubleValue],[model.journey_longitude doubleValue]);
         marker.title =[NSString stringWithFormat:@"%@",model.journey_id];
         marker.map = myMap;
-        GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:[model.journey_latitude doubleValue] longitude:[model.journey_longitude doubleValue] zoom:10];
+        GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:[model.journey_latitude doubleValue] longitude:[model.journey_longitude doubleValue] zoom:kGoogleMapsZoomLevelDefault];
         myMap.camera=cameraPosition;
     }
     
@@ -199,14 +200,17 @@ UIAlertView * Alert;
         NSLog(@"Pass Count%lu",(unsigned long)[passenger count]);
         for(int pos=0;pos<[passenger count];pos++)
         {
-              NSLog(@"Index%i",pos);
+            
             mPassengerModel=[[PassengerListModel alloc]init];
             NSDictionary *passDict=[passenger objectAtIndex:pos];
             mPassengerModel.journey_id=[passDict objectForKey:@"journey_id"];
             mPassengerModel.request_id=[passDict objectForKey:@"request_id"];
             mPassengerModel.name=[passDict objectForKey:@"name"];
+            mPassengerModel.user_id=[passDict objectForKey:@"user_id"];
+            mPassengerModel.request_status=[passDict objectForKey:@"request_status"];
           //  NSLog(@"RequestedName%@",[passDict objectForKey:@"name"]);
             mPassengerModel.index=[NSString stringWithFormat:@"%i",pos+1];
+              NSLog(@"Index%@",mPassengerModel.index);
             // NSLog(@"RequestedIndex%@",[NSString stringWithFormat:@"%i",pos+1]);
             [passListArray addObject:mPassengerModel];
         }
@@ -230,13 +234,25 @@ UIAlertView * Alert;
         
     }
     cell.backgroundColor=[UIColor clearColor];
+    cell.noField.text=model.index;
+    cell.nameField.text=model.name;
+    cell.acceptButton.layer.cornerRadius=3;
+    cell.rejectButton.layer.cornerRadius=3;
+    
     cell.acceptButton.tag = indexPath.row;
-   
+    
     [cell.acceptButton addTarget:self action:@selector(acceptButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    if([model.request_status isEqualToString:@"P"])
+    {
+  
     cell.rejectButton.tag = indexPath.row;
      [cell.rejectButton addTarget:self action:@selector(rejectButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-    cell.noField.text=@"1";
-    cell.nameField.text=model.name;
+ 
+    }
+    else if([model.request_status isEqualToString:@"C"]){
+        cell.rejectButton.backgroundColor=[UIColor redColor];
+        cell.rejectButton.userInteractionEnabled=NO;
+    }
     return cell;
 }
 
@@ -249,8 +265,78 @@ UIAlertView * Alert;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self performSelector:@selector(dismiss:) withObject:Alert afterDelay:1.0];
+    PassengerListModel *model=[passListArray objectAtIndex:indexPath.row];
+    NSString * PostString = [NSString stringWithFormat:@"userId=%@&profileId=%@",uId,model.user_id];
+    NSData *passengerProfile=[ConnectToServer ServerCall:kServerLink_GetCoridersProfileById post:PostString];
+     [self ShowPassengerProfileAlert:passengerProfile];
     
 }
+
+-(void)ShowPassengerProfileAlert:(NSData*)responseData
+{
+    
+   UIAlertView *Alert = [[UIAlertView alloc ]initWithTitle:@"Profile" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles: nil];
+    
+    RequestedProfileView *AccessoryView =[ [[NSBundle mainBundle]loadNibNamed:@"RequesteProfileView" owner:self options:nil] objectAtIndex:0];
+    
+    
+    [scollView setScrollEnabled:YES];
+    [scollView setContentSize:CGSizeMake(320, 462)];
+    [AccessoryView setBackgroundColor:[UIColor clearColor]];
+    
+    [Alert setValue:AccessoryView forKey:@"accessoryView"];
+    
+    NSError *jsonParsingError;
+    NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseData
+                                                         options:0 error:&jsonParsingError];
+    NSLog(@"Requested%@",data);
+    if(!jsonParsingError)
+    {
+        NSArray *passengerProf=[data objectForKey:@"profile"];
+        
+        for(int pos=0;pos<[passengerProf count];pos++)
+        {
+            NSDictionary *passDict=[passengerProf objectAtIndex:pos];
+            nameField.text=[passDict objectForKey:@"name"];
+            ageField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"age"]];
+            addressField.text=[passDict objectForKey:@"address"];
+            cityField.text=[passDict objectForKey:@"city"];
+            if([types isEqualToString:@"T"])
+            {
+                seatsField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"number_of_seats"]];
+                carModelField.text=[passDict objectForKey:@"car_model"];
+                
+            }
+            else if([types isEqualToString:@"G"]){
+                self.model.hidden=YES;
+                self.seats.hidden=YES;
+                seatsField.hidden=YES;
+                carModelField.hidden=YES;
+                const int movementDistance = 60; // tweak as needed
+                const float movementDuration = 0.1f; // tweak as needed
+                bool up=YES;
+                int movement = (up ? -movementDistance : movementDistance);
+                
+                [UIView beginAnimations: @"anim" context: nil];
+                [UIView setAnimationBeginsFromCurrentState: YES];
+                [UIView setAnimationDuration: movementDuration];
+                views.frame = CGRectOffset(views.frame, 0, movement);
+                [UIView commitAnimations];
+                [scollView setContentSize:CGSizeMake(320, 400)];
+            }
+            sosContactField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"sos_contact_num"]];
+            SOSEmailField.text=[passDict objectForKey:@"sos_email_id"];
+            phoneField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"mobile_number"]];
+            
+        }
+    }
+    
+    [Alert show];
+}
+
+
+//accept
 -(void)acceptButtonClicked:(UIButton*)sender
 {
     [sender setBackgroundColor:[UIColor blackColor]];
@@ -320,7 +406,18 @@ UIAlertView * Alert;
   
     [Alert show];
 }
+- (IBAction)zoomIn:(id)sender {
+    zoom=zoom+0.5f;
+    [myMap animateToZoom:zoom];
+}
+
+- (IBAction)zoomOut:(id)sender {
+    zoom=zoom-0.5f;
+    [myMap animateToZoom:zoom];
+}
+
 /*
+ 
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation

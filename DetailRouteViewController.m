@@ -18,11 +18,12 @@
     NSString *destination;
     NSString *OverViewPolyline;
     PolyLineDecoder *decoder;
+    float zoom;
 }
 @end
 
 @implementation DetailRouteViewController
-@synthesize myMap;
+@synthesize myMap,zoomIn,zoomOut;
 
 -(void)viewDidAppear:(BOOL)animated
 {
@@ -31,12 +32,16 @@
 }
 - (void)viewDidLoad
 {
+     zoom=kGoogleMapsZoomLevelDefault;
+    [myMap addSubview:zoomOut];
+    [myMap addSubview:zoomIn];
     [super viewDidLoad];
     isUpdatingEnd=NO;
     isUpdatingStart=NO;
     searchListArray=[[NSMutableArray alloc]init];
     journeyListArray=[[NSMutableArray alloc]init];
     [self LoadMaps];
+    
 }
 
 -(void)LoadMaps
@@ -45,13 +50,16 @@
     myMap.myLocationEnabled = YES;
     [self.view addSubview:myMap];
     [myMap setMapType:kGMSTypeNormal];
-    GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:26.90083 longitude:76.35371 zoom:8];
+     GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:12.9667 longitude:77.5667 zoom:kGoogleMapsZoomLevelDefault];
     myMap.camera=cameraPosition;
     self.draggableMarkerManager = [[GMDraggableMarkerManager alloc] initWithMapView:myMap delegate:self];
    // [self ShowAlertView:self.journeyId];
+  //  GMSCameraUpdate *a=[GMSCameraUpdate zoomIn];
+    
     [self fetchMyRoutesFromServer];
     
 }
+
 
 -(void)ShowSubmitRouteAlertWithMessage:(NSString*)Message{
     
@@ -64,7 +72,7 @@
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     
-    // Initate call over cellular network
+    
     if (buttonIndex==1) {
         [self UpdateRouteToServer];
     }
@@ -77,7 +85,6 @@
 -(void)fetchMyRoutesFromServer{
     [WTStatusBar setLoading:YES loadAnimated:YES];
     NSString * PostString = [NSString stringWithFormat:@"journey_id=%@",self.journeyId];
-    NSLog(@"Url %@",kServerLink_JourneyList);
     NSLog(@"postString %@",PostString);
     NSData *postData = [PostString  dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
@@ -126,10 +133,10 @@
         mDetaileModel.break_longitude=[journeyArray objectForKey:@"break_longitude"];
          NSLog(@"Lats %@ and %@",mDetaileModel.break_latitude,mDetaileModel.break_longitude);
         [Polylinepaths addCoordinate:CLLocationCoordinate2DMake([mDetaileModel.break_latitude  doubleValue],[mDetaileModel.break_longitude doubleValue])];
-         UIColor * Cgreen =[UIColor colorWithRed:0.0f/255.0f green:128.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
+          UIColor * Cblue =[UIColor colorWithRed:115.0f/255.0f green:185.0f/255.0f blue:255.0f/255.0f alpha:0.5f];
         GMSPolyline *rectangle = [GMSPolyline polylineWithPath:Polylinepaths];
-        rectangle.strokeColor =Cgreen;
-        rectangle.strokeWidth = 2.f;
+        rectangle.strokeColor =Cblue;
+        rectangle.strokeWidth = 3.f;
         rectangle.map = myMap;
 
         [journeyListArray addObject:mDetaileModel];
@@ -311,11 +318,11 @@
         NSString *overviewPolyline = [[route objectForKey: @"overview_polyline"] objectForKey:@"points"];
         
         //Polyline Plotting
-        
+          UIColor * Cblue =[UIColor colorWithRed:115.0f/255.0f green:185.0f/255.0f blue:255.0f/255.0f alpha:0.5f];
         GMSPath *paths=[GMSPath pathFromEncodedPath:overviewPolyline];
         GMSPolyline *line=[GMSPolyline polylineWithPath:paths];
-        line.strokeWidth = 2.f;
-        line.strokeColor = [UIColor redColor];
+        line.strokeWidth = 3.f;
+        line.strokeColor = Cblue;
         line.map=myMap;
         
         // fethching points from overview polyline
@@ -376,6 +383,29 @@
     
 }
 
+-(NSString*)formatOrigin:(NSString*)origins
+{
+    origins=[origins stringByReplacingOccurrencesOfString:@" " withString:@""];
+    origins=[origins stringByReplacingOccurrencesOfString:@"UnnamedRoad," withString:@""];
+    origins=[origins stringByReplacingOccurrencesOfString:@",India" withString:@""];
+    origins=[NSString stringWithFormat:@"%@",origins];
+    origins=[origins stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    return origins;
+    
+}
+
+-(NSString*)formatDest:(NSString*)destinations
+{
+    
+    destinations=[destinations stringByReplacingOccurrencesOfString:@" " withString:@""];
+    destinations=[destinations stringByReplacingOccurrencesOfString:@"UnnamedRoad," withString:@""];
+    destinations=[destinations stringByReplacingOccurrencesOfString:@",India" withString:@""];
+    destinations=[NSString stringWithFormat:@"%@",destinations];
+    destinations=[destinations stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    return destinations;
+}
 - (void)UpdateRouteToServer
 {
     [WTStatusBar setLoading:YES loadAnimated:YES];
@@ -384,7 +414,9 @@
     NSString *id=[prefs stringForKey:@"id"];
     NSLog(@" id %@",id);
     NSString *journeyId=self.journeyId;
-    NSString * PostString = [NSString stringWithFormat:@"userId=%@&journeyId=%@&overview_path=%@",id,journeyId,OverViewPolyline];
+    origin=[self formatOrigin:origin];
+    destination=[self formatDest:destination];
+    NSString * PostString = [NSString stringWithFormat:@"userId=%@&journeyId=%@&overview_path=%@&from=%@&to=%@",id,journeyId,OverViewPolyline,origin,destination];
     NSLog(@"postString %@",PostString);
     NSData *postData = [PostString  dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
@@ -437,15 +469,15 @@
             [WTStatusBar clearStatus];
         }
 }
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (IBAction)zoomOut:(id)sender {
+    zoom=zoom-0.5f;
+    [myMap animateToZoom:zoom];
+    
 }
-*/
+- (IBAction)zoomIn:(id)sender {
+    zoom=zoom+0.5f;
+    [myMap animateToZoom:zoom];
+}
+
 
 @end

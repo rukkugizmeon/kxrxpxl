@@ -10,10 +10,14 @@
 #import "MapViewController.h"
 
 @interface RouteSelectionViewController : UIViewController  <UIPickerViewDelegate, UIPickerViewDataSource,UITextFieldDelegate>
+
+@property (weak, nonatomic) IBOutlet UIPickerView *mOptionsPickerView;
 @property (weak, nonatomic) IBOutlet UIPickerView *mCityPickerView;
 @property (weak, nonatomic) IBOutlet UITextField *mOrigin;
 @property (weak, nonatomic) IBOutlet UITextField *mDestination;
 @property (weak, nonatomic) IBOutlet UIButton *mFindRouteButton;
 @property (strong, nonatomic) NSArray *cityNames;
 @property (strong, nonatomic) NSArray *Names;
+@property (strong, nonatomic) NSArray *options;
+@property (strong, nonatomic) NSArray *subOptions;
 @end

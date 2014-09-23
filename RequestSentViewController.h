@@ -23,6 +23,8 @@
     RecievedReqModel *mRequestModel;
       ServerConnection *ConnectToServer;
 }
+@property (weak, nonatomic) IBOutlet UIButton *zoomIn;
+@property (weak, nonatomic) IBOutlet UIButton *zoomOut;
 @property (weak, nonatomic) IBOutlet GMSMapView *myMap;
 @property (weak, nonatomic) IBOutlet EDStarRating *starRating;
 

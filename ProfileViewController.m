@@ -95,7 +95,19 @@ profileRidePointBalanceLabel .text=[NSString stringWithFormat:@"%@",[profileDeta
   profileNoOfRidesLabel.text= [NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"no_of_rides"]];
  profileApprovalStatusLabel.text =[NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"approval_status"]];
         RideOption= [profileDetailsDictionary objectForKey:@"ride_option"];
-  profileRideOptionsLabel.text=  [profileDetailsDictionary objectForKey:@"ride_option"];
+        if([[profileDetailsDictionary objectForKey:@"ride_option"] isEqualToString:@"G"])
+        {
+         profileRideOptionsLabel.text=@"Give A Ride";
+        }
+        else if([[profileDetailsDictionary objectForKey:@"ride_option"] isEqualToString:@"T"])
+        {
+          profileRideOptionsLabel.text=@"Take A Ride";
+        }
+        else{
+          profileRideOptionsLabel.text=@"Give A Ride/Take A Ride";
+        }
+ 
+         [prefs setObject:[profileDetailsDictionary objectForKey:@"ride_option"] forKey:@"role"];
     profileCompanyNameLabel.text=[profileDetailsDictionary objectForKey:@"company_name"];
            [self hideLoadingMode];
         LoadingView.hidden=YES;

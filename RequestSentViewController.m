@@ -9,14 +9,16 @@
 #import "RequestSentViewController.h"
 
 @interface RequestSentViewController ()<GMSMapViewDelegate>
-
+{
+    float zoom;
+}
 @end
 
 @implementation RequestSentViewController
 @synthesize myMap,scrollView,nameField,ageField,cityField,addressField,carModelField,sosContactField,SOSEmailField,phoneField,seatsField,views;
 NSString *uId;
 NSString *types;
-@synthesize starRating;
+@synthesize starRating,zoomOut,zoomIn;
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
@@ -35,6 +37,9 @@ NSString *types;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    zoom=kGoogleMapsZoomLevelDefault;
+    [myMap addSubview:zoomOut];
+    [myMap addSubview:zoomIn];
     ConnectToServer=[[ServerConnection alloc]init];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     uId=[prefs stringForKey:@"id"];
@@ -66,7 +71,7 @@ NSString *types;
     myMap.myLocationEnabled = YES;
     [self.view addSubview:myMap];
     [myMap setMapType:kGMSTypeNormal];
-    GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:26.90083 longitude:76.35371 zoom:8];
+     GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:12.9667 longitude:77.5667 zoom:kGoogleMapsZoomLevelDefault];
     myMap.camera=cameraPosition;
     [self fetchMyRoutesFromServer];
     
@@ -170,7 +175,7 @@ NSString *types;
          marker.icon = [GMSMarker markerImageWithColor:[UIColor greenColor]];
         }
         marker.map = myMap;
-        GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:[model.journey_latitude doubleValue] longitude:[model.journey_longitude doubleValue] zoom:10];
+        GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:[model.journey_latitude doubleValue] longitude:[model.journey_longitude doubleValue] zoom:kGoogleMapsZoomLevelDefault];
         myMap.camera=cameraPosition;
     }
     
@@ -293,6 +298,15 @@ NSString *types;
     }
     
     
+}
+
+- (IBAction)zoomOut:(id)sender {
+    zoom=zoom-0.5f;
+    [myMap animateToZoom:zoom];
+}
+- (IBAction)zoomIn:(id)sender {
+    zoom=zoom+0.5f;
+    [myMap animateToZoom:zoom];
 }
 
 

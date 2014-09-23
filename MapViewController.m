@@ -23,7 +23,8 @@
 
 @implementation MapViewController
 @synthesize gAddressField,gAgeField,gCarModelField,gCityField,gMinDistField,gMinTimeField,gNameField,gSeatsField;
-@synthesize mymap,LocationCoordinates,mNameField,mAgeField,mAddressField,mDriverImageField,minDistField,minTimeField,intervalSegment;
+@synthesize mymap,LocationCoordinates,mNameField,mAgeField,mAddressField,mDriverImageField,minDistField,minTimeField,mIntervalPicker;
+@synthesize submitButton,cancelButton,searchButton;
 PolyLineDecoder *decoder;
 ServerConnection *ConnectToServer;
 NSString *start_Latitude;
@@ -37,37 +38,50 @@ NSString *start;
 NSString *end;
 NSString *uId;
 NSString *types;
+NSString *company;
 NSString *distText;
 NSString *durText;
 NSMutableArray *days;
+NSArray *options;
+   float zoom;
 
--(void)viewDidAppear:(BOOL)animated
+- (void) viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
    
-    [super viewDidAppear:animated];
+     self.addRouteButton.userInteractionEnabled=NO;
+    options= @[@"12-1 AM", @"1-2 AM",@"2-3 AM", @"3-4 AM",@"4-5 AM",@"5-6 AM", @"6-7 AM", @"8-9 AM",@"9-10 AM", @"10-11 AM", @"11-12 AM",@"12-1 PM", @"1-2 PM",@"2-3 PM", @"3-4 PM",@"4-5 PM",@"5-6 PM", @"6-7 PM", @"8-9 PM",@"9-10 PM", @"10-11 PM",@"11-12 PM"];
+    
+    [mIntervalPicker selectRow:8 inComponent:0 animated:YES];
 }
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
- //  days = [NSMutableArray arrayWithObjects: @"Sunday", @"Monday", @"Tuesday", @"Wednesday",@"Thursday", @"Friday", @"Saturday", nil];
+   days = [NSMutableArray arrayWithObjects: @"Sunday", @"Monday", @"Tuesday", @"Wednesday",@"Thursday", @"Friday", @"Saturday", nil];
+    zoom=kGoogleMapsZoomLevelDefault;
     
     self.seatsField.delegate=self;
     self.daysTable.layer.cornerRadius=5;
     mSelectedArray=[[NSMutableArray alloc]init];
     ConnectToServer=[[ServerConnection alloc]init];
-    self.timeInterval=@"9-10";
+    self.timeInterval=@"9-10 AM";
     isUpdatingEnd=NO;
     isUpdatingStart=NO;
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     uId=[prefs stringForKey:@"id"];
     types=[prefs stringForKey:@"role"];
+    company=[prefs stringForKey:@"company"];
     if([types isEqualToString:@"T"])
     {
         self.seatsField.hidden=YES;
         self.seatsLabel.hidden=YES;
+   //     searchButton.hidden=YES;
     }
-    NSLog(@"id %@ type %@",uId,types);
+    else{
+    //    searchButton.hidden=YES;
+    }
+    NSLog(@"id %@ type %@ options %@",uId,types,self.options);
     searchListArray=[[NSMutableArray alloc]init];
 
     [self LoadMaps];
@@ -78,12 +92,22 @@ NSMutableArray *days;
 
 -(void)LoadMaps
     {
+        if([self.options isEqualToString:@"active_shedule"])
+        {
+            self.seatsField.hidden=YES;
+            self.seatsLabel.hidden=YES;
+            submitButton.hidden=YES;
+            [self MoveDown];
+            
+        }
     mymap.delegate=self;
     mymap.myLocationEnabled = YES;
-        mymap.settings.zoomGestures=YES;
+        [mymap addSubview:self.zoomIn];
+        [mymap addSubview:self.zoomOut];
     [self.view addSubview:mymap];
+      
     [mymap setMapType:kGMSTypeNormal];
-        GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:26.90083 longitude:76.35371 zoom:8];
+      GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:12.9667 longitude:77.5667 zoom:kGoogleMapsZoomLevelDefault];
         mymap.camera=cameraPosition;
        self.draggableMarkerManager = [[GMDraggableMarkerManager alloc] initWithMapView:mymap delegate:self];
         start=self.starts;
@@ -162,23 +186,10 @@ NSMutableArray *days;
     [self getStartLocation:origin lat:start_Latitude lng:start_Longitude];
     [self getStopLocation:destination lat:stop_Latitude lng:stop_Longitude];
     [self parseResponseAndDrawPolyline:LocationData];
-    NSString  *sOption=@"";
-    if([types isEqualToString:@"G"])
-    {
-        NSString *postString=[NSString stringWithFormat:@"userId=%@&OriginLat=%@&OriginLong=%@&DestLat=%@&DestLong=%@&searchoption=%@&type=%@",uId,start_Latitude,start_Longitude,stop_Latitude,stop_Longitude,sOption,@"T"];
-        
-        NSData *searchData=[ConnectToServer ServerCall:kServerLink_SearchRoute post:postString];
-        [self SearchMarkers:searchData];
-    }
-    else if([types isEqualToString:@"T"])
-    {
-        NSString *postString=[NSString stringWithFormat:@"userId=%@&OriginLat=%@&OriginLong=%@&DestLat=%@&DestLong=%@&searchoption=%@&type=%@",uId,start_Latitude,start_Longitude,stop_Latitude,stop_Longitude,sOption,@"G"];
-        
-        NSData *searchData=[ConnectToServer ServerCall:kServerLink_SearchRoute post:postString];
-        [self SearchMarkers:searchData];
-    }
-   
-    
+   // NSString  *sOption=@"";
+    [WTStatusBar setLoading:NO loadAnimated:NO];
+    [WTStatusBar clearStatus];
+  
     NSLog(@"***************************************");
 
 }
@@ -248,6 +259,7 @@ NSMutableArray *days;
         
         GMSPath *paths=[GMSPath pathFromEncodedPath:overviewPolyline];
         GMSPolyline *line=[GMSPolyline polylineWithPath:paths];
+         self.addRouteButton.userInteractionEnabled=YES;
         UIColor * Cgreen =[UIColor colorWithRed:0.0f/255.0f green:128.0f/255.0f blue:0.0f/255.0f alpha:1.0f];
         line.strokeWidth = 2.f;
         line.strokeColor = Cgreen;
@@ -287,9 +299,14 @@ NSMutableArray *days;
         CLLocationCoordinate2D coordinate = location.coordinate;
         coordinates[index] = coordinate;
         
-    GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:coordinate.latitude longitude:coordinate.longitude zoom:10];
+    GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:coordinate.latitude longitude:coordinate.longitude zoom:kGoogleMapsZoomLevelDefault];
     mymap.camera=cameraPosition;
-    }}
+    }
+    if(![self.options isEqualToString:@"active_shedule"])
+    {
+        [self searchUsers];
+    }
+}
 
 
 -(void)ShowAlertView:(NSString*)Message{
@@ -335,6 +352,7 @@ NSMutableArray *days;
     Marker.title =@"Destination";
     Marker.snippet=stops;
     Marker.map  = self.mymap;
+   
     
 }
 //Marker Activities ends
@@ -352,13 +370,8 @@ NSMutableArray *days;
     activedaysFinal= [activedaysFinal stringByReplacingOccurrencesOfString:@")" withString:@"}"];
      NSString *noSeats=[types isEqualToString:@"T"]? @"0":self.seatsField.text;
     noSeats=[NSString stringWithFormat:@"%@",noSeats];
-    origin=[origin stringByReplacingOccurrencesOfString:@" " withString:@""];
-    destination=[destination stringByReplacingOccurrencesOfString:@" " withString:@""];
-    origin=[NSString stringWithFormat:@"%@",origin];
-    destination=[NSString stringWithFormat:@"%@",destination];
-    origin=[origin stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-  //  OverViewPolyline=[OverViewPolyline stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    destination=[destination stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    origin=[self formatOrigin:origin];
+    destination=[self formatDest:destination];
     
     NSString * PostString = [NSString stringWithFormat:@"userId=%@&startLatLong[1]=%@&startLatLong[0]=%@&endLatLong[1]=%@&endLatLong[0]=%@&routeType=%@&from=%@&to=%@&activeDays=%@&timeInterval=%@&seatsCount=%@&overview_path=%@",uId,start_Latitude,start_Longitude,stop_Latitude,stop_Longitude,types,origin,destination,activedaysFinal,self.timeInterval,noSeats,OverViewPolyline];
     NSLog(@"postString %@",PostString);
@@ -387,6 +400,30 @@ NSMutableArray *days;
 
 //Submit rout alert
 
+-(NSString*)formatOrigin:(NSString*)origin
+{
+    origin=[origin stringByReplacingOccurrencesOfString:@" " withString:@""];
+    origin=[origin stringByReplacingOccurrencesOfString:@"UnnamedRoad," withString:@""];
+     origin=[origin stringByReplacingOccurrencesOfString:@",India" withString:@""];
+    origin=[NSString stringWithFormat:@"%@",origin];
+    origin=[origin stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    return origin;
+   
+}
+
+-(NSString*)formatDest:(NSString*)destination
+{
+    
+    destination=[destination stringByReplacingOccurrencesOfString:@" " withString:@""];
+    destination=[destination stringByReplacingOccurrencesOfString:@"UnnamedRoad," withString:@""];
+    destination=[destination stringByReplacingOccurrencesOfString:@",India" withString:@""];
+    destination=[NSString stringWithFormat:@"%@",destination];
+     destination=[destination stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    return destination;
+}
+
 -(void)ShowSubmitRouteAlertWithMessage:(NSString*)Message{
     
     UIAlertView * Alerts = [[UIAlertView alloc]initWithTitle:kApplicationName message:Message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Submit", nil];
@@ -400,7 +437,7 @@ NSMutableArray *days;
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
       NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
-    // Initate call over cellular network
+    
     if ([title isEqualToString:@"Submit"]) {
          [self MoveUp];
         [self addRouteToServer];
@@ -566,8 +603,10 @@ NSMutableArray *days;
 }
 -(void)MoveUp
 {
+    self.zoomIn.hidden=NO;
+    self.zoomOut.hidden=NO;
       self.addRouteButton.userInteractionEnabled=YES;
-    const int movementDistance = 385; // tweak as needed
+    const int movementDistance = 500; // tweak as needed
     const float movementDuration = 0.3f; // tweak as needed
     bool up=YES;
     int movement = (up ? -movementDistance : movementDistance);
@@ -578,6 +617,26 @@ NSMutableArray *days;
     self.addView.frame = CGRectOffset(self.addView.frame, 0, movement);
     [UIView commitAnimations];
       //self.addView.hidden=YES;
+}
+-(void)MoveDown
+{
+    self.zoomIn.hidden=YES;
+    self.zoomOut.hidden=YES;
+    self.addRouteButton.userInteractionEnabled=YES;
+    const int movementDistance = 498; // tweak as needed
+    const float movementDuration = 0.3f; // tweak as needed
+    bool up=YES;
+    int movement = (up ? movementDistance : -movementDistance);
+    
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.addView.frame = CGRectOffset(self.addView.frame, 0, movement);
+    [UIView commitAnimations];
+    self.addView.hidden=NO;
+    [mymap addSubview:self.addView];
+    [mymap bringSubviewToFront:self.addView];
+    //self.addView.hidden=YES;
 }
 - (void)mapView:(GMSMapView *)mapView didBeginDraggingMarker:(GMSMarker *)marker
 {
@@ -595,21 +654,10 @@ NSMutableArray *days;
 
 - (IBAction)addRouteAction:(id)sender {
     self.addRouteButton.userInteractionEnabled=NO;
-      days = [NSMutableArray arrayWithObjects: @"Sunday", @"Monday", @"Tuesday", @"Wednesday",@"Thursday", @"Friday", @"Saturday", nil];
+    searchButton.hidden=YES;
+    submitButton.hidden=NO;
     [self.daysTable reloadData];
-    const int movementDistance = 385; // tweak as needed
-    const float movementDuration = 0.3f; // tweak as needed
-    bool up=YES;
-    int movement = (up ? movementDistance : -movementDistance);
-    
-    [UIView beginAnimations: @"anim" context: nil];
-    [UIView setAnimationBeginsFromCurrentState: YES];
-    [UIView setAnimationDuration: movementDuration];
-    self.addView.frame = CGRectOffset(self.addView.frame, 0, movement);
-    [UIView commitAnimations];
-    self.addView.hidden=NO;
-    [mymap addSubview:self.addView];
-    [mymap bringSubviewToFront:self.addView];
+    [self MoveDown];
 }
 
 - (void)mapView:(GMSMapView *)mapView didDragMarker:(GMSMarker *)marker
@@ -945,21 +993,6 @@ NSMutableArray *days;
 
 
 
-- (IBAction)timeSubmission:(id)sender {
-    if (intervalSegment.selectedSegmentIndex == 0)
-    {
-        self.timeInterval=@"9-10";
-    }
-    else  if (intervalSegment.selectedSegmentIndex == 1)
-    {
-        self.timeInterval=@"10-11";
-    }
-    else{
-        self.timeInterval=@"11-12";
-    }
-
-    
-}
 
 - (IBAction)addRouteSUbmission:(id)sender {
     NSLog(@"Array val %@",mSelectedArray);
@@ -1060,5 +1093,111 @@ NSMutableArray *days;
     self.view.frame = CGRectOffset(self.view.frame, 0, movement);
     [UIView commitAnimations];
 }
+
+//picker
+
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
+{
+    UILabel* tView = (UILabel*)view;
+    if (!tView)
+    {
+        tView = [[UILabel alloc] init];
+        [tView setFont:[UIFont fontWithName:@"Verdana" size:16]];
+        [tView setTextAlignment:UITextAlignmentCenter];
+    }
+    
+
+        tView.text=[options objectAtIndex:row];
+    
+    return tView;
+}
+
+- (NSInteger)numberOfComponentsInPickerView:
+(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView
+numberOfRowsInComponent:(NSInteger)component
+{
+    
+        return options.count;
+   
+    
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView
+             titleForRow:(NSInteger)row
+            forComponent:(NSInteger)component
+{
+    
+        return options[row];
+   
+}
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row
+      inComponent:(NSInteger)component
+{
+    
+        
+        self.timeInterval= options[row];
+        NSLog(@"Selected = %@",self.timeInterval);
+    
+}
+
+- (IBAction)zoomOut:(id)sender {
+    zoom=zoom-0.5f;
+    [mymap animateToZoom:zoom];
+}
+- (IBAction)zoomIn:(id)sender {
+    zoom=zoom+0.5f;
+    [mymap animateToZoom:zoom];
+}
+
+-(void)searchUsers
+{
+    [WTStatusBar setLoading:YES loadAnimated:YES];
+    NSString *activedaysFinal;
+    if([self.options isEqualToString:@"same_company"])
+    {
+        self.options=company;
+        activedaysFinal=@"";
+        self.timeInterval=@"";
+    }
+    else if([self.options isEqualToString:@"active_shedule"])
+    {
+        activedaysFinal = [[NSString stringWithFormat:@"%@",mSelectedArray] stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+        
+        activedaysFinal= [activedaysFinal stringByReplacingOccurrencesOfString:@"(" withString:@"{"];
+        activedaysFinal= [activedaysFinal stringByReplacingOccurrencesOfString:@")" withString:@"}"];
+    }
+    else
+    {
+        activedaysFinal=@"";
+        self.timeInterval=@"";
+    }
+    if([types isEqualToString:@"G"])
+    {
+        
+        NSString *postString=[NSString stringWithFormat:@"userId=%@&OriginLat=%@&OriginLong=%@&DestLat=%@&DestLong=%@&searchoption=%@&active_shedule_time=%@&&active_shedule_days=%@&type=%@&companyName=%@",uId,start_Latitude,start_Longitude,stop_Latitude,stop_Longitude,self.options,activedaysFinal,self.timeInterval,@"T",company];
+        NSData *searchData=[ConnectToServer ServerCall:kServerLink_SearchRoute post:postString];
+        [self SearchMarkers:searchData];
+    }
+    else if([types isEqualToString:@"T"])
+    {
+        //        NSString *postString=[NSString stringWithFormat:@"userId=%@&OriginLat=%@&OriginLong=%@&DestLat=%@&DestLong=%@&searchoption=%@&type=%@",uId,start_Latitude,start_Longitude,stop_Latitude,stop_Longitude,sOption,@"G"];
+        NSString *postString=[NSString stringWithFormat:@"userId=%@&OriginLat=%@&OriginLong=%@&DestLat=%@&DestLong=%@&searchoption=%@&active_shedule_time=%@&&active_shedule_days=%@&type=%@&companyName=%@",uId,start_Latitude,start_Longitude,stop_Latitude,stop_Longitude,self.options,activedaysFinal,self.timeInterval,@"G",company];
+        NSData *searchData=[ConnectToServer ServerCall:kServerLink_SearchRoute post:postString];
+        [self SearchMarkers:searchData];
+    }
+}
+
+- (IBAction)searchUsers:(id)sender {
+    [self MoveUp];
+    [self searchUsers];
+}
+
+
+
 
 @end

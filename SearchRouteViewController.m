@@ -13,12 +13,16 @@
 @end
 
 @implementation SearchRouteViewController
-@synthesize myMap,postString;
+@synthesize myMap,postString,zoomOut,zoomIn;
+float zoom;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self LoadMaps];
+    zoom=kGoogleMapsZoomLevelDefault;
+    [myMap addSubview:zoomOut];
+    [myMap addSubview:zoomIn];
     ServerConnection *ConnectToServer=[[ServerConnection alloc]init];
     NSData *driverPolyLine=[ConnectToServer ServerCall:kServerLink_UserPolyline post:postString];
     [self UserRoute:driverPolyLine];
@@ -35,7 +39,7 @@
     myMap.myLocationEnabled = YES;
     [self.view addSubview:myMap];
     [myMap setMapType:kGMSTypeNormal];
-   
+     GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:12.9667 longitude:77.5667 zoom:kGoogleMapsZoomLevelDefault];
     self.draggableMarkerManager = [[GMDraggableMarkerManager alloc] initWithMapView:myMap delegate:self];
    
 }
@@ -44,6 +48,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 - (void)UserRoute:(NSData *)responseData {
     NSLog(@"Plotting polyline");
     NSError *jsonParsingError;
@@ -123,5 +128,13 @@
    
 }
 
+- (IBAction)zoomIn:(id)sender {
+    zoom=zoom+0.5f;
+    [myMap animateToZoom:zoom];
+}
+- (IBAction)zoomOut:(id)sender {
+    zoom=zoom-0.5f;
+    [myMap animateToZoom:zoom];
+}
 
 @end

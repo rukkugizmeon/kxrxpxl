@@ -12,5 +12,6 @@
 @interface ServerConnection : NSObject
 
 - (NSData*)ServerCall:(NSString*)url post:(NSString*)postString;
+-(NSMutableURLRequest*)RequestServer:(NSString*)url post:(NSString*)postStrings;
 -(float) DistanceDatas:(NSString*)responseData;
 @end

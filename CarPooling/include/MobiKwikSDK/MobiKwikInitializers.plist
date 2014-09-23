@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>MerchantID</key>
+	<string>MBK9002</string>
+	<key>MerchantReturnURL</key>
+	<string>https://staging.mobikwik.com/pgTest/response.jsp</string>
+	<key>ChecksumURL</key>
+	<string>https://staging.mobikwik.com/pgTest/checksum.jsp</string>
+	<key>MerchantName</key>
+	<string>TestMerchant</string>
+	<key>SDKsignature</key>
+	<string>a_lvjRAEvSbC0ENdEVuGC0B2Uo9</string>
+	<key>Mode</key>
+	<string>0</string>
+</dict>
+</plist>

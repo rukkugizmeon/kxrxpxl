@@ -116,7 +116,7 @@
 }
 
 - (IBAction)purchaseOption:(id)sender {
-    [self ShowAlertView:@"Purchase is pending"];
+   // [self ShowAlertView:@"Purchase is pending"];
 }
 
 

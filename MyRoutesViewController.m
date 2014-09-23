@@ -16,11 +16,12 @@
     NSString *active_Rawform;
     NSString *type;
     NSUserDefaults *prefs;
+    float zoom;
 }
 @end
 
 @implementation MyRoutesViewController
-@synthesize  myMap,noOfSeatField,mActiveFields,mActiveSwitch,mDestField;
+@synthesize  myMap,noOfSeatField,mActiveFields,mActiveSwitch,mDestField,zoomOut,zoomIn;
 @synthesize  mOriginField,mTimeIntervalField,seats,activeDays,timeInterval;
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -30,7 +31,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
- 
+    zoom=kGoogleMapsZoomLevelDefault;
+    [myMap addSubview:zoomOut];
+    [myMap addSubview:zoomIn];
+    [WTStatusBar setLoading:YES loadAnimated:YES];
     mSelectedArray=[[NSMutableArray alloc]init];
     prefs= [NSUserDefaults standardUserDefaults];
     userId=[prefs stringForKey:@"id"];
@@ -60,7 +64,7 @@
     myMap.myLocationEnabled = YES;
     [self.view addSubview:myMap];
     [myMap setMapType:kGMSTypeNormal];
-    GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:26.90083 longitude:76.35371 zoom:8];
+     GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:12.9667 longitude:77.5667 zoom:kGoogleMapsZoomLevelDefault];
     myMap.camera=cameraPosition;
     [self fetchMyRoutesFromServer];
     
@@ -83,7 +87,6 @@
 
 -(void)fetchMyRoutesFromServer{
     [myMap clear];
-    [WTStatusBar setLoading:YES loadAnimated:YES];
    // NSString *user_id=@"564";
     NSString * PostString = [NSString stringWithFormat:@"user_id=%@",userId];
    NSLog(@"Url %@",kServerLink_JourneyList);
@@ -107,7 +110,9 @@
         [self performSelectorOnMainThread:@selector(fetchedData:)
                                withObject:data waitUntilDone:YES];
         }else{
-            [self ShowAlertView:@"invalid"];
+            [self ShowAlertView:UnableToProcess];
+             [WTStatusBar setLoading:NO loadAnimated:NO];
+            [WTStatusBar clearStatus];
            
         }
     });
@@ -185,7 +190,7 @@
         marker.position = CLLocationCoordinate2DMake([model.journey_start_latitude doubleValue],[model.journey_start_longitude doubleValue]);
         marker.title =[NSString stringWithFormat:@"%@",model.journey_id];
         marker.map = myMap;
-        GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:[model.journey_start_latitude doubleValue] longitude:[model.journey_start_longitude doubleValue] zoom:8];
+        GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:[model.journey_start_latitude doubleValue] longitude:[model.journey_start_longitude doubleValue] zoom:kGoogleMapsZoomLevelDefault];
         myMap.camera=cameraPosition;
     }
    
@@ -255,20 +260,32 @@
      [self fetchMyRoutesFromServer];
             NSLog(@"Dismissed");
     }
-    // Initate call over cellular network
+    else if ([title isEqualToString:@"Delete"])
+    {
+    [self performSelector:@selector(dismiss:) withObject:Alert afterDelay:1.0];
+     [self DeleteRoute];
+    }
+    
     if (buttonIndex==1) {
          [self performSegueWithIdentifier:@"toDetailedView" sender:nil];
         
     }
     else if (buttonIndex==2){
          [self performSelector:@selector(dismiss:) withObject:Alert afterDelay:1.0];
-        [self DeleteRoute];
+        [self ShowDeleteAlertView];
     }
     else if (buttonIndex==3){
     NSLog(@"Edit");
           [self performSegueWithIdentifier:@"toEditDetailView" sender:nil];
         
     }
+}
+
+-(void)ShowDeleteAlertView{
+    NSString *Message=@"Are you sure you want to delete ?";
+    
+   Alert= [[UIAlertView alloc ]initWithTitle:kApplicationName message:Message delegate:self cancelButtonTitle:@"Delete" otherButtonTitles:@"Cancel",nil];
+    [Alert show];
 }
 
 -(void)dismiss:(UIAlertView*)alert
@@ -325,4 +342,14 @@
        edtVC.activeDaysRaw=active_Rawform;
     }
 }
+- (IBAction)zoomIn:(id)sender {
+    zoom=zoom+0.5f;
+    [myMap animateToZoom:zoom];
+}
+
+- (IBAction)zoomOut:(id)sender {
+    zoom=zoom-0.5f;
+    [myMap animateToZoom:zoom];
+}
+
 @end

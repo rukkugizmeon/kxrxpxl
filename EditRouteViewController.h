@@ -19,8 +19,10 @@
 }
 @property (weak, nonatomic) IBOutlet UITextField *noOfSeatField;
 @property (weak, nonatomic) IBOutlet UILabel *seatsLabel;
+@property (strong, nonatomic) IBOutlet UIScrollView *mScrollView;
+@property (weak, nonatomic) IBOutlet UIPickerView *mIntervalPicker;
 
-@property (weak, nonatomic) IBOutlet UISegmentedControl *intervalSegment;
+
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
 @property (weak, nonatomic) IBOutlet UISwitch *sunSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *monSwitch;

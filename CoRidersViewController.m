@@ -9,17 +9,22 @@
 #import "CoRidersViewController.h"
 
 @interface CoRidersViewController ()<GMSMapViewDelegate>
-
+{
+    float zoom;
+}
 @end
 
 @implementation CoRidersViewController
-@synthesize myMap,scrollView,nameField,ageField,cityField,addressField,carModelField,sosContactField,SOSEmailField,phoneField,seatsField;
+@synthesize myMap,scrollView,nameField,ageField,cityField,addressField,sosContactField,SOSEmailField,phoneField,zoomIn,zoomOut;
 NSString *uId;
 NSString *types;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    zoom=kGoogleMapsZoomLevelDefault;
+    [myMap addSubview:zoomOut];
+    [myMap addSubview:zoomIn];
     Rating=@"0";
     ConnectToServer=[[ServerConnection alloc]init];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -44,7 +49,7 @@ NSString *types;
     myMap.myLocationEnabled = YES;
     [self.view addSubview:myMap];
     [myMap setMapType:kGMSTypeNormal];
-    GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:26.90083 longitude:76.35371 zoom:8];
+     GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:12.9667 longitude:77.5667 zoom:kGoogleMapsZoomLevelDefault];
     myMap.camera=cameraPosition;
     [self fetchCoridersFromServer];
     
@@ -52,12 +57,12 @@ NSString *types;
 -(void)fetchCoridersFromServer
 {
     [WTStatusBar setLoading:YES loadAnimated:YES];
-    NSString * PostString = [NSString stringWithFormat:@"user_id=%@",uId];
+    NSString * PostString = [NSString stringWithFormat:@"user_id=%@&journey_option=%@",uId,@"T"];
     NSData *postData = [PostString  dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:kServerLink_GetCoriders]];
-    
-    
+    NSLog(@"URl %@",kServerLink_GetCoriders);
+      NSLog(@"post %@",PostString);
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:postData];
@@ -86,13 +91,12 @@ NSString *types;
     NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseData
                                                          options:0 error:&jsonParsingError];
     NSLog(@"Response %@",data);
-    
+    if(!jsonParsingError)
+    {
     
     [WTStatusBar setLoading:NO loadAnimated:NO];
     [WTStatusBar clearStatus];
-     NSString *req=[data objectForKey:@"requests"];
-    if(![req isEqualToString:@"No requests"])
-       {
+  
     NSArray *requestObj=[data objectForKey:@"requests"];
         if([requestObj count]>0 )
         {
@@ -120,12 +124,11 @@ NSString *types;
         [WTStatusBar setLoading:NO loadAnimated:NO];
         [WTStatusBar clearStatus];
         [self ShowAlertView:@"No Co-riders!!"];
-    }}else{
+    }} else{
         [WTStatusBar setLoading:NO loadAnimated:NO];
         [WTStatusBar clearStatus];
-        [self ShowAlertView:@"No Co-riders!!"];
+        [self ShowAlertView:UnableToProcess];
     }
-    
 }
 -(void)PlaceMarkersOnMap{
     NSLog(@"PlaceMarkersOnMap");
@@ -135,7 +138,7 @@ NSString *types;
         marker.position = CLLocationCoordinate2DMake([model.journey_latitude doubleValue],[model.journey_longitude doubleValue]);
         marker.title =[NSString stringWithFormat:@"%@",model.journey_id];
         marker.map = myMap;
-        GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:[model.journey_latitude doubleValue] longitude:[model.journey_longitude doubleValue] zoom:10];
+        GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:[model.journey_latitude doubleValue] longitude:[model.journey_longitude doubleValue] zoom:kGoogleMapsZoomLevelDefault];
         myMap.camera=cameraPosition;
     }
 }
@@ -199,10 +202,7 @@ NSString *types;
             nameField.text=[passDict objectForKey:@"name"];
             ageField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"age"]];
             addressField.text=[passDict objectForKey:@"address"];
-            cityField.text=[passDict objectForKey:@"city"];
-            carModelField.text=[passDict objectForKey:@"car_model"];
-            seatsField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"number_of_seats"]];
-            sosContactField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"sos_contact_num"]];
+            cityField.text=[passDict objectForKey:@"city"]; sosContactField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"sos_contact_num"]];
             SOSEmailField.text=[passDict objectForKey:@"sos_email_id"];
             phoneField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"mobile_number"]];
             
@@ -289,7 +289,7 @@ NSString *types;
     
     
     [scrollView setScrollEnabled:YES];
-    [scrollView setContentSize:CGSizeMake(320, 560)];
+    [scrollView setContentSize:CGSizeMake(320, 500)];
     [AccessoryView setBackgroundColor:[UIColor clearColor]];
     
     [Alerts setValue:AccessoryView forKey:@"accessoryView"];
@@ -309,10 +309,7 @@ NSString *types;
             ageField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"age"]];
             addressField.text=[passDict objectForKey:@"address"];
             cityField.text=[passDict objectForKey:@"city"];
-            carModelField.text=[passDict objectForKey:@"car_model"];
-            favId=[passDict objectForKey:@"user_id"];
-            seatsField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"number_of_seats"]];
-            sosContactField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"sos_contact_num"]];
+            favId=[passDict objectForKey:@"user_id"];sosContactField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"sos_contact_num"]];
             SOSEmailField.text=[passDict objectForKey:@"sos_email_id"];
             phoneField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"mobile_number"]];
             
@@ -343,7 +340,7 @@ NSString *types;
         if([result isEqualToString:@"1"])
         {
           
-            [self ShowAlertView:@"Requset processed!!"];
+            [self ShowAlertView:@"Request processed!!"];
             
         }
         else if([result isEqualToString:@"0"]){
@@ -406,6 +403,16 @@ NSString *types;
 {
     [super didReceiveMemoryWarning];
 }
+
+- (IBAction)zoomIn:(id)sender {
+    zoom=zoom+0.5f;
+    [myMap animateToZoom:zoom];
+}
+- (IBAction)zoomOut:(id)sender {
+    zoom=zoom-0.5f;
+    [myMap animateToZoom:zoom];
+}
+
 
 /*
 #pragma mark - Navigation

@@ -30,6 +30,8 @@
 }
 @property (weak, nonatomic) IBOutlet GMSMapView *myMap;
 @property (weak, nonatomic) IBOutlet UITableView *profileTable;
+@property (weak, nonatomic) IBOutlet UIButton *zoomOut;
+@property (weak, nonatomic) IBOutlet UIButton *zoomIn;
 
 //Profile
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -39,8 +41,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *addressField;
 
 @property (weak, nonatomic) IBOutlet UILabel *cityField;
-@property (weak, nonatomic) IBOutlet UILabel *carModelField;
-@property (weak, nonatomic) IBOutlet UILabel *seatsField;
 @property (weak, nonatomic) IBOutlet UILabel *sosContactField;
 @property (weak, nonatomic) IBOutlet UILabel *SOSEmailField;
 

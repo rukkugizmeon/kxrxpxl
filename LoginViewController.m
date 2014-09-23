@@ -27,6 +27,7 @@ NSString *rideOptions;
     NSLog(@"result%@",isLoggedIn);
     if([isLoggedIn isEqualToString:@"true"] && isLoggedIn!=nil)
     {
+        
         mUserNameTextField.hidden=YES;
         mPasswordTextField.hidden=YES;
         mLoginButton.hidden=YES;
@@ -37,12 +38,16 @@ NSString *rideOptions;
     }
 
 }
+
+
 -(void)viewDidAppear:(BOOL)animated
 {
     
     [super viewDidAppear:animated];
     if([isLoggedIn isEqualToString:@"true"] && isLoggedIn!=nil)
-    {   [self AuthenticateUserLoginWithServer];
+    {
+         [self performSegueWithIdentifier:@"toMenuView" sender:nil];
+        //[self AuthenticateUserLoginWithServer];
     }
 }
 
@@ -108,6 +113,24 @@ NSString *rideOptions;
     [Alert show];
 }
 
+-(void)ShowSelectionAlertView:(NSString*)Message{
+    
+    UIAlertView * Alert = [[UIAlertView alloc ]initWithTitle:kApplicationName message:Message delegate:self cancelButtonTitle:@"Take A Ride" otherButtonTitles:@"Give A Ride",nil];
+    [Alert show];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
+    if ([title isEqualToString:@"Take A Ride"]) {
+         [prefs setObject:@"T" forKey:@"role"];
+         [self performSegueWithIdentifier:@"toMenuView" sender:nil];
+    }
+    else if ([title isEqualToString:@"Give A Ride"])
+    {
+       [prefs setObject:@"G" forKey:@"role"];
+         [self performSegueWithIdentifier:@"toMenuView" sender:nil];
+    }}
+
 -(void)AuthenticationFailed{
     
     [[self mUserNameTextField] setText:nil];
@@ -172,7 +195,7 @@ NSString *rideOptions;
     NSString *password;
     NSString *username;
     NSString *rideOption;
-    
+     NSString *company;
     NSError *jsonParsingError;
      NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseData
                                                               options:0 error:&jsonParsingError];
@@ -190,6 +213,7 @@ NSString *rideOptions;
         rideOptions=[data objectForKey:@"rideOption"];
          password=[data objectForKey:@"password"];
         username=[data objectForKey:@"username"];
+         company=[data objectForKey:@"company"];
          username = [username stringByTrimmingCharactersInSet:
                                    [NSCharacterSet whitespaceCharacterSet]];
         if([isLoggedIn isEqualToString:@"false"] || isLoggedIn==nil)
@@ -200,8 +224,18 @@ NSString *rideOptions;
         [prefs setObject:username forKey:@"username"];
         [prefs setObject:password forKey:@"password"];
         [prefs setObject:rideOption forKey:@"role"];
+        [prefs setObject:company forKey:@"company"];
+            [prefs synchronize];
         }
+        NSString *type=[prefs valueForKey:@"role"];
+        if([type isEqualToString:@"B"])
+        {
+            [self ShowSelectionAlertView:@"What would you prefer ?"];
+        }
+        else
+        {
         [self performSegueWithIdentifier:@"toMenuView" sender:nil];
+        }
         //  [self ShowAlertView:result];
     }
     else if([result isEqualToString:@"Invalid"]){
@@ -213,6 +247,7 @@ NSString *rideOptions;
         [prefs removeObjectForKey:@"username"];
         [prefs removeObjectForKey:@"password"];
         [prefs removeObjectForKey:@"role"];
+          [prefs removeObjectForKey:@"company"];
         [prefs synchronize];
         mUserNameTextField.hidden=NO;
         mPasswordTextField.hidden=NO;
@@ -231,6 +266,7 @@ NSString *rideOptions;
     [prefs removeObjectForKey:@"username"];
     [prefs removeObjectForKey:@"password"];
     [prefs removeObjectForKey:@"role"];
+    [prefs removeObjectForKey:@"company"];
     [prefs synchronize];
     mUserNameTextField.hidden=NO;
     mPasswordTextField.hidden=NO;

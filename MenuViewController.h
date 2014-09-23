@@ -10,7 +10,7 @@
 #import "DefineMainValues.h"
 #import "WTStatusBar.h"
 
-@interface MenuViewController : UIViewController
+@interface MenuViewController : UIViewController<UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *earningPaymentButton;
 @property (strong, nonatomic)  NSString *options;
 @property (weak, nonatomic) IBOutlet UIButton *mRouteOptions;

@@ -19,14 +19,20 @@
 
 @implementation EditRouteViewController
 
-@synthesize noOfSeatField,intervalSegment,editButton;
+@synthesize noOfSeatField,editButton,mIntervalPicker,mScrollView;
 @synthesize monSwitch,sunSwitch,tueSwitch,wedSwitch,thursSwitch,friSwitch,satSwitch;
+NSArray *options;
 
--(void)viewWillAppear:(BOOL)animated{
+- (void) viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
- 
     [WTStatusBar clearStatus];
+    options= @[@"12-1 AM", @"1-2 AM",@"2-3 AM", @"3-4 AM",@"4-5 AM",@"5-6 AM", @"6-7 AM", @"8-9 AM",@"9-10 AM", @"10-11 AM", @"11-12 AM",@"12-1 PM", @"1-2 PM",@"2-3 PM", @"3-4 PM",@"4-5 PM",@"5-6 PM", @"6-7 PM", @"8-9 PM",@"9-10 PM", @"10-11 PM",@"11-12 PM"];
+     NSUInteger index = [options indexOfObject:self.timeInterval];
+    [mIntervalPicker selectRow:index inComponent:0 animated:YES];
 }
+
+
 
 - (void)viewDidLoad
 {
@@ -96,20 +102,7 @@
         
 }
     
-- (IBAction)timeSelection:(id)sender
-{
-    if (intervalSegment.selectedSegmentIndex == 0)
-    {
-        self.timeInterval=@"9-10";
-    }
-    else  if (intervalSegment.selectedSegmentIndex == 1)
-    {
-        self.timeInterval=@"10-11";
-    }
-    else{
-        self.timeInterval=@"11-12";
-    }
-}
+
 
 
 - (void)didReceiveMemoryWarning
@@ -120,6 +113,9 @@
 
 -(void)setUpUI
 {
+     noOfSeatField.delegate=self;
+    [mScrollView setScrollEnabled:YES];
+    [mScrollView setContentSize:CGSizeMake(320, 720)];
     if([type isEqualToString:@"T"])
     {
         noOfSeatField.hidden=YES;
@@ -129,17 +125,6 @@
     noOfSeatField.text=[NSString stringWithFormat:@"%@",self.seats];
     noOfSeatField.delegate=self;}
     NSString *timeInter=[NSString stringWithFormat:@"%@",self.timeInterval];
-    if([timeInter isEqualToString:@"9-10"])
-    {
-        [intervalSegment setSelectedSegmentIndex:0];
-    }
-    else if ([timeInter isEqualToString:@"10-11"])
-    {
-        [intervalSegment setSelectedSegmentIndex:1];
-    }
-    else{
-        [intervalSegment setSelectedSegmentIndex:2];
-    }
     
    // Active days
     
@@ -236,7 +221,7 @@
 
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up
 {
-    const int movementDistance = 105; // tweak as needed
+    const int movementDistance = 165; // tweak as needed
     const float movementDuration = 0.3f; // tweak as needed
     
     int movement = (up ? -movementDistance : movementDistance);
@@ -287,6 +272,58 @@
 
     return activedaysFinal;
 }
+
+//picker
+
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
+{
+    UILabel* tView = (UILabel*)view;
+    if (!tView)
+    {
+        tView = [[UILabel alloc] init];
+        [tView setFont:[UIFont fontWithName:@"Verdana" size:16]];
+        [tView setTextAlignment:UITextAlignmentCenter];
+    }
+    
+    
+    tView.text=[options objectAtIndex:row];
+    
+    return tView;
+}
+
+- (NSInteger)numberOfComponentsInPickerView:
+(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView
+numberOfRowsInComponent:(NSInteger)component
+{
+    
+    return options.count;
+    
+    
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView
+             titleForRow:(NSInteger)row
+            forComponent:(NSInteger)component
+{
+    
+    return options[row];
+    
+}
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row
+      inComponent:(NSInteger)component
+{
+    
+    
+    self.timeInterval= options[row];
+    NSLog(@"Selected = %@",self.timeInterval);
+    
+}
+
 
 
 

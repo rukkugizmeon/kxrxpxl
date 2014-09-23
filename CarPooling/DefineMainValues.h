@@ -42,8 +42,7 @@
 
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
 
-// Login
-//#define kServerLink_UserAuthenticationLink @"http://ridewit1.wwwss11.a2hosting.com/index.php?r=Api/login"
+
 
 // Login
 #define kServerLink_UserAuthenticationLink @"http://ridewithme.in/index.php?r=Api/login"
@@ -95,10 +94,14 @@
 
 #define kServerLink_GetEarnings @"http://ridewithme.in/index.php?r=Api/getEarnings"
 
+//Update Payments
+
+#define kServerLink_setPayment @"http://ridewithme.in/index.php?r=Api/setPayment"
+
 
 //Search Route
 
-#define kServerLink_SearchRoute @"http://ridewithme.in/index.php?r=Api/searchRoute"
+#define kServerLink_SearchRoute @"http://ridewithme.in/index.php?r=Api/searchRouteNew"
 
 
 //Taker/Giver Details
@@ -128,8 +131,7 @@
 
 //Requested Passengers
 
-#define kServerLink_journeyRequestPassengers @"http://ridewithme.in/index.php?r=Api/getRequestedPassengers" 
-//userId,journeyId
+#define kServerLink_journeyRequestPassengers @"http://ridewithme.in/index.php?r=Api/getRequestedPassengers"
 
 
 //User Polyline
@@ -169,7 +171,7 @@
 
 //Get Coriders
 
-#define kServerLink_GetCoriders @"http://ridewithme.in/index.php?r=Api/GetJourneyParticipants"
+#define kServerLink_GetCoriders @"http://ridewithme.in/index.php?r=Api/getJourneyParticipants"//GetJourneyParticipants"
 
 
 //GetCorriders Info

@@ -21,6 +21,9 @@
     NSMutableArray * searchListArray;
     DetailedRouteModel *mDetaileModel;
 }
+@property (weak, nonatomic) IBOutlet UIButton *zoomIn;
+@property (weak, nonatomic) IBOutlet UIButton *zoomOut;
+
 @property (strong, nonatomic)  NSString *starts;
 @property (strong, nonatomic)  NSString *stops;
 @property (strong, nonatomic)  NSString *journeyId;

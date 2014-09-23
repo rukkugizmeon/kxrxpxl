@@ -38,6 +38,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *mDestField;
 @property (weak, nonatomic) IBOutlet UILabel *mOriginField;
 @property (weak, nonatomic) IBOutlet UISwitch *mActiveSwitch;
+@property (weak, nonatomic) IBOutlet UIButton *zoomOut;
+@property (weak, nonatomic) IBOutlet UIButton *zoomIn;
 
 
 

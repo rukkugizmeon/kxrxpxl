@@ -13,4 +13,6 @@
 @property (strong, nonatomic) NSString *request_id;
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *index;
+@property (strong, nonatomic) NSString *user_id;
+@property (strong, nonatomic) NSString *request_status;
 @end
