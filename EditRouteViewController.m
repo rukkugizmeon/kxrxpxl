@@ -281,7 +281,13 @@ NSArray *options;
     if (!tView)
     {
         tView = [[UILabel alloc] init];
-        [tView setFont:[UIFont fontWithName:@"Verdana" size:16]];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            
+            [tView setFont:[UIFont fontWithName:@"Verdana" size:20]];}
+        else{
+            
+            [tView setFont:[UIFont fontWithName:@"Verdana" size:16]];
+        }
         [tView setTextAlignment:UITextAlignmentCenter];
     }
     

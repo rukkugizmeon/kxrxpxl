@@ -170,11 +170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MapViewController.m"
-            timestampString = "430999851.373935"
+            timestampString = "433234466.372165"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "807"
-            endingLineNumber = "807"
+            startingLineNumber = "841"
+            endingLineNumber = "841"
             landmarkName = "-ratingTaker:"
             landmarkType = "5">
          </BreakpointContent>
@@ -186,11 +186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MapViewController.m"
-            timestampString = "430999851.373935"
+            timestampString = "433234466.372165"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "700"
-            endingLineNumber = "700"
+            startingLineNumber = "734"
+            endingLineNumber = "734"
             landmarkName = "-ShowUserRouteDataAlert:age:address:time:dist:rate:"
             landmarkType = "5">
          </BreakpointContent>
@@ -202,11 +202,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MapViewController.m"
-            timestampString = "430999851.373935"
+            timestampString = "433234466.372165"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "702"
-            endingLineNumber = "702"
+            startingLineNumber = "736"
+            endingLineNumber = "736"
             landmarkName = "-ShowUserRouteDataAlert:age:address:time:dist:rate:"
             landmarkType = "5">
          </BreakpointContent>
@@ -358,11 +358,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MapViewController.m"
-            timestampString = "430999851.373935"
+            timestampString = "433234466.372165"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "649"
-            endingLineNumber = "649"
+            startingLineNumber = "683"
+            endingLineNumber = "683"
             landmarkName = "-mapView:didBeginDraggingMarker:"
             landmarkType = "5">
          </BreakpointContent>
@@ -515,6 +515,22 @@
             endingLineNumber = "20"
             landmarkName = "@implementation PurchaseViewController"
             landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MenuViewController.m"
+            timestampString = "433168520.449476"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
+            landmarkName = "-viewDidLoad"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

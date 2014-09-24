@@ -87,7 +87,7 @@ NSUserDefaults *prefs;
            mAgeTextField.text=[NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"age"]];
            Gender=[profileDetailsDictionary objectForKey:@"gender"];
              NSLog(@"Gender%@",Gender);
-            if([Gender isEqualToString:@"Male"])
+            if([Gender isEqualToString:@"Male"] || [Gender isEqualToString:@"male"] || [Gender isEqualToString:@"M"] || [Gender isEqualToString:@"m"])
             {
                [mGenderSegment setSelectedSegmentIndex:0];
             }

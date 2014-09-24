@@ -605,6 +605,20 @@ NSArray *options;
 {
     self.zoomIn.hidden=NO;
     self.zoomOut.hidden=NO;
+     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+     {
+         self.addRouteButton.userInteractionEnabled=YES;
+         const int movementDistance = 816; // tweak as needed
+         const float movementDuration = 0.3f; // tweak as needed
+         bool up=YES;
+         int movement = (up ? -movementDistance : movementDistance);
+         
+         [UIView beginAnimations: @"anim" context: nil];
+         [UIView setAnimationBeginsFromCurrentState: YES];
+         [UIView setAnimationDuration: movementDuration];
+         self.addView.frame = CGRectOffset(self.addView.frame, 0, movement);
+         [UIView commitAnimations];
+     }else{
       self.addRouteButton.userInteractionEnabled=YES;
     const int movementDistance = 500; // tweak as needed
     const float movementDuration = 0.3f; // tweak as needed
@@ -615,14 +629,33 @@ NSArray *options;
     [UIView setAnimationBeginsFromCurrentState: YES];
     [UIView setAnimationDuration: movementDuration];
     self.addView.frame = CGRectOffset(self.addView.frame, 0, movement);
-    [UIView commitAnimations];
+         [UIView commitAnimations];}
       //self.addView.hidden=YES;
 }
 -(void)MoveDown
 {
+     self.addRouteButton.userInteractionEnabled=NO;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        
+    {    self.zoomIn.hidden=YES;
+        self.zoomOut.hidden=YES;
+        const int movementDistance = 810; // tweak as needed
+        const float movementDuration = 0.3f; // tweak as needed
+        bool up=YES;
+        int movement = (up ? movementDistance : -movementDistance);
+        
+        [UIView beginAnimations: @"anim" context: nil];
+        [UIView setAnimationBeginsFromCurrentState: YES];
+        [UIView setAnimationDuration: movementDuration];
+        self.addView.frame = CGRectOffset(self.addView.frame, 0, movement);
+        [UIView commitAnimations];
+        self.addView.hidden=NO;
+        [mymap addSubview:self.addView];
+        [mymap bringSubviewToFront:self.addView];
+    
+    }else{
     self.zoomIn.hidden=YES;
     self.zoomOut.hidden=YES;
-    self.addRouteButton.userInteractionEnabled=YES;
     const int movementDistance = 498; // tweak as needed
     const float movementDuration = 0.3f; // tweak as needed
     bool up=YES;
@@ -636,6 +669,7 @@ NSArray *options;
     self.addView.hidden=NO;
     [mymap addSubview:self.addView];
     [mymap bringSubviewToFront:self.addView];
+    }
     //self.addView.hidden=YES;
 }
 - (void)mapView:(GMSMapView *)mapView didBeginDraggingMarker:(GMSMarker *)marker
@@ -1102,7 +1136,13 @@ NSArray *options;
     if (!tView)
     {
         tView = [[UILabel alloc] init];
-        [tView setFont:[UIFont fontWithName:@"Verdana" size:16]];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            
+            [tView setFont:[UIFont fontWithName:@"Verdana" size:20]];}
+        else{
+            
+            [tView setFont:[UIFont fontWithName:@"Verdana" size:16]];
+        }
         [tView setTextAlignment:UITextAlignmentCenter];
     }
     

@@ -225,6 +225,11 @@
     //Scrolling Enabled
     TopLayer.hidden=YES;
     [mScrollView setScrollEnabled:YES];
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+       [mScrollView setContentSize:CGSizeMake(768, 1200)];
+    } else {
+       [mScrollView setContentSize:CGSizeMake(320, 1200)];
+    }
     [mScrollView setContentSize:CGSizeMake(320, 1200)];
     mRegisterButton.layer.cornerRadius=5;
     mCancelButton.layer.cornerRadius=5;

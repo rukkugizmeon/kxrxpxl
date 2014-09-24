@@ -7,6 +7,8 @@
 //
 
 #import "MenuViewController.h"
+#define IS_RETINA ([[UIScreen mainScreen] scale] == 2.0f)
+#define IS_WIDESCREEN (IS_RETINA && [[UIScreen mainScreen] bounds].size.height != 2048.0f)
 
 @interface MenuViewController ()
 {
@@ -31,7 +33,7 @@
     {
      [self ShowSelectionAlertView:@"What would you prefer ?"];
     }
-    NSLog(@"%@",role);
+  
     if([role isEqualToString:@"G"])
     {
         [earningPaymentButton setTitle:@"Earnings" forState:UIControlStateNormal];
@@ -46,8 +48,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Do any additional setup after loading the view.
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        
+        if (IS_WIDESCREEN)
+        {
+            NSLog(@"Retina");
+        //    [self.view.frame.size:Cgrect]
+        }
+        else
+         {
+           NSLog(@"Ipad");
+        }
+    }
 }
 
 -(void)ShowSelectionAlertView:(NSString*)Message{

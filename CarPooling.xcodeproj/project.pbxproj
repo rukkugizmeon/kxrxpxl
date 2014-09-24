@@ -64,13 +64,14 @@
 		0477762D19827C8C00F36338 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0477762C19827C8B00F36338 /* libz.dylib */; };
 		0477762F19827C9600F36338 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0477762E19827C9600F36338 /* OpenGLES.framework */; };
 		0477763119827C9D00F36338 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0477763019827C9D00F36338 /* QuartzCore.framework */; };
+		0481EF2919D167E300F37E51 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0481EF2819D167E300F37E51 /* MainStoryboard_iPhone.storyboard */; };
+		0481EF5A19D1879700F37E51 /* Main-iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0481EF5919D1879700F37E51 /* Main-iPad.storyboard */; };
 		0498971E1987636700356457 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0498971D1987636700356457 /* GoogleMaps.framework */; };
 		04989720198763A000356457 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0498971F198763A000356457 /* GoogleMaps.bundle */; };
 		049ADB49198FB052006DCAB0 /* PolyLineDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 049ADB48198FB052006DCAB0 /* PolyLineDecoder.m */; };
 		049ADB501990A9A1006DCAB0 /* ic_action_search.png in Resources */ = {isa = PBXBuildFile; fileRef = 049ADB4F1990A9A1006DCAB0 /* ic_action_search.png */; };
 		049ADB531990C260006DCAB0 /* RouteSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049ADB521990C260006DCAB0 /* RouteSelectionViewController.m */; };
 		049D9D0419AB5028001228B3 /* RidePointModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 049D9D0319AB5028001228B3 /* RidePointModel.m */; };
-		049D9DBB19AC9FA7001228B3 /* Storyboard_with_sliding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 049D9DBA19AC9FA7001228B3 /* Storyboard_with_sliding.storyboard */; };
 		049D9DCA19ACA144001228B3 /* RECommonFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 049D9DBF19ACA144001228B3 /* RECommonFunctions.m */; };
 		049D9DCB19ACA144001228B3 /* REFrostedContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049D9DC119ACA144001228B3 /* REFrostedContainerViewController.m */; };
 		049D9DCC19ACA144001228B3 /* REFrostedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049D9DC319ACA144001228B3 /* REFrostedViewController.m */; };
@@ -82,7 +83,6 @@
 		049D9DD619ACA380001228B3 /* burger@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 049D9DD419ACA380001228B3 /* burger@2x.png */; };
 		049D9DD919ACA3FB001228B3 /* NavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049D9DD819ACA3FB001228B3 /* NavigationViewController.m */; };
 		049D9DDC19ACAA25001228B3 /* MenuTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049D9DDB19ACAA25001228B3 /* MenuTableViewController.m */; };
-		049D9DE119ACB072001228B3 /* TestMain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 049D9DE019ACB072001228B3 /* TestMain.storyboard */; };
 		049D9DE419ACB3F0001228B3 /* DEMOHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049D9DE319ACB3F0001228B3 /* DEMOHomeViewController.m */; };
 		049D9DE719ADBDC1001228B3 /* RequestedProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 049D9DE619ADBDC1001228B3 /* RequestedProfileView.m */; };
 		049D9DE919ADBDDC001228B3 /* RequesteProfileView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 049D9DE819ADBDDC001228B3 /* RequesteProfileView.xib */; };
@@ -231,6 +231,8 @@
 		0477762E19827C9600F36338 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		0477763019827C9D00F36338 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0477763219827CA800F36338 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		0481EF2819D167E300F37E51 /* MainStoryboard_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
+		0481EF5919D1879700F37E51 /* Main-iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = "Main-iPad.storyboard"; path = "../Main-iPad.storyboard"; sourceTree = "<group>"; };
 		0498971D1987636700356457 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
 		0498971F198763A000356457 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
 		049ADB47198FB052006DCAB0 /* PolyLineDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyLineDecoder.h; sourceTree = "<group>"; };
@@ -241,7 +243,6 @@
 		049ADB521990C260006DCAB0 /* RouteSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RouteSelectionViewController.m; sourceTree = "<group>"; };
 		049D9D0219AB5028001228B3 /* RidePointModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RidePointModel.h; sourceTree = "<group>"; };
 		049D9D0319AB5028001228B3 /* RidePointModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RidePointModel.m; sourceTree = "<group>"; };
-		049D9DBA19AC9FA7001228B3 /* Storyboard_with_sliding.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Storyboard_with_sliding.storyboard; path = CarPooling/Storyboard_with_sliding.storyboard; sourceTree = "<group>"; };
 		049D9DBE19ACA144001228B3 /* RECommonFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RECommonFunctions.h; sourceTree = "<group>"; };
 		049D9DBF19ACA144001228B3 /* RECommonFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RECommonFunctions.m; sourceTree = "<group>"; };
 		049D9DC019ACA144001228B3 /* REFrostedContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REFrostedContainerViewController.h; sourceTree = "<group>"; };
@@ -262,7 +263,6 @@
 		049D9DD819ACA3FB001228B3 /* NavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationViewController.m; sourceTree = "<group>"; };
 		049D9DDA19ACAA25001228B3 /* MenuTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuTableViewController.h; sourceTree = "<group>"; };
 		049D9DDB19ACAA25001228B3 /* MenuTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuTableViewController.m; sourceTree = "<group>"; };
-		049D9DE019ACB072001228B3 /* TestMain.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TestMain.storyboard; sourceTree = "<group>"; };
 		049D9DE219ACB3F0001228B3 /* DEMOHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DEMOHomeViewController.h; sourceTree = "<group>"; };
 		049D9DE319ACB3F0001228B3 /* DEMOHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DEMOHomeViewController.m; sourceTree = "<group>"; };
 		049D9DE519ADBDC1001228B3 /* RequestedProfileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestedProfileView.h; sourceTree = "<group>"; };
@@ -499,6 +499,7 @@
 				04510D81197F88530057D7B4 /* AppDelegate.h */,
 				04510D82197F88530057D7B4 /* AppDelegate.m */,
 				04510D84197F88530057D7B4 /* Main.storyboard */,
+				0481EF5919D1879700F37E51 /* Main-iPad.storyboard */,
 				04510D8A197F88530057D7B4 /* Images.xcassets */,
 				04510D79197F88530057D7B4 /* Supporting Files */,
 			);
@@ -580,10 +581,9 @@
 		049D9DBC19AC9FF0001228B3 /* slidingHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				0481EF2819D167E300F37E51 /* MainStoryboard_iPhone.storyboard */,
 				049D9DE219ACB3F0001228B3 /* DEMOHomeViewController.h */,
 				049D9DE319ACB3F0001228B3 /* DEMOHomeViewController.m */,
-				049D9DE019ACB072001228B3 /* TestMain.storyboard */,
-				049D9DBA19AC9FA7001228B3 /* Storyboard_with_sliding.storyboard */,
 				049D9DBD19ACA144001228B3 /* REFrostedViewController */,
 				049D9DD019ACA1AB001228B3 /* RootViewController.h */,
 				049D9DD119ACA1AB001228B3 /* RootViewController.m */,
@@ -834,7 +834,6 @@
 				04E4CD4A1993C18D00575290 /* LodingBar-Info.plist in Resources */,
 				043DE953199CFF95003ACE0C /* starhighlighted.png in Resources */,
 				04D5D5F419D00A36009595BD /* MobiKwikSDKResources.bundle in Resources */,
-				049D9DBB19AC9FA7001228B3 /* Storyboard_with_sliding.storyboard in Resources */,
 				043DE94C199CFF72003ACE0C /* star-highlighted-template.png in Resources */,
 				04E4CD6C1996177C00575290 /* driver.jpg in Resources */,
 				043DE956199D037C003ACE0C /* starsbackground iOS.png in Resources */,
@@ -844,14 +843,15 @@
 				049D9DF819AF4193001228B3 /* zoomout.png in Resources */,
 				04E4CD471993C18D00575290 /* InfoPlist.strings in Resources */,
 				043DE920199A38CB003ACE0C /* PassengerListView.xib in Resources */,
-				049D9DE119ACB072001228B3 /* TestMain.storyboard in Resources */,
 				04E4CD441993C18D00575290 /* Default-568h@2x.png in Resources */,
 				043DE94D199CFF72003ACE0C /* star-highlighted-template@2x.png in Resources */,
 				049D9DF419AF3E1C001228B3 /* zoom.png in Resources */,
 				049ADB501990A9A1006DCAB0 /* ic_action_search.png in Resources */,
 				043DE940199CD1C5003ACE0C /* RequestSentView.xib in Resources */,
 				04510D8B197F88530057D7B4 /* Images.xcassets in Resources */,
+				0481EF5A19D1879700F37E51 /* Main-iPad.storyboard in Resources */,
 				04E4CD461993C18D00575290 /* Default@2x.png in Resources */,
+				0481EF2919D167E300F37E51 /* MainStoryboard_iPhone.storyboard in Resources */,
 				049D9DE919ADBDDC001228B3 /* RequesteProfileView.xib in Resources */,
 				04E4CD481993C18D00575290 /* MainStoryboard.storyboard in Resources */,
 				043DE95E199D051F003ACE0C /* README.md in Resources */,
