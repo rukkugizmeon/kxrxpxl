@@ -8,6 +8,7 @@
 
 #import "PurchaseViewController.h"
 
+
 @interface PurchaseViewController ()
 {
     MobiKwikSDK *payments;
@@ -37,6 +38,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    UIImage *buttonImage = [UIImage imageNamed:@"menuIcon.png"];
+        UIButton *aButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [aButton setImage:buttonImage forState:UIControlStateNormal];
+        aButton.frame = CGRectMake(0.0, 0.0,30,20);
+        UIBarButtonItem *slideButton =[[UIBarButtonItem alloc] initWithCustomView:aButton];
+        [aButton addTarget:self action:@selector(slider:) forControlEvents:UIControlEventTouchUpInside];
+        self.navigationItem.leftBarButtonItem = slideButton;
+
+    
+        self.navigationItem.title = @"Payments";
+     self.navigationItem.hidesBackButton = YES;   
+    UIColor * Cgrey1 =[UIColor colorWithRed:74.0f/255.0f green:74.0f/255.0f blue:74.0f/255.0f alpha:1];
+    self.view.backgroundColor=Cgrey1;
     prefs= [NSUserDefaults standardUserDefaults];
     user_id=[prefs stringForKey:@"id"];
     UIToolbar* keyboardDoneButtonView = [[UIToolbar alloc] init];
@@ -46,7 +61,7 @@
     [keyboardDoneButtonView sizeToFit];
     
     UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done"
-                                                                   style:UIBarButtonItemStyleBordered target:self
+                                                                   style:UIBarButtonItemStyleDone target:self
                                                                   action:@selector(DoneButtonClicked:)];
     
     [keyboardDoneButtonView setItems:[NSArray arrayWithObjects:doneButton, nil]];
@@ -106,7 +121,7 @@
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             
             UIAlertView *Status = [[UIAlertView alloc] initWithTitle:@"Transaction Status" message:[NSString stringWithFormat:@"Amount : %@\nOrder ID : %@\nStatus Code : %@\nMessage : %@\n",[response objectForKey:@"amount"],[response objectForKey:@"orderid"],[response objectForKey:@"statuscode"],[response objectForKey:@"statusmessage"]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-          //  [Status show];
+            [Status show];
            
             
         });
@@ -333,7 +348,13 @@
     [Alerts show];
 }
 
-
+-(void)slider:(id)sender
+{
+    
+    [self.view endEditing:YES];
+    [self.frostedViewController.view endEditing:YES];
+    [self.frostedViewController presentMenuViewController];
+}
 /*
 #pragma mark - Navigation
 

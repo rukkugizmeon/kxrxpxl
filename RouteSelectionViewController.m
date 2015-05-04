@@ -9,7 +9,10 @@
 #import "RouteSelectionViewController.h"
 
 @interface RouteSelectionViewController ()
-
+{
+    UITableView * autocompleteTableView;
+    NSMutableArray *descriptionArray;
+}
 @end
 
 @implementation RouteSelectionViewController
@@ -19,13 +22,14 @@ NSString *city,*origin,*dest,*option;
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    mOrigin.text=@"";
+    mDestination.text=@"";
+    descriptionArray=[[NSMutableArray alloc]init];
     cityNames = @[@"Bangalore",
                   @"Chennai",@"Kannur", @"Cochin", @"Delhi"];
     
       options= @[@"None",@"Favourite Users",@"Same Company", @"Nearest to starting", @"Nearest to Destination",@"Already interested", @"Highest Rating", @"Schedule"];
     
-  //  @"female_only",
      [self.mOptionsPickerView selectRow:3 inComponent:0 animated:YES];
      [self.mCityPickerView selectRow:2 inComponent:0 animated:YES];
     NSLog(@"Counts %lu %lu",(unsigned long)subOptions.count,(unsigned long)options.count );
@@ -34,7 +38,16 @@ NSString *city,*origin,*dest,*option;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+  
+     UIColor *placeholder =[UIColor colorWithRed:230.0f/255.0f green:225.0f/255.0f blue:225.0f/255.0f alpha:1];
+     self.navigationItem.hidesBackButton = YES;
+    [mOrigin setValue:placeholder
+             forKeyPath:@"_placeholderLabel.textColor"];
+    [mDestination setValue:placeholder
+             forKeyPath:@"_placeholderLabel.textColor"];
+    
+     UIColor * Cgrey =[UIColor colorWithRed:74.0f/255.0f green:74.0f/255.0f blue:74.0f/255.0f alpha:1];
+    self.view.backgroundColor=Cgrey;
     mFindRouteButton.layer.cornerRadius=5;
     
     subOptions=@[@" ",@"fav_users",@"same_company",@"near_origin",@"near_destination",
@@ -49,7 +62,138 @@ NSString *city,*origin,*dest,*option;
       NSLog(@"Options %@",option);
     mOrigin.delegate=self;
     mDestination.delegate=self;
+    autocompleteTableView = [[UITableView alloc] initWithFrame:CGRectMake(35,265,mOrigin.frame.size.width,90) style:UITableViewStylePlain];
+    
+    autocompleteTableView.delegate=self;
+    autocompleteTableView.dataSource = self;
+    
+    autocompleteTableView.layer.masksToBounds=YES;
+    autocompleteTableView.backgroundColor=[[UIColor lightGrayColor] colorWithAlphaComponent:0.9f];
+    
+    autocompleteTableView.scrollEnabled = YES;
+    autocompleteTableView.layer.cornerRadius=3;
+    [autocompleteTableView setSeparatorInset:UIEdgeInsetsZero];
+    [self.view addSubview:autocompleteTableView];
+    autocompleteTableView.hidden = YES;
+
+
+
+//    NSDictionary *params = @{@"input" : [@"Kannur" stringByReplacingOccurrencesOfString:@" " withString:@"+"],
+//                             @"location" : [NSString stringWithFormat:@"%f,%f", 37.76999,-122.44696],
+//                             @"sensor" : @true,
+//                             @"key" : kGoogleMapsAPIKey};
+    }
+
+-(void)setupUI:(CGFloat)y
+{
+
+  }
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    NSString *substring;
+    
+        
+        substring = [NSString stringWithString:textField.text];
+        substring = [substring
+                     stringByReplacingCharactersInRange:range withString:string];
+        
+        if(substring!=nil && substring.length>2)
+        {
+           // [self Places:substring];
+            
+        }
+        else if(substring.length==0){
+            autocompleteTableView.hidden=YES;
+        }
+    
+    
+    return YES;
 }
+
+
+-(void)Places:(NSString*)input
+{
+    
+    NSLog(@"@Profile Info");
+    NSString *postData=[NSString stringWithFormat:@"%@&location=11.8689,75.3555&radius=500&sensor=true&key=%@",input,kGooglePlacesAPIKey];
+    NSString *text=@"https://maps.googleapis.com/maps/api/place/autocomplete/json?input=";
+    text=[text stringByAppendingString:postData];
+    NSURL *url = [NSURL URLWithString:text];
+    // NSLog(@"Url%@",url);
+    dispatch_async(kBgQueue, ^{
+        NSData *data= [NSData dataWithContentsOfURL:
+                       url];
+        [self performSelectorOnMainThread:@selector(fetchedData:)
+                               withObject:data waitUntilDone:YES];
+        
+        
+    });
+}
+
+- (void)fetchedData:(NSData *)responseData
+{
+    //  NSLog(@"@Parsing Info");
+    [descriptionArray removeAllObjects];
+     //[autocompleteTableView reloadData];
+    NSError *jsonParsingError;
+    NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseData
+                                                  options:0 error:&jsonParsingError];
+   
+    NSArray *predictions=[data objectForKey:@"predictions"];
+    for(int i=0;i<[predictions count];i++)
+    {
+        NSDictionary *predObj=[predictions objectAtIndex:i];
+        NSString *desc=[predObj objectForKey:@"description"];
+         //NSLog(@"Descriptions%@",desc);
+        [descriptionArray addObject:desc];
+    }
+    optionsArray = [[NSArray alloc] initWithArray:descriptionArray];
+	
+       //autocompleteTableView.hidden=NO;
+    //[autocompleteTableView reloadData];
+}
+
+
+// Tableview Delegates
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger) section {
+    return [descriptionArray count];
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *simpleTableIdentifier = @"SimpleTableItem";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    
+    
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+        
+    }
+    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+    cell.backgroundColor=[UIColor clearColor];
+    cell.textLabel.text =[descriptionArray objectAtIndex:indexPath.row];
+    
+    return cell;
+
+}
+
+- (void)tableView:(UITableView *)tv didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tv deselectRowAtIndexPath:indexPath animated:YES];
+    [self.view endEditing:YES];
+    if(mOrigin.editing)
+    {
+        mOrigin.text=[descriptionArray objectAtIndex:indexPath.row];
+        
+    }else{
+        mDestination.text=[descriptionArray objectAtIndex:indexPath.row];
+    }
+    NSLog(@"%@",[descriptionArray objectAtIndex:indexPath.row]);
+    autocompleteTableView.hidden=YES;
+}
+
 -(void)ShowAlertView:(NSString*)Message{
     
     UIAlertView * Alert = [[UIAlertView alloc ]initWithTitle:kApplicationName message:Message delegate:nil cancelButtonTitle:@"Dismiss" otherButtonTitles: nil];
@@ -68,7 +212,7 @@ NSString *city,*origin,*dest,*option;
             
             [tView setFont:[UIFont fontWithName:@"Verdana" size:16]];
         }
-       [tView setTextAlignment:UITextAlignmentCenter];
+       [tView setTextAlignment:NSTextAlignmentCenter];
     }
    
     if(pickerView==self.mOptionsPickerView)
@@ -134,8 +278,7 @@ numberOfRowsInComponent:(NSInteger)component
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [mOrigin resignFirstResponder];
-    [mDestination resignFirstResponder];
+    [ self.view endEditing:YES];
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -144,6 +287,7 @@ numberOfRowsInComponent:(NSInteger)component
     {
         [textField resignFirstResponder];
         [mDestination becomeFirstResponder];
+        
     }
     else if (textField==mDestination)
     {
@@ -168,7 +312,13 @@ numberOfRowsInComponent:(NSInteger)component
 {
     if(textField==mDestination)
     {
+     autocompleteTableView.frame = CGRectMake(35,318,mOrigin.frame.size.width,90);
         [self animateTextField: textField up: YES];
+    }
+    else if(textField==mOrigin)
+    {
+        autocompleteTableView.frame = CGRectMake(35,265,mOrigin.frame.size.width,90);
+       // [self animateTextField: textField up: YES];
     }
 
 }
@@ -202,7 +352,12 @@ numberOfRowsInComponent:(NSInteger)component
     {
     origin=[mOrigin.text stringByAppendingString:city];
     dest =[mDestination.text stringByAppendingString:city];
-    [self performSegueWithIdentifier:@"toSearch" sender:nil];
+   // [self performSegueWithIdentifier:@"toSearch" sender:nil];
+       MapViewController *mapVC= [self.storyboard instantiateViewControllerWithIdentifier:@"searchAdd"];
+        mapVC.starts=mOrigin.text;
+        mapVC.stops=mDestination.text;
+        mapVC.options=option;
+        [self.navigationController pushViewController:mapVC animated:YES];
     }
     else{
         [self ShowAlertView:@"Please fill all the fields"];
@@ -217,8 +372,8 @@ numberOfRowsInComponent:(NSInteger)component
  
     if ([segue.identifier isEqualToString:@"toSearch"]) {
         MapViewController *mapVC = segue.destinationViewController;
-        mapVC.starts= origin;
-        mapVC.stops=dest;
+        mapVC.starts=mOrigin.text;
+        mapVC.stops=mDestination.text;
         mapVC.options=option;
     }
 

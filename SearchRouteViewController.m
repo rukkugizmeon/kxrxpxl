@@ -29,6 +29,7 @@ float zoom;
     GMSMarker *marker= [[GMSMarker alloc] init];
     marker.position = CLLocationCoordinate2DMake([self.start_marker_lat doubleValue],[self.start_marker_lng doubleValue]);
     marker.icon = [GMSMarker markerImageWithColor:[UIColor blueColor]];
+   // marker.icon = [UIImage imageNamed:@"ridewithme_mobile_starttracker"];
     marker.map=myMap;
     
 }
@@ -39,7 +40,11 @@ float zoom;
     myMap.myLocationEnabled = YES;
     [self.view addSubview:myMap];
     [myMap setMapType:kGMSTypeNormal];
-     GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:12.9667 longitude:77.5667 zoom:kGoogleMapsZoomLevelDefault];
+    
+    
+   //  GMSCameraPosition *cameraPosition=[GMSCameraPosition cameraWithLatitude:12.9667 longitude:77.5667 zoom:kGoogleMapsZoomLevelDefault];
+    
+    
     self.draggableMarkerManager = [[GMDraggableMarkerManager alloc] initWithMapView:myMap delegate:self];
    
 }
@@ -86,6 +91,7 @@ float zoom;
     marker.position = CLLocationCoordinate2DMake([break_latitude doubleValue],[break_longitude doubleValue]);
     marker.icon = [GMSMarker markerImageWithColor:[UIColor blueColor]];
     marker.map=myMap;
+    //marker.icon = [UIImage imageNamed:@"ridewithme_mobile_starttracker"];
     [self CameraPos:responseData];
 }
 
@@ -102,7 +108,7 @@ float zoom;
     {
         NSDictionary *main=[routeArray1 objectAtIndex:i];
         NSArray *routeSubArray=[main objectForKey:@"route"];
-        NSString *count=[NSString stringWithFormat:@"%lu",([routeSubArray count])];
+        NSString *count=[NSString stringWithFormat:@"%lu",(unsigned long)([routeSubArray count])];
         NSLog(@"Count=%@",count);
         for(int j=0;j<([routeSubArray count])/2;j++)
         {

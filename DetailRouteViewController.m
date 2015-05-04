@@ -84,31 +84,42 @@
 
 -(void)fetchMyRoutesFromServer{
     [WTStatusBar setLoading:YES loadAnimated:YES];
-    NSString * PostString = [NSString stringWithFormat:@"journey_id=%@",self.journeyId];
-    NSLog(@"postString %@",PostString);
-    NSData *postData = [PostString  dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:kServerLink_JourneyPoints]];
+   
+    @try {
+        NSString * PostString = [NSString stringWithFormat:@"journey_id=%@",self.journeyId];
+        NSLog(@"postString %@",PostString);
+        NSData *postData = [PostString  dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+        NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:kServerLink_JourneyPoints]];
+        
+        
+        [request setHTTPMethod:@"POST"];
+        [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+        [request setHTTPBody:postData];
+        
+        
+        dispatch_async(kBgQueue, ^{
+            NSError *err;
+            NSURLResponse *response;
+            NSData *data= [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&err];
+            if(!err)
+            {
+                [self performSelectorOnMainThread:@selector(fetchedData:)
+                                       withObject:data waitUntilDone:YES];
+            }else{
+                [self ShowAlertView:@"invalid"];
+                
+            }
+        });
+
+    }
+    @catch (NSException *exception) {
+        
+    }
+    @finally {
+        NSLog(@"Inside Finally:Detail Route VC- fetch my routes from server");
+    }
     
-    
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setHTTPBody:postData];
-    
-    
-    dispatch_async(kBgQueue, ^{
-        NSError *err;
-        NSURLResponse *response;
-        NSData *data= [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&err];
-        if(!err)
-        {
-            [self performSelectorOnMainThread:@selector(fetchedData:)
-                                   withObject:data waitUntilDone:YES];
-        }else{
-            [self ShowAlertView:@"invalid"];
-            
-        }
-    });
     
     
     
@@ -122,6 +133,7 @@
                                                          options:0 error:&jsonParsingError];
     NSLog(@"Response %@",data);
     GMSMutablePath *Polylinepaths= [GMSMutablePath path];
+    
     for(int i=0;i<[data count]-1;i++)
     {
         mDetaileModel=[[DetailedRouteModel alloc]init];
@@ -142,6 +154,7 @@
         [journeyListArray addObject:mDetaileModel];
         
     }
+    
     [WTStatusBar setLoading:NO loadAnimated:NO];
     [WTStatusBar clearStatus];
     [self getStartLocation];
@@ -159,6 +172,7 @@
     [self.draggableMarkerManager addDraggableMarker:Marker];
     Marker.title =@"Origin";
    // Marker.snippet=stops;
+    // Marker.icon = [UIImage imageNamed:@"ridewithme_mobile_starttracker"];
     Marker.map  = self.myMap;
     
 }
@@ -178,6 +192,7 @@
     GMSMarker * Marker  =[GMSMarker markerWithPosition:Location];
     [self.draggableMarkerManager addDraggableMarker:Marker];
     Marker.title =@"Destination";
+   //  Marker.icon = [UIImage imageNamed:@"ridewithme_mobile_starttracker"];
     Marker.map  = self.myMap;
    
 }
@@ -409,37 +424,49 @@
 - (void)UpdateRouteToServer
 {
     [WTStatusBar setLoading:YES loadAnimated:YES];
-    NSUserDefaults *prefs;
-    prefs = [NSUserDefaults standardUserDefaults];
-    NSString *id=[prefs stringForKey:@"id"];
-    NSLog(@" id %@",id);
-    NSString *journeyId=self.journeyId;
-    origin=[self formatOrigin:origin];
-    destination=[self formatDest:destination];
-    NSString * PostString = [NSString stringWithFormat:@"userId=%@&journeyId=%@&overview_path=%@&from=%@&to=%@",id,journeyId,OverViewPolyline,origin,destination];
-    NSLog(@"postString %@",PostString);
-    NSData *postData = [PostString  dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:kServerLink_UpadteRoute]];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setHTTPBody:postData];
+  
+    @try {
+        NSUserDefaults *prefs;
+        prefs = [NSUserDefaults standardUserDefaults];
+        NSString *id=[prefs stringForKey:@"id"];
+        NSLog(@" id %@",id);
+        NSString *journeyId=self.journeyId;
+        origin=[self formatOrigin:origin];
+        destination=[self formatDest:destination];
+        NSString * PostString = [NSString stringWithFormat:@"userId=%@&journeyId=%@&overview_path=%@&from=%@&to=%@",id,journeyId,OverViewPolyline,origin,destination];
+        NSLog(@"postString %@",PostString);
+        NSData *postData = [PostString  dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+        NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:kServerLink_UpadteRoute]];
+        [request setHTTPMethod:@"POST"];
+        [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+        [request setHTTPBody:postData];
+        
+        
+        dispatch_async(kBgQueue, ^{
+            NSError *err;
+            NSURLResponse *response;
+            NSData *data= [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&err];
+            if(!err)
+            {
+                [self performSelectorOnMainThread:@selector(updateRouteResponse:)
+                                       withObject:data waitUntilDone:YES];
+            }else{
+                [self ShowAlertView:UnableToProcess];
+                
+            }
+        });
+
+    }
+    @catch (NSException *exception) {
+        
+    }
+    @finally {
+        NSLog(@"Inside ");
+    }
     
     
-    dispatch_async(kBgQueue, ^{
-        NSError *err;
-        NSURLResponse *response;
-        NSData *data= [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&err];
-        if(!err)
-        {
-            [self performSelectorOnMainThread:@selector(updateRouteResponse:)
-                                   withObject:data waitUntilDone:YES];
-        }else{
-            [self ShowAlertView:UnableToProcess];
-            
-        }
-    });
-}
+    }
 
 - (void)updateRouteResponse:(NSData *)responseData
 {

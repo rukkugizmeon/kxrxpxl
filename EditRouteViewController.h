@@ -10,6 +10,7 @@
 #import "DefineMainValues.h"
 #import "ServerConnection.h"
 #import "WTStatusBar.h"
+#import "MyRoutesViewController.h"
 
 @interface EditRouteViewController : UIViewController<UITextFieldDelegate,UIAlertViewDelegate>
 {
@@ -17,6 +18,28 @@
   NSMutableArray * mSelectedArray;
     ServerConnection *ConnectToServer;
 }
+
+@property (weak, nonatomic) IBOutlet UISlider *seatSlider;
+@property (weak, nonatomic) IBOutlet UILabel *seatLabel;
+- (IBAction)seatValueChanged:(id)sender;
+
+@property (weak, nonatomic) IBOutlet UIView *takerContainer;
+@property (weak, nonatomic) IBOutlet UIButton *monButton;
+@property (weak, nonatomic) IBOutlet UIButton *tueButton;
+@property (weak, nonatomic) IBOutlet UIButton *wedButton;
+@property (weak, nonatomic) IBOutlet UIButton *thurButton;
+@property (weak, nonatomic) IBOutlet UIButton *friButton;
+@property (weak, nonatomic) IBOutlet UIButton *satButton;
+@property (weak, nonatomic) IBOutlet UIButton *sunButton;
+
+- (IBAction)sunClick:(id)sender;
+- (IBAction)monClick:(id)sender;
+- (IBAction)tueClick:(id)sender;
+- (IBAction)wedClick:(id)sender;
+- (IBAction)thursClick:(id)sender;
+- (IBAction)friClick:(id)sender;
+- (IBAction)satClick:(id)sender;
+
 @property (weak, nonatomic) IBOutlet UITextField *noOfSeatField;
 @property (weak, nonatomic) IBOutlet UILabel *seatsLabel;
 @property (strong, nonatomic) IBOutlet UIScrollView *mScrollView;
@@ -24,13 +47,6 @@
 
 
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
-@property (weak, nonatomic) IBOutlet UISwitch *sunSwitch;
-@property (weak, nonatomic) IBOutlet UISwitch *monSwitch;
-@property (weak, nonatomic) IBOutlet UISwitch *tueSwitch;
-@property (weak, nonatomic) IBOutlet UISwitch *wedSwitch;
-@property (weak, nonatomic) IBOutlet UISwitch *thursSwitch;
-@property (weak, nonatomic) IBOutlet UISwitch *friSwitch;
-@property (weak, nonatomic) IBOutlet UISwitch *satSwitch;
 
 //Variables
 

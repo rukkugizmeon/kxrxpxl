@@ -7,21 +7,40 @@
 //
 
 #import "CoRidersViewController.h"
+#import "CustomIOS7AlertView.h"
+#import "BinSystemsServerConnectionHandler.h"
+#import "InterfaceManager.h"
+
 
 @interface CoRidersViewController ()<GMSMapViewDelegate>
 {
     float zoom;
+    
+    CustomIOS7AlertView *coRidersListView ;
+    StarRatingView * vRV;
+    NSInteger favButtonFlag;
 }
 @end
 
 @implementation CoRidersViewController
-@synthesize myMap,scrollView,nameField,ageField,cityField,addressField,sosContactField,SOSEmailField,phoneField,zoomIn,zoomOut;
+@synthesize myMap,nameField,ageField,cityField,addressField,sosContactField,SOSEmailField,phoneField,zoomIn,zoomOut;
+@synthesize viewRating;
+@synthesize buttonFavourite;
 NSString *uId;
 NSString *types;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIImage *buttonImage = [UIImage imageNamed:@"menuIcon.png"];
+    UIButton *aButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [aButton setImage:buttonImage forState:UIControlStateNormal];
+    aButton.frame = CGRectMake(0.0, 0.0,30,20);
+    UIBarButtonItem *slideButton =[[UIBarButtonItem alloc] initWithCustomView:aButton];
+    [aButton addTarget:self action:@selector(slider:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = slideButton;
+     self.navigationItem.title = @"Co-Riders";
+     self.navigationItem.hidesBackButton = YES;
     zoom=kGoogleMapsZoomLevelDefault;
     [myMap addSubview:zoomOut];
     [myMap addSubview:zoomIn];
@@ -32,7 +51,19 @@ NSString *types;
     types=[prefs stringForKey:@"role"];
     riderListArray=[[NSMutableArray alloc]init];
     ridePassengerListArray=[[NSMutableArray alloc]init];
+    self.profileTable.backgroundColor=[UIColor clearColor];
     [self LoadMaps];
+    one=0;
+    
+    
+    
+}
+-(void)slider:(id)sender
+{
+
+    [self.view endEditing:YES];
+    [self.frostedViewController.view endEditing:YES];
+    [self.frostedViewController presentMenuViewController];
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
@@ -56,80 +87,91 @@ NSString *types;
 }
 -(void)fetchCoridersFromServer
 {
+    
     [WTStatusBar setLoading:YES loadAnimated:YES];
-    NSString * PostString = [NSString stringWithFormat:@"user_id=%@&journey_option=%@",uId,@"T"];
-    NSData *postData = [PostString  dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:kServerLink_GetCoriders]];
-    NSLog(@"URl %@",kServerLink_GetCoriders);
-      NSLog(@"post %@",PostString);
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setHTTPBody:postData];
     
-    
-    dispatch_async(kBgQueue, ^{
-        NSError *err;
-        NSURLResponse *response;
-        NSData *data= [NSURLConnection sendSynchronousRequest:request  returningResponse:&response error:&err];
-        if(!err){
-            [self performSelectorOnMainThread:@selector(fetchedData:)
-                                   withObject:data waitUntilDone:YES];
-        }
-        else{
-            
-            [self ShowAlertView:UnableToProcess];
-        }
+ //   @try {
         
-    });
-}
+        NSString * PostString = [NSString stringWithFormat:@"user_id=%@&journey_option=%@",uId,@"T"];
+    
+   BinSystemsServerConnectionHandler *AuthenticationServer  = [[BinSystemsServerConnectionHandler alloc]initWithURL:kServerLink_GetCoriders PostData:PostString];
+    
+   
+    //specify method in first argument
+    
+    [AuthenticationServer StartServerConnectionWithCompletionHandler:@"POST" :^(NSDictionary *JSONDict) {
+        
+        
+        
+        
+        
+        NSDictionary *data = JSONDict;
+        
+        [riderListArray removeAllObjects];
+        
+      
+            
+            [WTStatusBar setLoading:NO loadAnimated:NO];
+            [WTStatusBar clearStatus];
+            
+            NSArray *requestObj=[data objectForKey:@"requests"];
+            if([requestObj count]>0 )
+            {
+                for(int i=0;i<[requestObj count];i++)
+                {
+                    mRiderModel=[[CoRiderObject alloc] init];
+                    NSDictionary *route=[requestObj objectAtIndex:i];
+                    NSString *status=[NSString stringWithFormat:@"%@",[route objectForKey:@"status"]];
+                    mRiderModel.status=status;
+                    NSDictionary *journeyArray=[route objectForKey:@"route"];
+                    mRiderModel.journey_id=[journeyArray objectForKey:@"journey_id"];
+                    mRiderModel.user_id=[journeyArray objectForKey:@"user_id"];
+                    NSLog(@"Jid %@",[journeyArray objectForKey:@"journey_id"]);
+                    mRiderModel.journey_start=[journeyArray objectForKey:@"journey_start_point"];
+                    mRiderModel.journey_latitude=[journeyArray objectForKey:@"journey_start_latitude"];
+                    mRiderModel.journey_longitude=[journeyArray objectForKey:@"journey_start_longitude"];
+                    mRiderModel.journey_end_latitude=[journeyArray objectForKey:@"journey_end_latitude"];
+                    mRiderModel.journey_end_longitude=[journeyArray objectForKey:@"journey_end_longitude"];
+                    [riderListArray addObject:mRiderModel];
+                    
+                }
+                [self PlaceMarkersOnMap];
+            }
+            else{
+                [WTStatusBar setLoading:NO loadAnimated:NO];
+                [WTStatusBar clearStatus];
+                [self ShowAlertView:@"No Co-riders!!"];
+            }
+        
+        
+        [WTStatusBar setLoading:NO loadAnimated:NO];
+        
+        [WTStatusBar clearStatus];
+        
+        
+        
+    } FailBlock:^(NSString *Error) {
+        
+        
+        
+        [InterfaceManager DisplayAlertWithMessage:@"Failed to load coriders"];
+        
+        
+        
+        [WTStatusBar setLoading:NO loadAnimated:NO];
+        
+        [WTStatusBar clearStatus];
+        
+        
+        
+    }];
+    
+    
+   }
 
 - (void)fetchedData:(NSData *)responseData {
     
-    [riderListArray removeAllObjects];
-    NSError *jsonParsingError;
-    NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseData
-                                                         options:0 error:&jsonParsingError];
-    NSLog(@"Response %@",data);
-    if(!jsonParsingError)
-    {
-    
-    [WTStatusBar setLoading:NO loadAnimated:NO];
-    [WTStatusBar clearStatus];
-  
-    NSArray *requestObj=[data objectForKey:@"requests"];
-        if([requestObj count]>0 )
-        {
-            for(int i=0;i<[requestObj count];i++)
-        {
-           mRiderModel=[[CoRiderObject alloc] init];
-            NSDictionary *route=[requestObj objectAtIndex:i];
-            NSString *status=[NSString stringWithFormat:@"%@",[route objectForKey:@"status"]];
-           mRiderModel.status=status;
-            NSDictionary *journeyArray=[route objectForKey:@"route"];
-           mRiderModel.journey_id=[journeyArray objectForKey:@"journey_id"];
-           mRiderModel.user_id=[journeyArray objectForKey:@"user_id"];
-            NSLog(@"Jid %@",[journeyArray objectForKey:@"journey_id"]);
-           mRiderModel.journey_start=[journeyArray objectForKey:@"journey_start_point"];
-           mRiderModel.journey_latitude=[journeyArray objectForKey:@"journey_start_latitude"];
-           mRiderModel.journey_longitude=[journeyArray objectForKey:@"journey_start_longitude"];
-           mRiderModel.journey_end_latitude=[journeyArray objectForKey:@"journey_end_latitude"];
-           mRiderModel.journey_end_longitude=[journeyArray objectForKey:@"journey_end_longitude"];
-            [riderListArray addObject:mRiderModel];
-            
-        }
-        [self PlaceMarkersOnMap];
     }
-    else{
-        [WTStatusBar setLoading:NO loadAnimated:NO];
-        [WTStatusBar clearStatus];
-        [self ShowAlertView:@"No Co-riders!!"];
-    }} else{
-        [WTStatusBar setLoading:NO loadAnimated:NO];
-        [WTStatusBar clearStatus];
-        [self ShowAlertView:UnableToProcess];
-    }
-}
 -(void)PlaceMarkersOnMap{
     NSLog(@"PlaceMarkersOnMap");
     
@@ -161,7 +203,8 @@ NSString *types;
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
             
         }
-    NSString *name=[NSString stringWithFormat:@"%@      %@",model.index,model.name];
+    NSString *name=[NSString stringWithFormat:@"%@",model.name];
+    cell.textLabel.textAlignment=NSTextAlignmentCenter;
     cell.backgroundColor=[UIColor clearColor];
     cell.textLabel.text=name;
     return cell;
@@ -176,12 +219,78 @@ NSString *types;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self performSelector:@selector(dismiss:) withObject:Alert afterDelay:1.0];
+    
+    [coRidersListView close];
+    
+    
     CoriderListObject *model=[ridePassengerListArray objectAtIndex:indexPath.row];
     NSString * PostString = [NSString stringWithFormat:@"userId=%@&profileId=%@",uId,model.user_id];
-    NSData *passengerProfile=[ConnectToServer ServerCall:kServerLink_GetCoridersProfileById post:PostString];
     
-    [self ShowPassengerProfileAlert:passengerProfile];
+   BinSystemsServerConnectionHandler *AuthenticationServer  = [[BinSystemsServerConnectionHandler alloc]initWithURL:kServerLink_GetCoridersProfileById PostData:PostString];
+    
+    
+    
+    
+    
+    
+    
+    //specify method in first argument
+    
+    [AuthenticationServer StartServerConnectionWithCompletionHandler:@"POST" :^(NSDictionary *JSONDict) {
+        
+        
+        
+        
+        
+        NSDictionary *data = JSONDict;
+        
+        
+        
+        //     NSMutableArray * Result = [JSONDict valueForKey:@"status"];
+        
+        
+        
+        
+        [self ShowPassengerProfileAlert:data];
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        [WTStatusBar setLoading:NO loadAnimated:NO];
+        
+        [WTStatusBar clearStatus];
+        
+        
+        
+        
+        
+        
+        
+    } FailBlock:^(NSString *Error) {
+        
+        
+        
+        [InterfaceManager DisplayAlertWithMessage:@"Failed to load data"];
+        
+        
+        
+        [WTStatusBar setLoading:NO loadAnimated:NO];
+        
+        [WTStatusBar clearStatus];
+        
+        
+        
+    }];
+    
+
+    
+    
 
 }
 
@@ -218,87 +327,122 @@ NSString *types;
     [alert dismissWithClickedButtonIndex:0 animated:YES];
 }
 
+
 - (BOOL)mapView:(GMSMapView *)mapView didTapMarker:(GMSMarker *)marker {
+    
       NSString *markerTitle=[NSString stringWithFormat:@"%@",marker.title];
      NSLog(@"markerTitle%@",markerTitle);
+    
     for (CoRiderObject * model in riderListArray)
     {
          NSString *ids=[NSString stringWithFormat:@"%@",model.journey_id];
 
         if([markerTitle isEqualToString:ids])
         {
+              [WTStatusBar setLoading:YES loadAnimated:YES];
+            
+            
             NSString * PostString = [NSString stringWithFormat:@"userId=%@&journeyId=%@",uId,model.journey_id];
-            NSData *passList=[ConnectToServer ServerCall:kServerLink_GetCoridersProfile post:PostString];
-            [self fetchPassengerList:passList];
+         
+            
+         BinSystemsServerConnectionHandler  *AuthenticationServer  = [[BinSystemsServerConnectionHandler alloc]initWithURL:kServerLink_GetCoridersProfile PostData:PostString];
+            
+                        //specify method in first argument
+            
+            [AuthenticationServer StartServerConnectionWithCompletionHandler:@"POST" :^(NSDictionary *JSONDict) {
+                
+                
+                
+                
+                
+                NSDictionary *data = JSONDict;
+                
+                if(data)
+                {
+                    [ridePassengerListArray removeAllObjects];
+                    
+                    NSArray *passenger=[data objectForKey:@"passengerList"];
+                    
+                    for(int pos=0;pos<[passenger count];pos++)
+                    {
+                        mRiderListModel=[[CoriderListObject alloc]init];
+                        NSDictionary *passDict=[passenger objectAtIndex:pos];
+                        mRiderListModel.user_id=[passDict objectForKey:@"user_id"];
+                        mRiderListModel.name=[passDict objectForKey:@"name"];
+                        NSLog(@"RequestedName%@",[passDict objectForKey:@"name"]);
+                        mRiderListModel.index=[NSString stringWithFormat:@"%i",pos+1];
+                        NSLog(@"RequestedIndex%@",[NSString stringWithFormat:@"%i",pos+1]);
+                        [ridePassengerListArray addObject:mRiderListModel];
+                    }
+                    
+                    [self.profileTable reloadData];
+                    [self ShowPassengerAlert];
+                }
+                
+                
+                [WTStatusBar setLoading:NO loadAnimated:NO];
+                
+                [WTStatusBar clearStatus];
+                
+                
+            } FailBlock:^(NSString *Error) {
+                
+                [InterfaceManager DisplayAlertWithMessage:@"Failed to load Details"];
+                
+                [WTStatusBar setLoading:NO loadAnimated:NO];
+                
+                [WTStatusBar clearStatus];
+                
+                
+                
+            }];
+            
+
+            
+            
+            
         }
     
     }
     return  YES;
 }
 
-
-
--(void) fetchPassengerList:(NSData*)responseData
-{
-    [ridePassengerListArray removeAllObjects];
-    NSError *jsonParsingError;
-    NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseData
-                                                         options:0 error:&jsonParsingError];
-    NSLog(@"Requested%@",data);
-    if(!jsonParsingError)
-    {
-        NSArray *passenger=[data objectForKey:@"passengerList"];
-        
-        for(int pos=0;pos<[passenger count];pos++)
-        {
-            mRiderListModel=[[CoriderListObject alloc]init];
-            NSDictionary *passDict=[passenger objectAtIndex:pos];
-            mRiderListModel.user_id=[passDict objectForKey:@"user_id"];
-            mRiderListModel.name=[passDict objectForKey:@"name"];
-            NSLog(@"RequestedName%@",[passDict objectForKey:@"name"]);
-            mRiderListModel.index=[NSString stringWithFormat:@"%i",pos+1];
-            NSLog(@"RequestedIndex%@",[NSString stringWithFormat:@"%i",pos+1]);
-            [ridePassengerListArray addObject:mRiderListModel];
-        }
-        
-        [self.profileTable reloadData];
-        [self ShowPassengerAlert];
-    }
-
-}
-
--(void)ShowPassengerAlert//:(NSString*)from To:(NSString*)to TimeI:(NSString*)time NofSeats:(NSString*)noSeats ActiveDays:(NSString*)activeDays active:(NSString*)action
+-(void)ShowPassengerAlert
 {
     
-    Alert = [[UIAlertView alloc ]initWithTitle:@"Co-riders List" message:@"" delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles: nil];
-    
-    CoriderProfiles *AccessoryView =[ [[NSBundle mainBundle]loadNibNamed:@"CoridersProfiles" owner:self options:nil] objectAtIndex:0];
-    
-    [AccessoryView setBackgroundColor:[UIColor clearColor]];
-    
-    [Alert setValue:AccessoryView forKey:@"accessoryView"];
-    
-    [Alert show];
-}
-
--(void)ShowPassengerProfileAlert:(NSData*)responseData//:(NSString*)from To:(NSString*)to TimeI:(NSString*)time NofSeats:(NSString*)noSeats ActiveDays:(NSString*)activeDays active:(NSString*)action
-{
-    
-   Alerts = [[UIAlertView alloc ]initWithTitle:@"Co-riders  profile" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles: nil];
-    CoridersSingleProfileView *AccessoryView =[ [[NSBundle mainBundle]loadNibNamed:@"CoridersSingleProfileView" owner:self options:nil] objectAtIndex:0];
-    
-    
-    [scrollView setScrollEnabled:YES];
-    [scrollView setContentSize:CGSizeMake(320, 500)];
-    [AccessoryView setBackgroundColor:[UIColor clearColor]];
-    
-    [Alerts setValue:AccessoryView forKey:@"accessoryView"];
   
-    NSError *jsonParsingError;
-    NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseData
-                                                         options:0 error:&jsonParsingError];
+    AccessoryView =[ [[NSBundle mainBundle]loadNibNamed:@"CoridersProfiles" owner:self options:nil] objectAtIndex:0];
+//  
+      [AccessoryView setBackgroundColor:[UIColor clearColor]];
+;
+    
+    
+    
+    coRidersListView = [[CustomIOS7AlertView alloc] init];
+    
+    
+    
+    [coRidersListView setContainerView:AccessoryView];
+    
+    [coRidersListView show];
+    
+    
+    
+    
+    
+}
+
+-(void)ShowPassengerProfileAlert:(NSDictionary*)data
+{
+    AccessoryView =[ [[NSBundle mainBundle]loadNibNamed:@"CoridersSingleProfileView" owner:self options:nil] objectAtIndex:0];
+    
+    AccessoryView.hidden=NO;
+    [AccessoryView setBackgroundColor:[[UIColor darkGrayColor] colorWithAlphaComponent:0.9f]];
+    AccessoryView.frame=CGRectMake(20,self.view.frame.origin.y+20,AccessoryView.frame.size.width-20,AccessoryView.frame.size.height);
+    AccessoryView.layer.cornerRadius=5;
+  
     NSLog(@"Requested%@",data);
-    if(!jsonParsingError)
+    if(data)
     {
         NSArray *passengerProf=[data objectForKey:@"profile"];
         
@@ -313,89 +457,185 @@ NSString *types;
             SOSEmailField.text=[passDict objectForKey:@"sos_email_id"];
             phoneField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"mobile_number"]];
             
+            if ([passDict valueForKey:@"favourites"] == 0 ) {
+                
+                favButtonFlag=0;
+                [buttonFavourite setImage:[UIImage imageNamed:@"add-Fav.jpg"] forState:UIControlStateNormal];
+            }else{
+                
+                [buttonFavourite setImage:[UIImage imageNamed:@"favo"] forState:UIControlStateNormal];
+                
+            }
+            
+            
+            
+            
         }
       }
+    vRV = [[StarRatingView alloc]initWithFrame:viewRating.frame andRating:68 withLabel:NO animated:YES];
     
-    [Alerts show];
+    
+    
+    viewRating=vRV;
+    
+    
+    [AccessoryView addSubview:viewRating];
+    
+    [myMap addSubview:AccessoryView];
+   // [Alerts show];
 }
 
-- (IBAction)addToFavs:(id)sender {
+- (IBAction)addToFavs:(UIButton*)sender {
     NSLog(@"Favourites");
     NSString *favsPost=[NSString stringWithFormat:@"userId=%@&fave_user_id=%@",uId,favId];
     NSData *favs=[ConnectToServer ServerCall:kServerLink_AddToFavourites post:favsPost];
-    [self favResponse:favs];
-}
-
--(void)favResponse:(NSData*)responseData
-{
-    NSError *jsonParsingError;
-    NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseData
-                                                         options:0 error:&jsonParsingError];
-    NSLog(@"Requested%@",data);
-    if(!jsonParsingError)
-    {
-        NSString *result=[NSString stringWithFormat:@"%@",[data objectForKey:@"status"]];
-        
-        NSLog(@"Data %@",result);
-        if([result isEqualToString:@"1"])
-        {
-          
-            [self ShowAlertView:@"Request processed!!"];
-            
-        }
-        else if([result isEqualToString:@"0"]){
-         
-            [self ShowAlertView:@"Request Failed!!"];
-        }
-    }
-    else{
-        
-        [self ShowAlertView:UnableToProcess];
-    }
-
+    BinSystemsServerConnectionHandler *AuthenticationServer  = [[BinSystemsServerConnectionHandler alloc]initWithURL:kServerLink_AddToFavourites PostData:favsPost];
     
-    }
+    //specify method in first argument
+    
+    [AuthenticationServer StartServerConnectionWithCompletionHandler:@"POST" :^(NSDictionary *JSONDict) {
+        
+        
+        
+        
+        
+        NSDictionary *data = JSONDict;
+        
+        if(data)
+        {
+            NSString *result=[NSString stringWithFormat:@"%@",[data objectForKey:@"status"]];
+            
+            
+            if([result isEqualToString:@"1"])
+            {
+                
+                //   [self ShowAlertView:@"Request processed!!"];
+                
+                
+                if (favButtonFlag==0) {
+                    
+                    
+                    [buttonFavourite setImage:[UIImage imageNamed:@"favo"] forState:UIControlStateNormal];
+                    
+                    favButtonFlag=1;
+                }else{
+                    
+                    [buttonFavourite setImage:[UIImage imageNamed:@"add-Fav.jpg"] forState:UIControlStateNormal];
+                    
+                    favButtonFlag=0;
+                }
+                
+            }
+            else if([result isEqualToString:@"0"]){
+                
+                // [self ShowAlertView:@"Request Failed!!"];
+                
+                
+            }
+        }
+        else{
+            
+            [self ShowAlertView:UnableToProcess];
+        }
+        
+        
+        [WTStatusBar setLoading:NO loadAnimated:NO];
+        
+        [WTStatusBar clearStatus];
+        
+        
+        
+        
+        
+        
+        
+    } FailBlock:^(NSString *Error) {
+        
+        
+        
+        [InterfaceManager DisplayAlertWithMessage:@"Failed to load routes"];
+        
+        
+        
+        [WTStatusBar setLoading:NO loadAnimated:NO];
+        
+        [WTStatusBar clearStatus];
+        
+        
+        
+    }];
+    
+}
 
-- (IBAction)rating1:(id)sender {
-     Rating=@"1";
-     [self.GiverStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
-}
-- (IBAction)rating2:(id)sender {
-     Rating=@"2";
-    [self.GiverStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
-    [self.GiverStar2 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
-}
-- (IBAction)rating3:(id)sender {
-     Rating=@"3";
-    [self.GiverStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
-    [self.GiverStar2 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
-    [self.GiverStar3 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
-}
-- (IBAction)rating4:(id)sender {
-     Rating=@"4";
-    [self.GiverStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
-    [self.GiverStar2 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
-    [self.GiverStar3 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
-    [self.GiverStar4 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
-}
-- (IBAction)rating5:(id)sender {
-     Rating=@"5";
-    [self.GiverStar1 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
-    [self.GiverStar2 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
-    [self.GiverStar3 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
-    [self.GiverStar4 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
-    [self.GiverStar5 setImage:[UIImage imageNamed: @"starhighlighted.png"] forState:UIControlStateNormal];
-}
+
 - (IBAction)submitAll:(id)sender {
-    if([Rating isEqualToString:@"0"])
+    
+    UIButton *buttonSelf = (UIButton *) sender;
+    
+    
+    NSInteger rating = viewRating.myRating/20;
+    
+    if(rating==0)
     {
         [self ShowAlertView:@"Select alteast one"];
     }
     else{
-        NSString *RatePost=[NSString stringWithFormat:@"userId=%@&userIdRate=%@&rate=%@",uId,favId,Rating];
-        NSData *rates=[ConnectToServer ServerCall:kServerLink_SaveRatings post:RatePost];
-        [self favResponse:rates];
+        NSString *RatePost=[NSString stringWithFormat:@"userId=%@&userIdRate=%@&rate=%ld",uId,favId,(long)rating];
+        
+        
+        
+       [WTStatusBar setLoading:YES loadAnimated:YES];
 
+       BinSystemsServerConnectionHandler *AuthenticationServer  = [[BinSystemsServerConnectionHandler alloc]initWithURL:kServerLink_SaveRatings PostData:RatePost];
+        
+                //specify method in first argument
+        
+        [AuthenticationServer StartServerConnectionWithCompletionHandler:@"POST" :^(NSDictionary *JSONDict) {
+            
+            
+            
+            
+            
+            NSDictionary *data = JSONDict;
+            
+            NSString *status = [[data valueForKey:@"status"] stringValue];
+            
+            
+            if ([status isEqualToString:@"1"]) {
+                
+                buttonSelf.userInteractionEnabled=NO;
+                
+                
+            }
+            
+            [WTStatusBar setLoading:NO loadAnimated:NO];
+            
+            [WTStatusBar clearStatus];
+            
+            
+            
+            
+            
+            
+            
+        } FailBlock:^(NSString *Error) {
+            
+            
+            
+            [InterfaceManager DisplayAlertWithMessage:@"Failed to load routes"];
+            
+            
+            
+            [WTStatusBar setLoading:NO loadAnimated:NO];
+            
+            [WTStatusBar clearStatus];
+            
+            
+            
+        }];
+        
+
+        
     }
 }
 
@@ -414,15 +654,10 @@ NSString *types;
 }
 
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+
+
+- (IBAction)closeView:(id)sender {
+    AccessoryView.hidden=YES;
 }
-*/
-
 @end

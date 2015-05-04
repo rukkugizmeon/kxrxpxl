@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "MapViewController.h"
 
-@interface RouteSelectionViewController : UIViewController  <UIPickerViewDelegate, UIPickerViewDataSource,UITextFieldDelegate>
-
+@interface RouteSelectionViewController : UIViewController  <UIPickerViewDelegate, UIPickerViewDataSource,UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate>
+{
+    NSArray *optionsArray;
+}
 @property (weak, nonatomic) IBOutlet UIPickerView *mOptionsPickerView;
 @property (weak, nonatomic) IBOutlet UIPickerView *mCityPickerView;
 @property (weak, nonatomic) IBOutlet UITextField *mOrigin;

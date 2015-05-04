@@ -12,6 +12,7 @@
 #import "RidePointModel.h"
 #import "WTStatusBar.h"
 #import "EarningsViewCell.h"
+#import "REFrostedViewController.h"
 
 @interface EarningsViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 {
@@ -20,5 +21,6 @@
     NSMutableArray *earningsData;
 }
 @property (weak, nonatomic) IBOutlet UITableView *pointsTable;
+
 
 @end

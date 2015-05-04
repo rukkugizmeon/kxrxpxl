@@ -10,13 +10,26 @@
 #import "MapViewController.h"
 #import "DefineMainValues.h"
 #import "ServerConnection.h"
-#import "MenuViewController.h"
+#import "SevenSwitch.h"
+#import "MyRoutesViewController.h"
+#import "ViewController.h"
+#import "DropDownView.h"
 
 
 @interface LoginViewController : UIViewController<UITextFieldDelegate,UIAlertViewDelegate>
 {
     MZLoadingCircle *loadingCircle;
+    DropDownView *dropDownView;
 }
+
+
+@property (weak, nonatomic) IBOutlet UIView *bothContainer;
+- (IBAction)giverAction:(id)sender;
+- (IBAction)takerAction:(id)sender;
+
+@property (weak, nonatomic) IBOutlet UIImageView *appLogo;
+
+
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *mSpinner;
 @property (weak, nonatomic) IBOutlet UIView *myView;
 @property (weak, nonatomic) IBOutlet UITextField *mUserNameTextField;

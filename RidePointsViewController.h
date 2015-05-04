@@ -11,7 +11,9 @@
 #import "DefineMainValues.h"
 #import "ServerConnection.h"
 #import "WTStatusBar.h"
+#import "PurchaseViewController.h"
 #import "RidePointModel.h"
+#import "REFrostedViewController.h"
 
 @interface RidePointsViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
 {
@@ -20,6 +22,7 @@
       NSMutableArray *ridePointData;
 }
 @property (weak, nonatomic) IBOutlet UITableView *pointsTable;
+
 @property (weak, nonatomic) IBOutlet UIButton *purchaseButton;
 
 @end

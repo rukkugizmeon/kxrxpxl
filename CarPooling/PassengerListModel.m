@@ -9,5 +9,5 @@
 #import "PassengerListModel.h"
 
 @implementation PassengerListModel
-@synthesize journey_id,request_id,name,index,user_id,request_status;
+@synthesize age,journey_id,request_id,name,index,user_id,request_status,address,journeyDetails,city,sosEmail,sosNumber,mobile;
 @end

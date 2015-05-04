@@ -7,6 +7,10 @@
 //
 
 #import "RequestSentViewController.h"
+#import "CustomIOS7AlertView.h"
+#import "InterfaceManager.h"
+#import "BinSystemsServerConnectionHandler.h"
+
 
 @interface RequestSentViewController ()<GMSMapViewDelegate>
 {
@@ -33,10 +37,25 @@ NSString *types;
     else
         NSLog(@"Rating%@",ratingString);
 }
-
+-(void)slider:(id)sender
+{
+   
+    [self.view endEditing:YES];
+    [self.frostedViewController.view endEditing:YES];
+    [self.frostedViewController presentMenuViewController];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+     self.navigationItem.title = @"Request Sent";
+    UIImage *buttonImage = [UIImage imageNamed:@"menuIcon.png"];
+    UIButton *aButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [aButton setImage:buttonImage forState:UIControlStateNormal];
+    aButton.frame = CGRectMake(0.0, 0.0,30,20);
+    UIBarButtonItem *slideButton =[[UIBarButtonItem alloc] initWithCustomView:aButton];
+    [aButton addTarget:self action:@selector(slider:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = slideButton;
+        self.navigationItem.hidesBackButton = YES;
     zoom=kGoogleMapsZoomLevelDefault;
     [myMap addSubview:zoomOut];
     [myMap addSubview:zoomIn];
@@ -76,41 +95,105 @@ NSString *types;
     [self fetchMyRoutesFromServer];
     
 }
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
-    if ([title isEqualToString:@"Cancel"]) {
-        [self performSelector:@selector(dismiss:) withObject:Alerts afterDelay:1.0];
-        
-    }}
+
 
 -(void)fetchMyRoutesFromServer{
     [WTStatusBar setLoading:YES loadAnimated:YES];
-    NSString * PostString = [NSString stringWithFormat:@"userId=%@",uId];
-    NSData *postData = [PostString  dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:kServerLink_journeyRequestSent]];
+   
+
+        NSString * PostString = [NSString stringWithFormat:@"userId=%@",uId];
+  
+
+   BinSystemsServerConnectionHandler *AuthenticationServer  = [[BinSystemsServerConnectionHandler alloc]initWithURL:kServerLink_journeyRequestSent PostData:PostString];
     
     
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setHTTPBody:postData];
+    //specify method in first argument
     
-    
-    dispatch_async(kBgQueue, ^{
-        NSError *err;
-        NSURLResponse *response;
-        NSData *data= [NSURLConnection sendSynchronousRequest:request  returningResponse:&response error:&err];
-        if(!err){
-            [self performSelectorOnMainThread:@selector(fetchedData:)
-                                   withObject:data waitUntilDone:YES];
+    [AuthenticationServer StartServerConnectionWithCompletionHandler:@"POST" :^(NSDictionary *JSONDict) {
+        
+        
+        
+        
+        
+        NSDictionary *data = JSONDict;
+        
+        [reqListArray removeAllObjects];
+        
+        
+        
+        [WTStatusBar setLoading:NO loadAnimated:NO];
+        [WTStatusBar clearStatus];
+        
+        NSArray *requestObj=[data objectForKey:@"requests"];
+        NSInteger count=[requestObj count];
+        if(count>0)
+        {
+            
+            for(int i=0;i<[requestObj count];i++)
+            {
+                
+                
+                mRequestModel=[[RecievedReqModel alloc] init];
+                NSDictionary *route=[requestObj objectAtIndex:i];
+                NSString *status=[NSString stringWithFormat:@"%@",[route objectForKey:@"status"]];
+                mRequestModel.status=status;
+                NSDictionary *journeyArray=[route objectForKey:@"route"];
+                mRequestModel.journey_id=[journeyArray objectForKey:@"journey_id"];
+                mRequestModel.user_id=[journeyArray objectForKey:@"user_id"];
+                NSLog(@"Jid %@",[journeyArray objectForKey:@"journey_id"]);
+                mRequestModel.journey_start=[journeyArray objectForKey:@"journey_start_point"];
+                mRequestModel.journey_latitude=[journeyArray objectForKey:@"journey_start_latitude"];
+                mRequestModel.journey_longitude=[journeyArray objectForKey:@"journey_start_longitude"];
+                mRequestModel.journey_end_latitude=[journeyArray objectForKey:@"journey_end_latitude"];
+                mRequestModel.journey_end_longitude=[journeyArray objectForKey:@"journey_end_longitude"];
+                
+                //            if (mRequ) {
+                //
+                //
+                [reqListArray addObject:mRequestModel];
+                //
+                //            }
+                //
+                //
+                
+            }
+            [self PlaceMarkersOnMap];
         }
         else{
-            
-            [self ShowAlertView:UnableToProcess];
+            [WTStatusBar setLoading:NO loadAnimated:NO];
+            [WTStatusBar clearStatus];
+            [self ShowAlertView:@"No Requests Sent"];
         }
         
-    });
-}
+        
+        [WTStatusBar setLoading:NO loadAnimated:NO];
+        
+        [WTStatusBar clearStatus];
+        
+        
+        
+        
+        
+        
+        
+    } FailBlock:^(NSString *Error) {
+        
+        
+        
+        [InterfaceManager DisplayAlertWithMessage:@"Failed to load requests"];
+        
+        
+        
+        [WTStatusBar setLoading:NO loadAnimated:NO];
+        
+        [WTStatusBar clearStatus];
+        
+        
+        
+    }];
+    
+
+    }
 
 -(void)ShowAlertView:(NSString*)Message{
     
@@ -118,48 +201,7 @@ NSString *types;
     [Alert show];
 }
 
-- (void)fetchedData:(NSData *)responseData {
-    
-    [reqListArray removeAllObjects];
-    NSError *jsonParsingError;
-    NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseData
-                                                         options:0 error:&jsonParsingError];
-    NSLog(@"Response %@",data);
-   
 
-        [WTStatusBar setLoading:NO loadAnimated:NO];
-        [WTStatusBar clearStatus];
-        NSArray *requestObj=[data objectForKey:@"requests"];
-        NSInteger *count=[requestObj count];
-        if(count>0)
-        {
-        for(int i=0;i<[requestObj count];i++)
-        {
-            mRequestModel=[[RecievedReqModel alloc] init];
-            NSDictionary *route=[requestObj objectAtIndex:i];
-             NSString *status=[NSString stringWithFormat:@"%@",[route objectForKey:@"status"]];
-            mRequestModel.status=status;
-            NSDictionary *journeyArray=[route objectForKey:@"route"];
-            mRequestModel.journey_id=[journeyArray objectForKey:@"journey_id"];
-            mRequestModel.user_id=[journeyArray objectForKey:@"user_id"];
-            NSLog(@"Jid %@",[journeyArray objectForKey:@"journey_id"]);
-            mRequestModel.journey_start=[journeyArray objectForKey:@"journey_start_point"];
-            mRequestModel.journey_latitude=[journeyArray objectForKey:@"journey_start_latitude"];
-            mRequestModel.journey_longitude=[journeyArray objectForKey:@"journey_start_longitude"];
-            mRequestModel.journey_end_latitude=[journeyArray objectForKey:@"journey_end_latitude"];
-            mRequestModel.journey_end_longitude=[journeyArray objectForKey:@"journey_end_longitude"];
-            [reqListArray addObject:mRequestModel];
-            
-        }
-           [self PlaceMarkersOnMap];
-        }
-        else{
-            [WTStatusBar setLoading:NO loadAnimated:NO];
-            [WTStatusBar clearStatus];
-             [self ShowAlertView:@"No Requests Sent"];
-        }
-     
-    }
 
 
 
@@ -184,38 +226,90 @@ NSString *types;
 
 
 - (BOOL)mapView:(GMSMapView *)mapView didTapMarker:(GMSMarker *)marker {
+    
+    
+    
     NSString *markerTitle=[NSString stringWithFormat:@"%@",marker.title];
     NSLog(@"JID %@",markerTitle);
     for (RecievedReqModel * model in reqListArray)
     {  NSString *id=[NSString stringWithFormat:@"%@",model.journey_id];
         if([markerTitle isEqualToString:id])
         {
+            
+            
+            
+            
+            
     NSString * PostString = [NSString stringWithFormat:@"userId=%@&profileId=%@",uId,model.user_id];
-    NSData *passengerProfile=[ConnectToServer ServerCall:kServerLink_GetCoridersProfileById post:PostString];
-    [self ShowPassengerProfileAlert:passengerProfile];
-        }}
+  
+            
+            
+            [WTStatusBar setLoading:YES loadAnimated:YES];
+            
+           BinSystemsServerConnectionHandler *AuthenticationServer  = [[BinSystemsServerConnectionHandler alloc]initWithURL:kServerLink_GetCoridersProfileById PostData:PostString];
+            
+                //specify method in first argument
+            
+            [AuthenticationServer StartServerConnectionWithCompletionHandler:@"POST" :^(NSDictionary *JSONDict) {
+                      
+                NSDictionary *data = JSONDict;
+                
+                [self ShowPassengerProfileAlert:data];
+                
+                
+                [WTStatusBar setLoading:NO loadAnimated:NO];
+                
+                [WTStatusBar clearStatus];
+                
+                
+                
+            } FailBlock:^(NSString *Error) {
+                
+                
+                
+                [InterfaceManager DisplayAlertWithMessage:@"Failed to load routes"];
+                
+                
+                
+                [WTStatusBar setLoading:NO loadAnimated:NO];
+                
+                [WTStatusBar clearStatus];
+                
+                
+                
+            }];
+            
+
+            
+            
+        }
+    
+    }
+    
+    
+    
+    
+    
     return  YES;
+    
 }
 
- -(void)ShowPassengerProfileAlert:(NSData*)responseData
+ -(void)ShowPassengerProfileAlert:(NSDictionary *)data
 {
     
-    Alerts = [[UIAlertView alloc ]initWithTitle:@"Profile" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles: nil];
     
-    RequestSentView *AccessoryView =[ [[NSBundle mainBundle]loadNibNamed:@"RequestSentView" owner:self options:nil] objectAtIndex:0];
     
+    AccessoryView =[ [[NSBundle mainBundle]loadNibNamed:@"RequestSentView" owner:self options:nil] objectAtIndex:0];
+    AccessoryView.hidden=NO;
+    [AccessoryView setBackgroundColor:[[UIColor darkGrayColor] colorWithAlphaComponent:0.9f]];
+    AccessoryView.frame=CGRectMake(15,self.view.frame.origin.y+20,self.view.frame.size.width-40,self.view.frame.size.height-60);
+    AccessoryView.layer.cornerRadius=5;
     
     [scrollView setScrollEnabled:YES];
-    [scrollView setContentSize:CGSizeMake(320, 550)];
-    [AccessoryView setBackgroundColor:[UIColor clearColor]];
+    [scrollView setContentSize:CGSizeMake(300, 500)];
     
-    [Alerts setValue:AccessoryView forKey:@"accessoryView"];
-    
-    NSError *jsonParsingError;
-    NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseData
-                                                         options:0 error:&jsonParsingError];
-    NSLog(@"Requested%@",data);
-    if(!jsonParsingError)
+ 
+    if(data)
     {
         NSArray *passengerProf=[data objectForKey:@"profile"];
         
@@ -229,16 +323,18 @@ NSString *types;
             favId=[passDict objectForKey:@"user_id"];
             if([types isEqualToString:@"T"])
             {
+                
              seatsField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"number_of_seats"]];
             carModelField.text=[passDict objectForKey:@"car_model"];
            
             }
             else if([types isEqualToString:@"G"]){
+                
                 self.model.hidden=YES;
                 self.seat.hidden=YES;
                 seatsField.hidden=YES;
                 carModelField.hidden=YES;
-                const int movementDistance = 75; // tweak as needed
+                const int movementDistance = 100; // tweak as needed
                 const float movementDuration = 0.1f; // tweak as needed
                 bool up=YES;
                 int movement = (up ? -movementDistance : movementDistance);
@@ -248,8 +344,11 @@ NSString *types;
                 [UIView setAnimationDuration: movementDuration];
                 views.frame = CGRectOffset(views.frame, 0, movement);
                 [UIView commitAnimations];
-                 [scrollView setContentSize:CGSizeMake(300, 500)];
+                 [scrollView setContentSize:CGSizeMake(300,350)];
+                 AccessoryView.frame=CGRectMake(15,self.view.frame.origin.y+20,self.view.frame.size.width-40,self.view.frame.size.height-180);
+                
             }
+            
             sosContactField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"sos_contact_num"]];
             SOSEmailField.text=[passDict objectForKey:@"sos_email_id"];
             phoneField.text=[NSString stringWithFormat:@"%@",[passDict objectForKey:@"mobile_number"]];
@@ -257,7 +356,9 @@ NSString *types;
         }
     }
     
-    [Alerts show];
+   
+    [myMap addSubview:AccessoryView];
+   // [Alerts show];
 }
 
 -(void)dismiss:(UIAlertView*)alert
@@ -321,4 +422,7 @@ NSString *types;
 }
 */
 
+- (IBAction)closeView:(id)sender {
+    [AccessoryView setHidden:YES];
+}
 @end

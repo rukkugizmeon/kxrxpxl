@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "StarRatingView.h"
 
 @interface CoridersSingleProfileView : UIView
 

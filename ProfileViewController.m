@@ -7,6 +7,7 @@
 //
 
 #import "ProfileViewController.h"
+#import "InterfaceManager.h"
 
 @interface ProfileViewController ()
 
@@ -24,104 +25,170 @@
 @synthesize profilecityLabel;
 @synthesize profileMobileLabel;
 @synthesize profileNoOfRidesLabel;
-@synthesize profileRideOptionsLabel;
 @synthesize profileSeatLabel;
-@synthesize profileSexLabel;
-@synthesize profileRidePointBalanceLabel;
+@synthesize profileSexLabel,genderSwitch;
+@synthesize profileRidePointBalanceLabel,rideOptionSegment;
 @synthesize profileSosContactNoLabel;
 @synthesize profileSosEmailLabel,LoadingView;
 NSDictionary *data ;
 NSUserDefaults *prefs;
 NSString *RideOption;
+UIBarButtonItem *editButton;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self webconnection];
+  
     [self setupUI];
     // Do any additional setup after loading the view.
 }
+-(void) viewWillAppear:(BOOL)animated
+{
+    
+//    
+//    int x = 0;
+//    
+//    int y = 10/x;
+//    
+//    NSLog(@"%d",y);
+    
+    [self webconnection];
+}
+-(void) viewDidAppear:(BOOL)animated
+{
+    
+    
+    [editButton setEnabled:NO];
+}
+
 -(void)webconnection
 {
-    [self showLoadingMode];
+   [self showLoadingMode];
+    UIColor * Cgrey1 =[UIColor colorWithRed:74.0f/255.0f green:74.0f/255.0f blue:74.0f/255.0f alpha:1];
+    self.view.backgroundColor=Cgrey1;
     prefs = [NSUserDefaults standardUserDefaults];
+    
     NSString *id=[prefs stringForKey:@"id"];
     NSLog(@" id %@",id);
     NSString * PostString = [NSString stringWithFormat:@"user_id=%@",id];
-    NSData *postData = [PostString  dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:kServerLink_ProfileView]];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setHTTPBody:postData];
-    dispatch_async(kBgQueue, ^{
-        NSError *err;
-        NSURLResponse *response;
-        NSData *data= [NSURLConnection sendSynchronousRequest:request  returningResponse:&response error:&err];
-        [self performSelectorOnMainThread:@selector(fetchedData:)
-                               withObject:data waitUntilDone:YES];
+    
+  //  NSString * PostString = [NSString stringWithFormat:@"user_id=%@",userId];
+    
+    
+    
+   BinSystemsServerConnectionHandler  *AuthenticationServer  = [[BinSystemsServerConnectionHandler alloc]initWithURL:kServerLink_ProfileView PostData:PostString];
+    
+        //specify method in first argument
+    
+    [AuthenticationServer StartServerConnectionWithCompletionHandler:@"POST" :^(NSDictionary *JSONDict) {
         
-    });
-
-}
-- (void)fetchedData:(NSData *)responseData {
-    NSLog(@"Processing response");
-    //  NSLog(@"Data %@",responseData);
-    NSError *jsonParsingError;
-    data = [NSJSONSerialization JSONObjectWithData:responseData
-                                                         options:0 error:&jsonParsingError];
-    NSDictionary *profileDetailsDictionary=[data objectForKey:@"0"];
-   
-    NSString *result=[NSString stringWithFormat:@"%@",[data objectForKey:@"status"]];
-    NSLog(@"Data %@",result);
-    if(!jsonParsingError && profileDetailsDictionary!=nil)
-    {
-    if([result isEqualToString:@"1"])
-    {
- 
-   profileNameLabel.text=[profileDetailsDictionary objectForKey:@"name"];
-  profileAgeLabel.text=[NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"age"]];
-   profileSexLabel.text=[profileDetailsDictionary objectForKey:@"gender"];
-   profileMobileLabel.text= [NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"mobile_number"]];
-   profileAddressLabel.text= [profileDetailsDictionary objectForKey:@"address"];
-   profilecityLabel.text= [profileDetailsDictionary objectForKey:@"city"];
-  profileCarModelLabel.text=  [profileDetailsDictionary objectForKey:@"car_model"];
-  profileCarBrandLabel.text=  [profileDetailsDictionary objectForKey:@"car_brand"];
-   profileSeatLabel.text= [NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"number_of_seats"]];
-  profileSosContactNoLabel.text= [NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"sos_contact_num"]];
- profileSosEmailLabel.text=  [profileDetailsDictionary objectForKey:@"sos_email_id"];
-profileRidePointBalanceLabel .text=[NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"ride_point_balance"]];
-   
-  profileNoOfRidesLabel.text= [NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"no_of_rides"]];
- profileApprovalStatusLabel.text =[NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"approval_status"]];
-        RideOption= [profileDetailsDictionary objectForKey:@"ride_option"];
-        if([[profileDetailsDictionary objectForKey:@"ride_option"] isEqualToString:@"G"])
-        {
-         profileRideOptionsLabel.text=@"Give A Ride";
-        }
-        else if([[profileDetailsDictionary objectForKey:@"ride_option"] isEqualToString:@"T"])
-        {
-          profileRideOptionsLabel.text=@"Take A Ride";
+        
+        
+        
+        
+        data = JSONDict;
+        
+        NSDictionary *profileDetailsDictionary=[data objectForKey:@"0"];
+        
+        NSString *result=[NSString stringWithFormat:@"%@",[data objectForKey:@"status"]];
+        NSLog(@"Data %@",result);
+       
+            if([result isEqualToString:@"1"])
+            {
+                
+                profileNameLabel.text=[profileDetailsDictionary objectForKey:@"name"];
+                profileAgeLabel.text=[NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"age"]];
+                NSString *myAge=[NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"age"]];
+                float age=[myAge floatValue];
+                [self.ageSlider setValue:age];
+                profileSexLabel.text=[profileDetailsDictionary objectForKey:@"gender"];
+                NSString *myGender=[profileDetailsDictionary objectForKey:@"gender"];
+                if([myGender isEqualToString:@"Male"] || [myGender isEqualToString:@"male"])
+                {
+                    
+                    UIImage *male=[UIImage imageNamed:@"ridewithme_mobile_gendermale.png"];
+                    [genderSwitch setImage:male forState:UIControlStateNormal];
+                }
+                else
+                {
+                    UIImage *female=[UIImage imageNamed:@"ridewithme_mobile_genderfemale.png"];
+                    [genderSwitch setImage:female forState:UIControlStateNormal];
+                }
+                profileMobileLabel.text= [NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"mobile_number"]];
+                profileAddressLabel.text= [profileDetailsDictionary objectForKey:@"address"];
+                profilecityLabel.text= [profileDetailsDictionary objectForKey:@"city"];
+                
+                profileSosContactNoLabel.text= [NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"sos_contact_num"]];
+                profileSosEmailLabel.text=  [profileDetailsDictionary objectForKey:@"sos_email_id"];
+                profileRidePointBalanceLabel .text=[NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"ride_point_balance"]];
+                
+                profileNoOfRidesLabel.text= [NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"no_of_rides"]];
+                profileApprovalStatusLabel.text =[NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"approval_status"]];
+                RideOption= [profileDetailsDictionary objectForKey:@"ride_option"];
+                NSLog(@"OPtion %@",RideOption);
+                if([[profileDetailsDictionary objectForKey:@"ride_option"] isEqualToString:@"G"])
+                {
+                    [rideOptionSegment setSelectedSegmentIndex:1];
+                    profileCarModelLabel.text=  [profileDetailsDictionary objectForKey:@"car_model"];
+                    profileCarBrandLabel.text=  [profileDetailsDictionary objectForKey:@"car_brand"];
+                    profileSeatLabel.text= [NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"number_of_seats"]];
+                }
+                else if([[profileDetailsDictionary objectForKey:@"ride_option"] isEqualToString:@"T"])
+                {
+                    [rideOptionSegment setSelectedSegmentIndex:0];
+                    profileCarModelLabel.text= @"NA";
+                    profileCarBrandLabel.text=   @"NA";
+                    profileSeatLabel.text= @"NA";
+                }
+                else{
+                    [rideOptionSegment setSelectedSegmentIndex:2];
+                    profileCarModelLabel.text=  [profileDetailsDictionary objectForKey:@"car_model"];
+                    profileCarBrandLabel.text=  [profileDetailsDictionary objectForKey:@"car_brand"];
+                    profileSeatLabel.text= [NSString stringWithFormat:@"%@",[profileDetailsDictionary objectForKey:@"number_of_seats"]];
+                }
+                
+                [prefs setObject:[profileDetailsDictionary objectForKey:@"ride_option"] forKey:@"role"];
+                profileCompanyNameLabel.text=[profileDetailsDictionary objectForKey:@"company_name"];
+                [self hideLoadingMode];
+                LoadingView.hidden=YES;
+            
         }
         else{
-          profileRideOptionsLabel.text=@"Give A Ride/Take A Ride";
+             [self hideLoadingMode];
+            [self ShowAlertView:UnableToProcess];
         }
- 
-         [prefs setObject:[profileDetailsDictionary objectForKey:@"ride_option"] forKey:@"role"];
-    profileCompanyNameLabel.text=[profileDetailsDictionary objectForKey:@"company_name"];
-           [self hideLoadingMode];
-        LoadingView.hidden=YES;
-    }
-    else{
+        
+        [editButton setEnabled:YES];
         [self hideLoadingMode];
         
-        [self ShowAlertView:@"Invalid Response"];
-    }
-    }
-    else{
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+     
+        
+        
+        
+        
+        
+        
+        
+    } FailBlock:^(NSString *Error) {
+        
         [self hideLoadingMode];
-        [self ShowAlertView:UnableToProcess];
-    }
+        [InterfaceManager DisplayAlertWithMessage:@"Failed to profile details"];
+        
+    }];
+    
+
+
 }
 
 -(void)ShowAlertView:(NSString*)Message{
@@ -131,10 +198,36 @@ profileRidePointBalanceLabel .text=[NSString stringWithFormat:@"%@",[profileDeta
 }
 -(void) setupUI
 {
+    self.navigationItem.title = @"Profile";
+    [self.ageSlider setThumbImage:[UIImage imageNamed:@"ridewithme_mobile_slide.png"] forState:UIControlStateNormal];
+     self.navigationItem.hidesBackButton = YES;
+    
+    editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(EditProfile:)];
+    self.navigationItem.rightBarButtonItem = editButton;
+    
+    UIImage *buttonImage = [UIImage imageNamed:@"menuIcon.png"];
+    
+    UIButton *aButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [aButton setImage:buttonImage forState:UIControlStateNormal];
+    aButton.frame = CGRectMake(0.0, 0.0,30,20);
+    UIBarButtonItem *slideButton =[[UIBarButtonItem alloc] initWithCustomView:aButton];
+    [aButton addTarget:self action:@selector(slider:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = slideButton;
     [profileScrollView setScrollEnabled:YES];
-    [profileScrollView setContentSize:CGSizeMake(320, 800)];
+    [profileScrollView setContentSize:CGSizeMake(320, 950)];
 }
-
+-(void)slider:(id)sender
+{
+    [self.view endEditing:YES];
+    [self.frostedViewController.view endEditing:YES];
+    [self.frostedViewController presentMenuViewController];
+}
+-(void)EditProfile:(id)sender
+{
+    UpdateProfileViewController *updVC= [self.storyboard instantiateViewControllerWithIdentifier:@"editProfile"];
+    updVC.profiledata=data;
+    [self.navigationController pushViewController:updVC animated:YES];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -180,11 +273,7 @@ profileRidePointBalanceLabel .text=[NSString stringWithFormat:@"%@",[profileDeta
         UpdateProfileViewController *upVc = segue.destinationViewController;
         upVc.profiledata=data;
     }
-    if([segue.identifier isEqualToString:@"toMenuFromProfile"])
-    {
-        MenuViewController *menVC = segue.destinationViewController;
-        menVC.options=RideOption;
-    }
+   
     
 }
 

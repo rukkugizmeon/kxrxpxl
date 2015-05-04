@@ -16,6 +16,7 @@
 #import "PassengerListView.h"
 #import "PassengerListModel.h"
 #import "RequestedProfileView.h"
+#import "REFrostedViewController.h"
 
 @interface RequestRecievedViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
 {
@@ -25,6 +26,7 @@
     RecievedReqModel *mRequestModel;
     PassengerListModel *mPassengerModel;
     UIAlertView *Alerts;
+    RequestedProfileView *AccessoryView;
 }
 @property (weak, nonatomic) IBOutlet GMSMapView *myMap;
 @property (weak, nonatomic) IBOutlet UITableView *passengerTable;
@@ -32,6 +34,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *zoomIn;
 
 //Profile view
+- (IBAction)closeView:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scollView;
 @property (weak, nonatomic) IBOutlet UILabel *nameField;
@@ -47,5 +50,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *model;
 @property (weak, nonatomic) IBOutlet UILabel *seats;
 
+@property (strong, nonatomic) IBOutlet UILabel *routeFrom;
+@property (strong, nonatomic) IBOutlet UILabel *routeTo;
 
 @end

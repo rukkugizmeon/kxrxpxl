@@ -7,12 +7,15 @@
 //
 
 #import "EarningsViewController.h"
+#import "InterfaceManager.h"
+#import "BinSystemsServerConnectionHandler.h"
 
 @interface EarningsViewController ()
 {
     
     NSString *userId;
     NSUserDefaults *prefs ;
+    UIColor * tblbg;
 }
 @end
 
@@ -23,12 +26,39 @@
 - (void)viewDidLoad
  {
     [super viewDidLoad];
+     UIImage *buttonImage = [UIImage imageNamed:@"menuIcon.png"];
+     UIButton *aButton = [UIButton buttonWithType:UIButtonTypeCustom];
+     [aButton setImage:buttonImage forState:UIControlStateNormal];
+     aButton.frame = CGRectMake(0.0, 0.0,30,20);
+     UIBarButtonItem *slideButton =[[UIBarButtonItem alloc] initWithCustomView:aButton];
+     [aButton addTarget:self action:@selector(slider:) forControlEvents:UIControlEventTouchUpInside];
+     self.navigationItem.leftBarButtonItem = slideButton;
+   self.navigationItem.hidesBackButton = YES;  
+        self.navigationItem.title = @"Earnings";
+       tblbg =[UIColor colorWithRed:74.0f/255.0f green:74.0f/255.0f blue:74.0f/255.0f alpha:1];
+     self.view.backgroundColor=tblbg;
+     self.pointsTable.backgroundColor=[UIColor clearColor];
     prefs= [NSUserDefaults standardUserDefaults];
     userId=[prefs stringForKey:@"id"];
     earningsData=[[NSMutableArray alloc]init];
     ConnectToServer=[[ServerConnection alloc]init];
-     [self fetchPoints];
+   
   }
+
+-(void)slider:(id)sender
+{
+    [self.view endEditing:YES];
+    [self.frostedViewController.view endEditing:YES];
+    [self.frostedViewController presentMenuViewController];
+}
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self fetchPoints];
+    tblbg =[UIColor colorWithRed:74.0f/255.0f green:74.0f/255.0f blue:74.0f/255.0f alpha:0.9f];
+    self.view.backgroundColor=tblbg;
+    
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -55,6 +85,7 @@
     if (cell == nil) {
         cell = [[EarningsViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
+    cell.backgroundColor=[UIColor clearColor];
     cell.index.text=model.index;
     cell.points.text=model.points;
     cell.date.text=model.date;
@@ -67,13 +98,18 @@
 {
     [WTStatusBar setLoading:YES loadAnimated:YES];
     NSString *postString=[NSString stringWithFormat:@"userId=%@",userId];
-    NSData *ridePointsData=[ConnectToServer ServerCall:kServerLink_GetEarnings post:postString];
-    NSError *jsonParsingError;
-    NSDictionary *data = [NSJSONSerialization JSONObjectWithData:ridePointsData
-                                                         options:0 error:&jsonParsingError];
-    NSLog(@"Earnings%@",data);
-    if(!jsonParsingError)
-    {
+  
+    
+    BinSystemsServerConnectionHandler *AuthenticationServer  = [[BinSystemsServerConnectionHandler alloc]initWithURL:kServerLink_GetEarnings PostData:postString];
+    
+    
+    //specify method in first argument
+    
+    [AuthenticationServer StartServerConnectionWithCompletionHandler:@"POST" :^(NSDictionary *JSONDict) {
+        
+        
+        NSDictionary *data = JSONDict;
+        
         NSArray *dataArray=[data objectForKey:@"Earnings"];
         int count=[dataArray count];
         if(count>0)
@@ -98,13 +134,41 @@
             [self ShowAlertView:@"No data"];
         }
         
-    }
-    else{
+    
+    
+     
+        
+        
         [WTStatusBar setLoading:NO loadAnimated:NO];
+        
         [WTStatusBar clearStatus];
-        [self ShowAlertView:UnableToProcess];
-    }
-}
+        
+        
+        
+        
+        
+        
+        
+    } FailBlock:^(NSString *Error) {
+        
+        
+        
+        [InterfaceManager DisplayAlertWithMessage:@"Failed to load Earnings"];
+        
+        
+        
+        [WTStatusBar setLoading:NO loadAnimated:NO];
+        
+        [WTStatusBar clearStatus];
+        
+        
+        
+    }];
+
+    
+    
+  
+       }
 
 -(void)ShowAlertView:(NSString*)Message{
     UIAlertView * Alerts = [[UIAlertView alloc ]initWithTitle:kApplicationName message:Message delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles: nil];

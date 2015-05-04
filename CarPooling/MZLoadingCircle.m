@@ -192,6 +192,8 @@
 
 
 - (void)viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:YES];
     customLayer_.backgroundColor = [[UIColor clearColor] CGColor];
     customLayer_.frame = CGRectInset(self.view.bounds, 0.0f, 0.0f);
     int scale = self.view.frame.size.width * 0.15;

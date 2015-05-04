@@ -6,22 +6,30 @@
 //  Copyright (c) 2014 gizmeon. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>]
+#import <UIKit/UIKit.h>
 #import "MZLoadingCircle.h"
 #import "DefineMainValues.h"
+#import "ProfileViewController.h"
+#import "BinSystemsServerConnectionHandler.h"
 
-@interface UpdateProfileViewController : UIViewController<UITextFieldDelegate>
+@interface UpdateProfileViewController : UIViewController<UITextFieldDelegate,NSURLConnectionDelegate>
 {
       MZLoadingCircle *loadingCircle;
 }
+@property (weak, nonatomic) IBOutlet UISlider *ageSlider;
+@property (weak, nonatomic) IBOutlet UIButton *genderSwitch;
+- (IBAction)genderChanged:(id)sender;
+- (IBAction)ageValueChanged:(id)sender;
+@property (weak, nonatomic) IBOutlet UILabel *ageLabel;
+@property (weak, nonatomic) IBOutlet UITextField *mAddressTextField;
 
 @property (strong, nonatomic)  NSDictionary *profiledata;
 @property (weak, nonatomic) IBOutlet UIScrollView *mScrollView;
 @property (weak, nonatomic) IBOutlet UITextField *mNameTextField;
-@property (weak, nonatomic) IBOutlet UITextField *mAgeTextField;
+
 @property (weak, nonatomic) IBOutlet UISegmentedControl *mGenderSegment;
 @property (weak, nonatomic) IBOutlet UITextField *mPhoneTextField;
-@property (weak, nonatomic) IBOutlet UITextView *mAddressTextField;
+
 @property (weak, nonatomic) IBOutlet UITextField *mCityTextField;
 @property (weak, nonatomic) IBOutlet UITextField *mCarModelTextField;
 @property (weak, nonatomic) IBOutlet UITextField *mCarBrandTextField;

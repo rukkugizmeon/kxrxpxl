@@ -22,13 +22,15 @@
 
 #define kViewRoundedCornerVal 12.0f
 
-#define kGoogleMapsAPIKey @"AIzaSyAwwaoXs4rZj8H1L2Z1riGZGSR31xtAml0"
+#define kGoogleMapsAPIKey @"AIzaSyCtxwsGBdMjvLV3Jz1mzZGO8oIzOr69jwQ"
+
+#define kGooglePlacesAPIKey @"AIzaSyC1CHljfuBrSeTgXmm_NuJ1HZC6moNRRPE"
 
 #define kGoogleMapsZoomLevelDefault 10
 
 #define kLocationCacheExpiryTime 5
 
-#define kApplicationName @"CarPooling"
+#define kApplicationName @"RideWithMe"
 
 #define kErrorMessageLocationDataUnavailable @"Unable to determine your location."
 
@@ -42,7 +44,13 @@
 
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
 
+#define kServerConnectionTimeOut 1000
 
+
+
+#define kKeyChainCredStoreID @"XvVSs4KTArq94l74zHcitqSA3eyXGGlGq4atpF533UkjJ8U0"
+//Device token
+#define kServerLink_saveDevicetoken @"http://ridewithme.in/index.php?r=api/SaveIOSId"
 
 // Login
 #define kServerLink_UserAuthenticationLink @"http://ridewithme.in/index.php?r=Api/login"
@@ -182,3 +190,22 @@
 
  #define kServerLink_GetCoridersProfileById @"http://ridewithme.in/index.php?r=Api/fetchPassengerProfileById"
 
+//Get journey Details
+#define kServerLink_GetJourneyDetaails @"http://ridewithme.in/index.php?r=api/GetJourneyDetails"
+
+//Start | end journey
+#define kServerLink_StartStopJourney @"http://ridewithme.in/index.php?r=Profile/startJourney"
+
+
+// get journey complete list
+
+#define kServerLink_GetNotifications @"http://ridewithme.in/index.php?r=JourneyComplete/GetReviewItems"
+
+//confirm journey complete
+#define kServerLink_ReviewJourneyCompleteConfirmation @"http://ridewithme.in/index.php?r=JourneyComplete/reviewJourneyComplete"
+
+// send feedback
+
+#define kServerLink_ReviewJourneyCompleteConfirmationFeedback @"http://ridewithme.in/index.php?r=JourneyComplete/postComments"
+
+#define kServerLink_SetPayment @"http://ridewithme.in/index.php?r=Api/SetPayment"

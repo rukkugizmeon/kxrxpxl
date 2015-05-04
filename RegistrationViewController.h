@@ -16,20 +16,24 @@
     NSString *RideOption;
       MZLoadingCircle *loadingCircle;
 }
+@property (weak, nonatomic) IBOutlet UISlider *ageSlider;
+@property (weak, nonatomic) IBOutlet UIButton *genderSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *ageLabel;
+- (IBAction)ageValueChanged:(id)sender;
+- (IBAction)genderValueChanged:(id)sender;
+@property (weak, nonatomic) IBOutlet UITextField *mAddressTextField;
 
+@property (weak, nonatomic) IBOutlet UIImageView *footerText;
 
 @property (weak, nonatomic) IBOutlet UIView *TopLayer;
 
 @property (weak, nonatomic) IBOutlet UIScrollView *mScrollView;
 @property (weak, nonatomic) IBOutlet UIButton *mRegisterButton;
 @property (weak, nonatomic) IBOutlet UIButton *mCancelButton;
-@property (weak, nonatomic) IBOutlet UITextView *mAddressTextField;
 @property (weak, nonatomic) IBOutlet UITextField *mUsername;
 @property (weak, nonatomic) IBOutlet UITextField *mPassword;
 @property (weak, nonatomic) IBOutlet UITextField *mConPassword;
 @property (weak, nonatomic) IBOutlet UITextField *mNameTextField;
-@property (weak, nonatomic) IBOutlet UITextField *mAgeTextField;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *mGenderSegment;
 @property (weak, nonatomic) IBOutlet UITextField *mPhoneTextField;
 @property (weak, nonatomic) IBOutlet UITextField *mCityTextField;
 @property (weak, nonatomic) IBOutlet UITextField *mCarModelTextField;

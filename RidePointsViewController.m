@@ -21,16 +21,53 @@
 
 
 - (void)viewDidLoad
+
 {
+     self.navigationItem.title = @"Ride Points";
+    self.navigationItem.hidesBackButton = YES;
+  //  UIBarButtonItem *purchaseButton = [[UIBarButtonItem alloc] initWithTitle:@"Purchase" style:UIBarButtonItemStylePlain target:self action:@selector(purchase:)];
+    //self.navigationItem.rightBarButtonItem = purchaseButton;
+    UIImage *buttonImage = [UIImage imageNamed:@"menuIcon.png"];
+    UIButton *aButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [aButton setImage:buttonImage forState:UIControlStateNormal];
+    aButton.frame = CGRectMake(0.0, 0.0,30,20);
+    UIBarButtonItem *slideButton =[[UIBarButtonItem alloc] initWithCustomView:aButton];
+    [aButton addTarget:self action:@selector(slider:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = slideButton;
     [super viewDidLoad];
+//    UIColor * Cblue =[UIColor colorWithRed:4.0f/255.0f green:200.0f/255.0f blue:248.0f/255.0f alpha:0.9f];
+  
+    UIColor *Cgrey =[UIColor colorWithRed:74.0f/255.0f green:74.0f/255.0f blue:74.0f/255.0f alpha:1];
+      self.view.backgroundColor=Cgrey;
+    self.pointsTable.backgroundColor=[UIColor clearColor];
     prefs= [NSUserDefaults standardUserDefaults];
     userId=[prefs stringForKey:@"id"];
     ridePointData=[[NSMutableArray alloc]init];
     ConnectToServer=[[ServerConnection alloc]init];
-    [self fetchRidePoints];
+     [self fetchRidePoints];
     
 }
-
+-(void)slider:(id)sender
+{
+   
+    [self.view endEditing:YES];
+    [self.frostedViewController.view endEditing:YES];
+    [self.frostedViewController presentMenuViewController];
+}
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+   
+    UIColor *tblbg =[UIColor colorWithRed:74.0f/255.0f green:74.0f/255.0f blue:74.0f/255.0f alpha:0.9f];
+    self.view.backgroundColor=tblbg;
+    
+}
+-(void)purchase:(id)sender
+{
+    PurchaseViewController *purVC= [self.storyboard instantiateViewControllerWithIdentifier:@"payment"];
+ 
+    [self.navigationController pushViewController:purVC animated:YES];
+}
 //
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -58,6 +95,7 @@
     if (cell == nil) {
         cell = [[ RidePointCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
+    cell.backgroundColor=[UIColor clearColor];
     cell.index.text=model.index;
     cell.type.text=model.type;
     cell.points.text=model.points;

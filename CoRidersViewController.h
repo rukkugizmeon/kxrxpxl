@@ -15,9 +15,12 @@
 #import "CoriderListObject.h"
 #import "CoriderProfiles.h"
 #import "CoridersSingleProfileView.h"
+#import "REFrostedViewController.h"
+#import "StarRatingView.h"
 
 @interface CoRidersViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
 {
+    CoridersSingleProfileView *AccessoryView ;
     ServerConnection *ConnectToServer;
     NSMutableArray *riderListArray;
     NSMutableArray *ridePassengerListArray;
@@ -27,6 +30,7 @@
     NSString *favId;
      NSString *Rating;
     CoriderListObject *mRiderListModel;
+    int one;
 }
 @property (weak, nonatomic) IBOutlet GMSMapView *myMap;
 @property (weak, nonatomic) IBOutlet UITableView *profileTable;
@@ -34,7 +38,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *zoomIn;
 
 //Profile
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @property (weak, nonatomic) IBOutlet UILabel *nameField;
 @property (weak, nonatomic) IBOutlet UILabel *ageField;
@@ -44,15 +47,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *sosContactField;
 @property (weak, nonatomic) IBOutlet UILabel *SOSEmailField;
 
+@property (strong, nonatomic) IBOutlet StarRatingView *viewRating;
 @property (weak, nonatomic) IBOutlet UILabel *phoneField;
+- (IBAction)closeView:(id)sender;
 
-//Ratings
 
-@property (weak, nonatomic) IBOutlet UIButton *GiverStar1;
-@property (weak, nonatomic) IBOutlet UIButton *GiverStar2;
-@property (weak, nonatomic) IBOutlet UIButton *GiverStar3;
-@property (weak, nonatomic) IBOutlet UIButton *GiverStar4;
-@property (weak, nonatomic) IBOutlet UIButton *GiverStar5;
+@property (strong, nonatomic) IBOutlet UIButton *buttonFavourite;
+
+
 
 
 @end

@@ -13,16 +13,20 @@
 #import "RequestSentView.h"
 #import "ServerConnection.h"
 #import "EDStarRating.h"
+#import "REFrostedViewController.h"
+
 
 @interface RequestSentViewController : UIViewController<EDStarRatingProtocol,UIAlertViewDelegate>
 {
     NSMutableArray *path;
      UIAlertView  *Alerts;
+    RequestSentView *AccessoryView;
      NSString *favId;
     NSMutableArray * reqListArray;
     RecievedReqModel *mRequestModel;
       ServerConnection *ConnectToServer;
 }
+- (IBAction)closeView:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *zoomIn;
 @property (weak, nonatomic) IBOutlet UIButton *zoomOut;
 @property (weak, nonatomic) IBOutlet GMSMapView *myMap;

@@ -14,20 +14,41 @@
 #import "ServerConnection.h"
 #import "MyDataView.h"
 #import "WTStatusBar.h"
+#import "EarningsViewController.h"
 #import "EditRouteViewController.h"
+#import "ProfileViewController.h"
+#import "LoginViewController.h"
+#import "RequestRecievedViewController.h"
+#import "RequestSentViewController.h"
+#import "RouteSelectionViewController.h"
+#import "CoRidersViewController.h"
+#import "RidePointsViewController.h"
+#import "PurchaseViewController.h"
+#import "REFrostedViewController.h"
+#import "CustomIOS7AlertView.h"
+#import "ModelNotification.h"
+#import "BinSystemsServerConnectionHandler.h"
+#import "PaymentsSDK.h"
 
-@interface MyRoutesViewController : UIViewController<UIAlertViewDelegate,UITextFieldDelegate>
+
+@interface MyRoutesViewController : UIViewController<CustomIOS7AlertViewDelegate, UIAlertViewDelegate,UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate,PGTransactionDelegate>
 {
-    NSMutableArray * journeyListArray;
+    NSMutableArray * arrayJourneyList;
     NSMutableArray * mSelectedArray;
      NSArray * DaysArray;
     myRouteModel *mRouteModel;
+    MyDataView *AccessoryView;
     UIAlertView * Alert ;
     ServerConnection *ConnectToServer;
 }
+
+
+
+@property (strong,nonatomic) BinSystemsServerConnectionHandler * AuthenticationServer;
+
 @property (strong, nonatomic)  NSString *seats;
 @property (weak, nonatomic) IBOutlet UILabel *seatsLabel;
-
+@property (strong, nonatomic)  NSString *role;
 @property (strong, nonatomic)  NSString *activeDays;
 @property (strong, nonatomic)  NSString *timeInterval;
 @property (weak, nonatomic) IBOutlet GMSMapView *myMap;
@@ -40,7 +61,18 @@
 @property (weak, nonatomic) IBOutlet UISwitch *mActiveSwitch;
 @property (weak, nonatomic) IBOutlet UIButton *zoomOut;
 @property (weak, nonatomic) IBOutlet UIButton *zoomIn;
+- (IBAction)deleteRoute:(id)sender;
+- (IBAction)editRouteDetails:(id)sender;
 
+- (IBAction)closeView:(id)sender;
+- (IBAction)showRouteDetail:(id)sender;
 
+@property (strong, nonatomic) IBOutlet UIView *viewNotifications;
+@property (strong, nonatomic) IBOutlet UITableView *tableViewJourneyCompletionConfirmation;
+@property (weak, nonatomic) IBOutlet UIView *viewFeedbackView;
+
+@property (weak, nonatomic) IBOutlet UITextView *textViewFeedBack;
+@property (strong, nonatomic) IBOutlet UITableView *tableViewCoRiders;
+@property (strong, nonatomic) IBOutlet UIView *viewCoriders;
 
 @end

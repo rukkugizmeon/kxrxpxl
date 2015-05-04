@@ -11,6 +11,7 @@
 #import "WTStatusBar.h"
 #import "ServerConnection.h"
 #import "DefineMainValues.h"
+#import "REFrostedViewController.h"
 
 @interface PurchaseViewController : UIViewController
 {
