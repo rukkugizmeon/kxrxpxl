@@ -234,7 +234,7 @@
 		7AC04D3A1AE7749E005C05E1 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC04D391AE7749E005C05E1 /* MapViewController.m */; };
 		7AC04D421AE77C64005C05E1 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AC04D411AE77C64005C05E1 /* GoogleMaps.framework */; };
 		7AC04D441AE77C96005C05E1 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7AC04D431AE77C96005C05E1 /* GoogleMaps.bundle */; };
-		9F04E6491AF7404C005ECC5A /* Main-iPad copy.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F04E6481AF7404C005ECC5A /* Main-iPad copy.storyboard */; };
+		9F04E64B1AF74140005ECC5A /* Main-iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F04E64A1AF74140005ECC5A /* Main-iPad.storyboard */; };
 		B923A27B1A88D494002150E4 /* SIOSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = B923A2791A88D494002150E4 /* SIOSocket.m */; };
 		B93D54181A7F6C0F00BB8E28 /* 5starsgray.png in Resources */ = {isa = PBXBuildFile; fileRef = B93D54151A7F6C0F00BB8E28 /* 5starsgray.png */; };
 		B93D54191A7F6C0F00BB8E28 /* StarRatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = B93D54171A7F6C0F00BB8E28 /* StarRatingView.m */; };
@@ -578,7 +578,7 @@
 		7AC04D391AE7749E005C05E1 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		7AC04D411AE77C64005C05E1 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
 		7AC04D431AE77C96005C05E1 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
-		9F04E6481AF7404C005ECC5A /* Main-iPad copy.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = "Main-iPad copy.storyboard"; path = "../../Xcode-Qater-Deals/Gizmeondeals/Main-iPad copy.storyboard"; sourceTree = "<group>"; };
+		9F04E64A1AF74140005ECC5A /* Main-iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Main-iPad.storyboard"; sourceTree = "<group>"; };
 		B923A2781A88D494002150E4 /* SIOSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SIOSocket.h; sourceTree = "<group>"; };
 		B923A2791A88D494002150E4 /* SIOSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SIOSocket.m; sourceTree = "<group>"; };
 		B923A27A1A88D494002150E4 /* socket.io.js.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = socket.io.js.h; sourceTree = "<group>"; };
@@ -814,7 +814,7 @@
 				04510DA7197F8DA00057D7B4 /* ViewControllers */,
 				04510D81197F88530057D7B4 /* AppDelegate.h */,
 				04510D82197F88530057D7B4 /* AppDelegate.m */,
-				9F04E6481AF7404C005ECC5A /* Main-iPad copy.storyboard */,
+				9F04E64A1AF74140005ECC5A /* Main-iPad.storyboard */,
 				04510D84197F88530057D7B4 /* Main.storyboard */,
 				04510D8A197F88530057D7B4 /* Images.xcassets */,
 				04510D79197F88530057D7B4 /* Supporting Files */,
@@ -1427,6 +1427,7 @@
 				043DE936199B8B5C003ACE0C /* CoridersProfiles.xib in Resources */,
 				04EA52681A0F92DC009D89B9 /* ridewithme_mobile_login.png in Resources */,
 				049D9DF019AF34B1001228B3 /* zOut.png in Resources */,
+				9F04E64B1AF74140005ECC5A /* Main-iPad.storyboard in Resources */,
 				04EA52771A0F92DC009D89B9 /* ridewithme_mobile_sun.png in Resources */,
 				04EA52801A0F92DC009D89B9 /* ridewithme_mobile_yes.png in Resources */,
 				04EA526F1A0F92DC009D89B9 /* ridewithme_mobile_remember.png in Resources */,
@@ -1439,7 +1440,6 @@
 				04EA52581A0F92DC009D89B9 /* ridewithme_mobile_field1.png in Resources */,
 				04EA527C1A0F92DC009D89B9 /* ridewithme_mobile_thu1.png in Resources */,
 				04EA52741A0F92DC009D89B9 /* ridewithme_mobile_seats2.png in Resources */,
-				9F04E6491AF7404C005ECC5A /* Main-iPad copy.storyboard in Resources */,
 				04EA526D1A0F92DC009D89B9 /* ridewithme_mobile_photoicon.png in Resources */,
 				048717D01A06105600FEEB2B /* Icon@2x.png in Resources */,
 				04E4CD491993C18D00575290 /* IMG_0710_x.jpg in Resources */,
