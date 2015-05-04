@@ -41,7 +41,7 @@
     //self.tableView.frame = CGRectMake(0,45,320,430);
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.tableHeaderView = ({
-        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 50.0f)];
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 10.0f)];
      
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 145, 0, 24)];
         label.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
@@ -72,7 +72,7 @@
         return nil;
   
     
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(30, 0, tableView.frame.size.width, 20
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(30, 0, tableView.frame.size.width, 0
 )];
 //    view.backgroundColor = [UIColor clearColor];
 //    UIImageView *dot =[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 30)];

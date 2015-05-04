@@ -10,7 +10,7 @@
             <objects>
                 <viewController storyboardIdentifier="login" modalTransitionStyle="partialCurl" id="vXZ-lx-hvc" customClass="LoginViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ridewithme_mobile_newuser.png" id="gph-Ml-Khb">
@@ -104,8 +104,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="xPs-S4-fad"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="320" height="568"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="appLogo" destination="miD-Rr-Taf" id="47Y-b7-vof"/>
                         <outlet property="bothContainer" destination="oTT-vu-fO0" id="WhB-YO-nON"/>
@@ -126,11 +125,11 @@
             <objects>
                 <viewController storyboardIdentifier="payment" id="l5z-Vu-1F5" customClass="PurchaseViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vd1-3g-WHN">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="v3R-QS-Udd">
-                                <rect key="frame" x="0.0" y="57" width="320" height="511"/>
+                                <rect key="frame" x="0.0" y="-31" width="320" height="511"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OrderID" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WPz-qt-2f3">
@@ -349,6 +348,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="wjS-PA-5kf"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="CardNoField" destination="TDf-nj-KFr" id="PBR-r9-CQX"/>
                         <outlet property="Scroller" destination="v3R-QS-Udd" id="3O0-9r-6pe"/>
@@ -373,16 +373,16 @@
             <objects>
                 <viewController storyboardIdentifier="earning" id="yQb-WF-Ycb" customClass="EarningsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="b5p-oB-T7r">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ridewithme_mobile_earnings.png" id="BVZ-uV-mbP">
                                 <rect key="frame" x="0.0" y="64" width="320" height="36"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <view contentMode="scaleToFill" id="pep-K3-abk">
-                                <rect key="frame" x="21" y="189" width="283" height="23"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <rect key="frame" x="19" y="108" width="283" height="23"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0wy-QD-Cmm">
                                         <rect key="frame" x="15" y="0.0" width="10" height="21"/>
@@ -408,12 +408,8 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.18289316130193101" green="0.66869296879156748" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ridewithme_mobile_photoicon.png" id="nIX-ky-NZc">
-                                <rect key="frame" x="124" y="108" width="67" height="63"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="61" sectionHeaderHeight="22" sectionFooterHeight="22" id="heg-ma-SYQ">
-                                <rect key="frame" x="20" y="212" width="284" height="356"/>
+                                <rect key="frame" x="19" y="139" width="288" height="321"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="separatorColor" red="0.1828931613" green="0.66869296879999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -465,41 +461,30 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="iUX-xm-hfh"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="pointsTable" destination="heg-ma-SYQ" id="pXT-pg-Fxs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N4u-gQ-n7l" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="655" y="577"/>
+            <point key="canvasLocation" x="415" y="357"/>
         </scene>
         <!--Request Recieved View Controller-->
         <scene sceneID="kPr-6W-zs9">
             <objects>
                 <viewController storyboardIdentifier="requestRecieved" id="Sr1-IU-JWY" customClass="RequestRecievedViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kFZ-u3-kwo">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="WWg-Bo-mKJ" customClass="GMSMapView">
-                                <rect key="frame" x="0.0" y="48" width="320" height="520"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <rect key="frame" x="0.0" y="67" width="320" height="413"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1WQ-bF-AmG">
-                                        <rect key="frame" x="53" y="464" width="40" height="25"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" backgroundImage="zoomIn.png">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="zoomIn:" destination="u2t-zP-OpC" eventType="touchUpInside" id="3TB-mK-eK6"/>
-                                            <action selector="zoomIn:" destination="Sr1-IU-JWY" eventType="touchUpInside" id="sDL-n8-jQi"/>
-                                            <action selector="zoomIn:" destination="RvM-8e-Fda" eventType="touchUpInside" id="uYT-kP-CnM"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="M0H-GE-9ma">
-                                        <rect key="frame" x="13" y="463" width="40" height="26"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <rect key="frame" x="8" y="348" width="40" height="26"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                         <state key="normal" backgroundImage="zoomout.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -509,6 +494,18 @@
                                             <action selector="zoomOut:" destination="Sr1-IU-JWY" eventType="touchUpInside" id="aCu-95-pN4"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1WQ-bF-AmG">
+                                        <rect key="frame" x="47" y="349" width="40" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                        <state key="normal" backgroundImage="zoomIn.png">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="zoomIn:" destination="u2t-zP-OpC" eventType="touchUpInside" id="3TB-mK-eK6"/>
+                                            <action selector="zoomIn:" destination="Sr1-IU-JWY" eventType="touchUpInside" id="sDL-n8-jQi"/>
+                                            <action selector="zoomIn:" destination="RvM-8e-Fda" eventType="touchUpInside" id="uYT-kP-CnM"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -516,6 +513,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="V9b-6s-yjY"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="myMap" destination="WWg-Bo-mKJ" id="im8-CO-EUm"/>
                         <outlet property="zoomIn" destination="1WQ-bF-AmG" id="Ls9-L3-tpN"/>
@@ -531,50 +529,15 @@
             <objects>
                 <viewController storyboardIdentifier="ridePoint" id="IEj-Bx-BWH" customClass="RidePointsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HCq-8W-bkl">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" id="Mql-zU-Eg9">
-                                <rect key="frame" x="18" y="172" width="282" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="BGw-GE-tT9">
-                                        <rect key="frame" x="11" y="0.0" width="10" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="7mb-jh-8GB">
-                                        <rect key="frame" x="36" y="0.0" width="36" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Points" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8wz-Pq-wKm">
-                                        <rect key="frame" x="109" y="0.0" width="67" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="u4K-ls-qba">
-                                        <rect key="frame" x="183" y="0.0" width="36" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" red="0.1828931613" green="0.66869296879999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ridewithme_mobile_photoicon.png" id="Jm5-da-05v">
-                                <rect key="frame" x="126" y="105" width="67" height="63"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <rect key="frame" x="127" y="105" width="67" height="63"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="56" sectionHeaderHeight="22" sectionFooterHeight="22" id="PNG-q5-MgX">
-                                <rect key="frame" x="18" y="196" width="282" height="372"/>
+                                <rect key="frame" x="20" y="197" width="281" height="263"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="separatorColor" red="0.1828931613" green="0.66869296879999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -632,12 +595,48 @@
                             </tableView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ridewithme_mobile_ridepoints.png" id="qoz-Jz-cv2">
                                 <rect key="frame" x="0.0" y="64" width="320" height="36"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <view contentMode="scaleToFill" id="Mql-zU-Eg9">
+                                <rect key="frame" x="19" y="176" width="282" height="24"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="BGw-GE-tT9">
+                                        <rect key="frame" x="11" y="0.0" width="10" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="7mb-jh-8GB">
+                                        <rect key="frame" x="36" y="0.0" width="36" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Points" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8wz-Pq-wKm">
+                                        <rect key="frame" x="109" y="0.0" width="67" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="u4K-ls-qba">
+                                        <rect key="frame" x="183" y="0.0" width="36" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.1828931613" green="0.66869296879999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="G84-Za-b2k"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="pointsTable" destination="PNG-q5-MgX" id="0X1-kt-hOF"/>
                     </connections>
@@ -651,29 +650,29 @@
             <objects>
                 <viewController storyboardIdentifier="search" id="aJn-82-vTU" customClass="RouteSelectionViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jUK-u0-1v8">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="YMs-V0-ghD">
-                                <rect key="frame" x="0.0" y="54" width="320" height="534"/>
+                                <rect key="frame" x="0.0" y="62" width="320" height="418"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Origin" textAlignment="center" minimumFontSize="17" background="ridewithme_mobile_field1.png" id="4MB-PV-NYb">
-                                        <rect key="frame" x="36" y="182" width="250" height="30"/>
+                                        <rect key="frame" x="36" y="152" width="250" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="next"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Destination" textAlignment="center" minimumFontSize="17" background="ridewithme_mobile_field1.png" id="gwm-hB-PQX">
-                                        <rect key="frame" x="40" y="232" width="244" height="30"/>
+                                        <rect key="frame" x="40" y="202" width="244" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="search"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Vad-WC-9Z5">
-                                        <rect key="frame" x="83" y="465" width="155" height="32"/>
+                                        <rect key="frame" x="83" y="435" width="155" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <state key="normal" backgroundImage="ridewithme_mobile_btn_search.png">
@@ -685,7 +684,7 @@
                                         </connections>
                                     </button>
                                     <pickerView contentMode="scaleToFill" id="Hsh-0y-VpE">
-                                        <rect key="frame" x="2" y="20" width="319" height="162"/>
+                                        <rect key="frame" x="2" y="-10" width="319" height="162"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <connections>
                                             <outlet property="dataSource" destination="aJn-82-vTU" id="Iir-Ly-rmU"/>
@@ -693,7 +692,7 @@
                                         </connections>
                                     </pickerView>
                                     <pickerView contentMode="scaleToFill" id="5rT-RF-Clc">
-                                        <rect key="frame" x="-1" y="303" width="320" height="162"/>
+                                        <rect key="frame" x="-1" y="273" width="320" height="162"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <connections>
                                             <outlet property="dataSource" destination="aJn-82-vTU" id="pAg-4p-aBd"/>
@@ -701,7 +700,7 @@
                                         </connections>
                                     </pickerView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search Options" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EJy-Bj-PMg">
-                                        <rect key="frame" x="90" y="280" width="149" height="29"/>
+                                        <rect key="frame" x="90" y="250" width="149" height="29"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
                                         <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -713,6 +712,8 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="mCityPickerView" destination="Hsh-0y-VpE" id="4II-Mv-Ynv"/>
                         <outlet property="mDestination" destination="gwm-hB-PQX" id="16y-Kv-Cyn"/>
@@ -730,15 +731,15 @@
             <objects>
                 <viewController storyboardIdentifier="searchAdd" id="KSB-Rc-aw8" customClass="MapViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="SJT-6q-MdR">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="pZj-cK-0G2" customClass="GMSMapView">
-                                <rect key="frame" x="0.0" y="63" width="320" height="505"/>
+                                <rect key="frame" x="0.0" y="63" width="320" height="417"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" id="6xm-yw-Ny7">
-                                        <rect key="frame" x="0.0" y="-501" width="320" height="498"/>
+                                        <rect key="frame" x="0.0" y="-501" width="320" height="410"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select active days" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="e81-J9-VwH">
@@ -749,7 +750,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="fvi-7v-HTY">
-                                                <rect key="frame" x="64" y="39" width="195" height="207"/>
+                                                <rect key="frame" x="64" y="39" width="195" height="167"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" red="0.88327955160000005" green="0.70048537870000005" blue="0.18155645240000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 <connections>
@@ -919,8 +920,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="vsa-4z-LGM"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="320" height="568"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="addView" destination="6xm-yw-Ny7" id="Pun-Tg-USX"/>
                         <outlet property="animatedContainer" destination="Gi4-rh-0l8" id="Mt8-LG-CTb"/>
@@ -953,7 +953,7 @@
             <objects>
                 <viewController storyboardIdentifier="myRoute" id="u2t-zP-OpC" customClass="MyRoutesViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Nnr-z6-cbL">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="aCO-9j-4eT" customClass="GMSMapView">
@@ -986,11 +986,11 @@
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" id="Vyd-MH-3dl">
-                                <rect key="frame" x="0.0" y="59" width="320" height="509"/>
+                                <rect key="frame" x="0.0" y="59" width="320" height="421"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="110" sectionHeaderHeight="22" sectionFooterHeight="22" id="UWN-np-h8d">
-                                        <rect key="frame" x="0.0" y="0.0" width="329" height="509"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="329" height="421"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
@@ -1051,8 +1051,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="YWB-lX-FFX"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="320" height="568"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="myMap" destination="aCO-9j-4eT" id="frq-ua-l7X"/>
                         <outlet property="tableViewJourneyCompletionConfirmation" destination="UWN-np-h8d" id="Rrq-m9-h8f"/>
@@ -1070,7 +1069,7 @@
             <objects>
                 <viewController storyboardIdentifier="requestSent" id="Atw-RJ-ZmS" customClass="RequestSentViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="odD-qd-cMw">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="kJ5-1I-MEF" customClass="GMSMapView">
@@ -1110,6 +1109,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="PII-bm-o8v"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="myMap" destination="kJ5-1I-MEF" id="eUD-fV-YJL"/>
                         <outlet property="zoomIn" destination="yKc-xK-Qhd" id="t3C-gf-Ot8"/>
@@ -1125,7 +1125,7 @@
             <objects>
                 <viewController storyboardIdentifier="userRoute" id="R39-wT-bQr" customClass="SearchRouteViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="NQD-ME-KHY">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="mMJ-7L-zdZ" customClass="GMSMapView">
@@ -1158,6 +1158,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="myMap" destination="mMJ-7L-zdZ" id="ca5-Mi-qMa"/>
                         <outlet property="zoomIn" destination="v42-vP-UNV" id="9hL-m1-VKm"/>
@@ -1173,7 +1174,7 @@
             <objects>
                 <viewController storyboardIdentifier="detailRoute" id="RvM-8e-Fda" customClass="DetailRouteViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ht6-P8-YWi">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="AO8-w9-xso" customClass="GMSMapView">
@@ -1206,8 +1207,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="320" height="568"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="myMap" destination="AO8-w9-xso" id="xfN-IB-Lgv"/>
                         <outlet property="zoomIn" destination="PHU-eA-czW" id="FZS-iC-fwt"/>
@@ -1223,7 +1223,7 @@
             <objects>
                 <viewController storyboardIdentifier="editRouteDetail" id="8rI-pc-4na" customClass="EditRouteViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="U88-2e-zkU" customClass="UIScrollView">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select active days " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ZYt-dO-ZdK">
@@ -1387,8 +1387,7 @@
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="ea7-Tx-iCQ"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="320" height="568"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="editButton" destination="WvX-Pl-eQk" id="h5D-4x-A2o"/>
                         <outlet property="friButton" destination="cPG-El-7ug" id="38s-zj-xOW"/>
@@ -1416,7 +1415,7 @@
             <objects>
                 <viewController storyboardIdentifier="corider" id="OTR-BP-Gnu" customClass="CoRidersViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="x7w-gg-VQJ">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="QBh-uK-zth" customClass="GMSMapView">
@@ -1458,6 +1457,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="HNe-rU-gcg"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="myMap" destination="QBh-uK-zth" id="Nmj-sf-g8h"/>
                         <outlet property="zoomIn" destination="42r-zc-oHC" id="msq-v9-guY"/>
@@ -1473,15 +1473,15 @@
             <objects>
                 <viewController storyboardIdentifier="profile" id="j7s-YL-kX2" customClass="ProfileViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Jfo-5e-3yw">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="1000"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="txj-S8-ipV">
-                                <rect key="frame" x="0.0" y="75" width="320" height="980"/>
+                                <rect key="frame" x="0.0" y="75" width="320" height="460"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" id="Ec6-z3-xyu">
-                                        <rect key="frame" x="-6" y="-34" width="334" height="972"/>
+                                        <rect key="frame" x="-6" y="-34" width="334" height="452"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yhU-Ni-vkn">
@@ -1768,8 +1768,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="Y7Z-IE-LhX"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="320" height="1000"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="LoadingView" destination="gE0-OZ-JoP" id="SOF-K1-Gp4"/>
                         <outlet property="ageSlider" destination="Y39-jP-h4g" id="TLU-LW-Lxd"/>
@@ -1802,11 +1801,11 @@
             <objects>
                 <viewController modalTransitionStyle="partialCurl" id="Moz-iu-zlF" customClass="RegistrationViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UjA-gA-dNd">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="1000"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Jzi-eY-aaX">
-                                <rect key="frame" x="0.0" y="20" width="320" height="980"/>
+                                <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username" textAlignment="center" minimumFontSize="17" background="ridewithme_mobile_field_username.png" id="yI7-ia-Zyr">
@@ -2016,8 +2015,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="1fo-Ft-UVy"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="320" height="1000"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="TopLayer" destination="oo8-cl-ezq" id="M6j-zV-W5Q"/>
                         <outlet property="ageLabel" destination="VG5-eV-7rI" id="e7k-SG-IrD"/>
@@ -2052,7 +2050,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="menuController" id="kmZ-38-F6a" customClass="SlidingMenuViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Ywh-NH-aA7">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -2081,6 +2079,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Root View Controller" id="N3t-7H-l8M"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gjY-2q-Dyl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -2090,6 +2089,7 @@
         <scene sceneID="liB-I5-3TT">
             <objects>
                 <navigationController storyboardIdentifier="contentController" definesPresentationContext="YES" id="Uiz-QV-cfe" customClass="SlidingNavigationViewController" sceneMemberID="viewController">
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Bia-eG-8gW">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -2115,11 +2115,11 @@
             <objects>
                 <viewController storyboardIdentifier="chatroom" id="sGv-d7-h0p" customClass="SelectChatRoomViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="R9m-Uw-A3A">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="C5c-aC-KzY">
-                                <rect key="frame" x="0.0" y="47" width="320" height="321"/>
+                                <rect key="frame" x="0.0" y="47" width="320" height="233"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
@@ -2128,7 +2128,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="tdX-ms-45x"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="tableViewChatRooms" destination="C5c-aC-KzY" id="jA2-mG-Ubj"/>
                         <segue destination="d1w-Uf-NGg" kind="push" identifier="toChat" id="lfi-VO-Igh"/>
@@ -2143,7 +2143,7 @@
             <objects>
                 <viewController storyboardIdentifier="chatView" id="d1w-Uf-NGg" customClass="ChatViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="YlN-gA-34F">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" minimumFontSize="17" id="woe-gS-Roq">
@@ -2163,7 +2163,7 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="H5Q-oS-ci8">
-                                <rect key="frame" x="0.0" y="63" width="320" height="255"/>
+                                <rect key="frame" x="0.0" y="63" width="320" height="167"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
@@ -2171,6 +2171,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="tqE-jI-iVe"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="buttonSend" destination="63n-9n-jOS" id="Xta-L5-FUr"/>
                         <outlet property="tableViewChatView" destination="H5Q-oS-ci8" id="wf8-CY-Qog"/>
@@ -2186,10 +2187,11 @@
             <objects>
                 <viewController id="rPy-bd-Zgd" customClass="SlidingRootViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UmR-yL-4BQ">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <segue destination="vXZ-lx-hvc" kind="modal" identifier="logout" modalTransitionStyle="coverVertical" id="QGU-eC-FZr"/>
                     </connections>
@@ -2203,6 +2205,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="sPs-JJ-NGe" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="pwD-mS-0pB">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -2221,11 +2224,11 @@
             <objects>
                 <viewController storyboardIdentifier="editProfile" modalTransitionStyle="partialCurl" id="FoZ-JU-llM" customClass="UpdateProfileViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Rrl-Ei-vRe">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="1058"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Gab-vb-Usu">
-                                <rect key="frame" x="0.0" y="37" width="320" height="1021"/>
+                                <rect key="frame" x="0.0" y="37" width="320" height="443"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Name" textAlignment="center" minimumFontSize="17" background="ridewithme_mobile_field1.png" id="Io1-Hm-vSL">
@@ -2417,8 +2420,7 @@
                         </subviews>
                     </view>
                     <navigationItem key="navigationItem" id="uMb-lF-MPx"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="320" height="1058"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="ageLabel" destination="4fd-5g-WW5" id="sgV-jK-f3i"/>
                         <outlet property="ageSlider" destination="9ko-F0-8Nn" id="icc-J1-asB"/>
@@ -2480,7 +2482,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="zgg-kq-fhg"/>
+        <segue reference="0By-Mr-ETV"/>
         <segue reference="kyq-yj-sJW"/>
     </inferredMetricsTieBreakers>
 </document>

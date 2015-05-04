@@ -31,7 +31,7 @@
     [[BITHockeyManager sharedHockeyManager] startManager];
     [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
     
-   // [[BITHockeyManager sharedHockeyManager].crashManager setEnableMachExceptionHandler: YES];
+    [[BITHockeyManager sharedHockeyManager].crashManager setEnableMachExceptionHandler: YES];
     
     
     
